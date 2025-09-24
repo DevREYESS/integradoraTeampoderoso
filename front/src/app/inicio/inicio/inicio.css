@@ -47,14 +47,23 @@
 }
 
 .brand-logo-circle {
-  width: 40px;
-  height: 40px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   background-color: #f7a8ca;
+
+  /* Para centrar la imagen */
   display: flex;
   justify-content: center;
   align-items: center;
+
+  /* Imagen como fondo */
+  background-image: url('../../../assets/imagenes/logo.jpg');
+  background-size: cover;       /* Ajusta la imagen para cubrir todo el círculo */
+  background-position: center;  /* Centra la imagen */
+  background-repeat: no-repeat; /* Evita que se repita */
 }
+
 
 .logo-inner {
   height: 30px;
@@ -69,6 +78,8 @@
   cursor: pointer;
   font-weight: bold;
   font-size: 14px;
+  margin-left: 105px;
+  margin-top: -20px;
 }
 
 /* Espacio para el contenido principal debido al encabezado fijo */
@@ -93,6 +104,11 @@ p {
   font-size: 16px;
   line-height: 1.6;
   color: #555;
+}
+.textohe{
+   font-size: 20px;
+  line-height: 1.6;
+  color: #555; 
 }
 
 /* Estilos de las cajas de Misión, Visión, Valores */
