@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CardModule } from 'primeng/card';
 
 
 
@@ -10,7 +11,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   imports: [
     CommonModule,BrowserModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    CardModule
   ]
   
 })

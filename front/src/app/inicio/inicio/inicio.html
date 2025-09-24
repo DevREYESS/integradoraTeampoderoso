@@ -1,4 +1,4 @@
-<div class="header-container">
+<div [class.shrink]="isShrunk" class="header-container">
   <div class="social-info">
     <div class="logo-text">
       <a
@@ -7,7 +7,7 @@
         class="logo-text"
       >
         <i class="pi pi-instagram icon"></i>
-        <span>medica_isor</span>
+        <span>Instagram</span>
       </a>
     </div>
     <div class="contact-info">
@@ -17,13 +17,34 @@
         class="logo-text"
       >
       <i class="pi pi-whatsapp icon"></i>
-      <span>+52 7222619193</span>
+      <span>Whatsapp</span>
+      </a>
+    </div>
+      <div class="contact-info">
+         <a
+        href=""
+        target="_blank"
+        class="logo-text"
+      >
+      <i class="pi pi-tiktok icon"></i>
+      <span>TikTok</span>
+      </a>
+    </div>
+      <div class="contact-info">
+         <a
+        href=""
+        target="_blank"
+        class="logo-text"
+      >
+      <i class="pi pi-facebook icon"></i>
+      <span>Facebook</span>
       </a>
     </div>
   </div>
+  <div class="brand-logo-circle"></div>
   <div class="brand-cta">
     <div class="brand-info">
-      <div class="brand-logo-circle"></div>
+      
       <p class="textohe">Transforma tu imagen, empieza hoy</p>
     </div>
     <button class="cta-button">Agenda tu cita</button>
@@ -31,8 +52,27 @@
 </div>
 
 <div class="main-content">
-  <div class="section-container">
-    <h2>CULTURA EMPRESARIAL</h2>
+ 
+<div class="seccion-superior">
+  <div class="cita-card-container">
+    <div class="cita-card">
+      <div class="cita-header">
+        <h2>YA TIENES CITA?</h2>
+        <p>Consúltala</p>
+      </div>
+      <div class="cita-body">
+        <div class="input-group">
+          <input id="phone-number" type="text" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" />
+
+        </div>
+        <button pButton type="button" label="Consultar" class="p-button-consultar">Consultar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="contenido-derecho">
+    <div class="cultura-empresarial">
+      <h2>CULTURA EMPRESARIAL</h2>
     <p>
       Somos una clínica con una misión clara, enfocada en empoderar la belleza,
       los valores como la empatía y la excelencia en la atención. Tenemos la
@@ -41,10 +81,9 @@
       tratamientos de excelencia y del manejo del equipo para ofrecer una mejor
       experiencia al paciente.
     </p>
-  </div>
-
-  <div class="section-container">
-    <h2>OBJETIVOS</h2>
+    </div>
+    <div class="objetivos">
+      <h2>OBJETIVOS</h2>
     <p>
       Buscamos ser una clínica que ofrece un ambiente cordial y seguro en el que
       los clientes tengan la certeza de que recibirán un trato digno y un
@@ -53,11 +92,14 @@
       ayudando a las personas a sentirse seguras consigo mismas y sean felices
       con su apariencia.
     </p>
-  </div>
+    </div>
+    </div>
+</div>
+
 
   <div class="mision-vision-valores-container">
     <div class="box mision-box">
-      <i class="icon-placeholder">🚀</i>
+     <img src="../../../assets/imagenes/mision.jpg" alt="">
       <h3>Misión</h3>
       <p>
         Ofrecer servicios de medicina estética de calidad y personalizada a
@@ -71,7 +113,7 @@
     </div>
 
     <div class="box vision-box">
-      <i class="icon-placeholder">👁️</i>
+       <img src="../../../assets/imagenes/vision.jpg" class="valoresimg" alt="">
       <h3>Visión</h3>
       <p>
         Liderar el sector de la medicina estética en nuestra región dando
@@ -83,7 +125,7 @@
     </div>
 
     <div class="box valores-box">
-      <i class="icon-placeholder">💖</i>
+       <img src="../../../assets/imagenes/valores.jpg" class="valoresimg" alt="">
       <h3>Valores</h3>
       <ol>
         <li>Profesionalismo y Ética profesional</li>
