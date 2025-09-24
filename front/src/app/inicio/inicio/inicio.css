@@ -1,0 +1,166 @@
+/* Estilos del encabezado superior fijo */
+@import "primeicons/primeicons.css";
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 70px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.social-info {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-text, .contact-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 14px;
+}
+
+.logo, .icon {
+  height: 30px;
+}
+
+.brand-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 500px;
+}
+
+.brand-info {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.brand-logo-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f7a8ca;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo-inner {
+  height: 30px;
+}
+
+.cta-button {
+  background-color: #f06a8f;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* Espacio para el contenido principal debido al encabezado fijo */
+.main-content {
+  padding-top: 130px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Estilos de las secciones de texto */
+.section-container {
+  padding: 30px 20px;
+}
+
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #555;
+}
+
+/* Estilos de las cajas de Misión, Visión, Valores */
+.mision-vision-valores-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.box {
+  flex: 1;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.mision-box {
+  background-color: #f7a8ca; /* Rosa claro de la imagen */
+}
+
+.vision-box {
+  background-color: #c982d6; /* Morado claro de la imagen */
+}
+
+.valores-box {
+  background-color: #f06a8f; /* Rosa oscuro de la imagen */
+}
+
+
+.box-icon {
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.box h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.box p, .box ol {
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.box ol {
+  list-style-position: inside;
+  padding-left: 0;
+  text-align: left;
+}
+.contact-info {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* O el espacio que necesites */
+}
+
+/* Modifica la clase .icon para la nueva etiqueta <i> */
+.icon {
+  font-size: 30px; /* Le da el tamaño que tenía la imagen */
+  color: #333; 
+  margin-top: 6px;    /* Le da un color para que se vea */
+}
+.box .icon-placeholder {
+  font-size: 40px;
+  display: block;
+  margin: 0 auto 10px;
+}
