@@ -1,0 +1,40 @@
+package com.utsem.app.citasbackend.dto;
+
+public class ServicioDTO {
+    private String servicioUuid;
+    private String nombreServicio;
+    private String duracion;
+    private String prioridad;
+
+    public String getServicioUuid() {
+        return servicioUuid;
+    }
+
+    public void setServicioUuid(String servicioUuid) {
+        this.servicioUuid = servicioUuid;
+    }
+
+    public String getNombreServicio() {
+        return nombreServicio;
+    }
+
+    public void setNombreServicio(String nombreServicio) {
+        this.nombreServicio = nombreServicio;
+    }
+
+    public String getDuracion() {
+        return duracion;
+    }
+
+    public void setDuracion(String duracion) {
+        this.duracion = duracion;
+    }
+
+    public String getPrioridad() {
+        return prioridad;
+    }
+
+    public void setPrioridad(String prioridad) {
+        this.prioridad = prioridad;
+    }
+}
