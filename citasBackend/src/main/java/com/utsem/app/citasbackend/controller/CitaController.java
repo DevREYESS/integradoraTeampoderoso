@@ -24,4 +24,9 @@ public class CitaController {
     public List<Cita> consultarCita(@RequestBody CitaDTO citaDTO) {
         return citaService.findCita(citaDTO);
     }
+
+    @PostMapping("/saveCita")
+    public Cita crearCita(@RequestBody CitaDTO citaDTO) {
+        return citaService.crearCita(citaDTO);
+    }
 }
