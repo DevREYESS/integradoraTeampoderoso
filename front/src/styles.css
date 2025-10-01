@@ -2,3 +2,7 @@
 
 @import "primeicons/primeicons.css";
 
+.modal-open-scroll-blocker {
+    overflow: hidden !important; 
+   
+}

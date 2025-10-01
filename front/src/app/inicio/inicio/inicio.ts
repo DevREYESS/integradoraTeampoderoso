@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation,HostListener, OnInit  } from '@angular/core';
+import { Component, ViewEncapsulation,HostListener, OnInit, ChangeDetectorRef, Renderer2  } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -8,15 +8,18 @@ import { StepsModule } from 'primeng/steps';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ConsultaModal } from '../componentes/consulta-modal/consulta-modal';
+import { Services } from '../services/services';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-inicio',
-  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,ToastModule],
+  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,ToastModule,ConsultaModal,HttpClientModule],
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
-   providers: [MessageService],
+   providers: [MessageService,Services ],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class Inicio implements OnInit {
@@ -42,7 +45,7 @@ servicios = [
 
 servicioSeleccionado: number | null = null;
 
- constructor (private formBuilder: FormBuilder,private messageService: MessageService){
+ constructor (private formBuilder: FormBuilder,private messageService: MessageService, private consultaService: Services,private cdRef: ChangeDetectorRef,private renderer: Renderer2 ){
    this.formulario = this.formBuilder.group({
       nombre: ['', []],
       telefono: ['', []],
@@ -165,7 +168,7 @@ servicioSeleccionado: number | null = null;
        { "time": "10:00", "status": "Disponible" },
       { "time": "11:00", "status": "Disponible" },
     ]}
-    // AÑADE MÁS SEMANAS AQUÍ SI LO NECESITAS
+    
   ];
   
   public weekData: any[] = [];
@@ -180,21 +183,17 @@ servicioSeleccionado: number | null = null;
     const startIndex = this.currentWeekIndex * 7;
     const rawWeekData = this.allMockData.slice(startIndex, startIndex + 7);
 
-    // ✨ Crea una plantilla de 7 días completa
     this.weekData = this.daysOfWeek.map((dayName, index) => {
-      // Intenta encontrar el día correspondiente en los datos
       const dayData = rawWeekData.find(d => d.name === dayName);
 
-      // Si se encuentra, usa sus datos, si no, usa un objeto vacío
       return dayData || {
         name: dayName,
-        date: '', // Puedes dejar la fecha vacía o calcularla
+        date: '', 
         schedules: []
       };
     });
   }
 
-  // Las funciones goToPreviousWeek y goToNextWeek son las mismas que en la respuesta anterior
   goToPreviousWeek(): void {
     if (this.currentWeekIndex > 0) {
       this.currentWeekIndex--;
@@ -203,7 +202,6 @@ servicioSeleccionado: number | null = null;
   }
 
   goToNextWeek(): void {
-    // Verificamos si hay una semana siguiente antes de cambiar el índice
     if ((this.currentWeekIndex + 1) * 7 < this.allMockData.length) {
       this.currentWeekIndex++;
       this.loadWeekData();
@@ -226,10 +224,9 @@ servicioSeleccionado: number | null = null;
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isShrunk = window.scrollY > 50; // si bajas más de 50px, achica
+    this.isShrunk = window.scrollY > 50; 
   }
 
-  // tus funciones de botones
   limpiarFormulario() {
     this.formulario.reset();
   }
@@ -331,12 +328,56 @@ this.regresarf = false;
 
  public showConfirmationModal: boolean = false; 
  
-
-  // Función del botón "Regresar" y de la "X"
   regresar2() {
-    this.showConfirmationModal = false; // ✨ Oculta el modal
-    // Lógica adicional, como redirigir al inicio o recargar el calendario
-    // this.router.navigate(['/']); 
+    this.showConfirmationModal = false; 
   }
+
+
+
+  public showConsultaModal: boolean = false;
+  public consultaResult: any = null;
+  public isLoading: any = null;
+
+  public phoneNumber: string = ''; 
+
+  consultarCita() {
+     this.isLoading = true;
+    this.consultaResult = null;
+    this.showConsultaModal = false;
+
+    this.consultaService.getCitaPorTelefono(this.phoneNumber)
+      .subscribe({
+        next: (response) => {
+          this.isLoading = false; 
+
+          if (response) {
+            this.consultaResult = response;
+            this.showConsultaModal = true; 
+            this.cdRef.detectChanges(); 
+             this.renderer.addClass(document.body, 'modal-open-scroll-blocker');
+          } else {
+            console.warn("No se encontró ninguna cita para ese número.");
+            this.cdRef.detectChanges(); 
+          }
+        },
+        error: (err) => {
+          this.isLoading = false;
+          console.error("Falló la consulta de la cita:", err.message);
+          this.cdRef.detectChanges(); 
+        }
+      });
+
+  
+
+  
+  }
+
+  closeConsultaModal() {
+    this.showConsultaModal = false;
+    this.consultaResult = null; 
+    this.phoneNumber = ''; 
+    this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
+  }
+
 
 }

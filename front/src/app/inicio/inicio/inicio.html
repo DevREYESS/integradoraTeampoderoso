@@ -240,11 +240,11 @@
       </div>
       <div class="cita-body">
         <div class="input-group">
-          <input id="phone-number" type="text" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" />
+          <input id="phone-number" type="text"  [(ngModel)]="phoneNumber" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" />
 
         </div>
         <div class="contenedor-boton">
-        <button pButton type="button"  class="p-button-consultar">Consultar</button>
+        <button pButton type="button"  class="p-button-consultar" (click)="consultarCita()">Consultar</button>
         </div>
       </div>
     </div>
@@ -274,8 +274,11 @@
     </p>
     </div>
     </div>
+    
+  
 </div>
 
+<app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult" (close)="closeConsultaModal()"></app-consulta-modal>
 
   <div class="mision-vision-valores-container">
     <div class="box mision-box">

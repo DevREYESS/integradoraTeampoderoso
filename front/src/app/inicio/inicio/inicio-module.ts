@@ -9,6 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { Inicio } from './inicio';
+import { ConsultaModal } from '../componentes/consulta-modal/consulta-modal';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -21,12 +23,12 @@ import { Inicio } from './inicio';
     StepperModule,
     ButtonModule ,
     ToastModule,
-    
-    
+    ConsultaModal
+    ,HttpClientModule
     
   
   ],
-  providers:[MessageService]
+  providers:[MessageService ]
   
 })
 export class InicioModule { }

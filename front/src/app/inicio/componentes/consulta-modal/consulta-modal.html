@@ -1,0 +1,53 @@
+<div class="modal-backdrop" (click)="close.emit()"></div>
+
+<div class="custom-modal-container">
+    <button class="custom-modal-close-btn" (click)="close.emit()">
+        &times; 
+    </button>
+
+    <h3 class="modal-header">
+        <i class="pi pi-search modal-icon"></i> 
+        Detalle de tu Cita
+    </h3>
+
+    <div class="appointment-details">
+        <div class="detail-row">
+            <span class="detail-label">Paciente:</span>
+            <span class="detail-value">
+                {{ appointmentData.nombrePaciente }}
+            </span>
+        </div>
+        
+        <div class="detail-row">
+            <span class="detail-label">Estado:</span>
+            <span class="detail-value status-{{ statusInfo.class }}">
+                {{ statusInfo.text }}
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Fecha:</span>
+            <span class="detail-value">
+                {{ appointmentData.horario }} 
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Hora:</span>
+            <span class="detail-value">
+                {{ appointmentTime }}
+            </span>
+        </div>
+
+        <div class="detail-row">
+            <span class="detail-label">Servicio:</span>
+            <span class="detail-value">
+                {{ appointmentData.servicio }}
+            </span>
+        </div>
+    </div>
+
+    <button class="custom-modal-button primary-button" (click)="close.emit()">
+        Aceptar
+    </button>
+</div>
