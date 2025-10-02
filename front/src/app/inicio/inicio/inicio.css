@@ -305,7 +305,7 @@ margin-bottom: -40px
 
 .progress-bar {
   position: relative;
-  height: 8px;
+  height: 5px;
   background: #e0e0e0;   /* gris claro */
   border-radius: 2px;
   overflow: hidden;
