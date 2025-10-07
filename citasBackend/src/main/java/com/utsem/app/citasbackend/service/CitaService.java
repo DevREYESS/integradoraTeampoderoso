@@ -1,6 +1,7 @@
 package com.utsem.app.citasbackend.service;
 
 import com.utsem.app.citasbackend.dto.CitaDTO;
+import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.repository.CitaRepository;
 import jakarta.persistence.EntityManager;
@@ -11,6 +12,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,12 +39,38 @@ public class CitaService {
             predicate = cb.and(predicate, cb.like(root.get("telefono"), "%" + citaDTO.getTelefono() + "%"));
         }
 
+        if (citaDTO.getEstatus() != null && !citaDTO.getEstatus().isEmpty()) {
+            predicate = cb.and(predicate, cb.like(root.get("estatus"), "%" + citaDTO.getEstatus() + "%"));
+        }
+
+        if (citaDTO.getNombrePaciente() != null && !citaDTO.getNombrePaciente().isEmpty()) {
+            predicate = cb.and(predicate, cb.like(root.get("nombrePaciente"), "%" + citaDTO.getNombrePaciente() + "%"));
+        }
+
         query.where(predicate);
 
         return entityManager.createQuery(query).getResultList();
     }
 
     public Cita crearCita(CitaDTO citaDTO) {
+
+        String[] partesNueva = citaDTO.getHorario().split("-");
+        LocalTime inicioNueva = LocalTime.parse(partesNueva[0].trim());
+        LocalTime finNueva = LocalTime.parse(partesNueva[1].trim());
+
+        List<Cita> citasExistentes = citaRepository.findByServicio(citaDTO.getServicio());
+
+        for (Cita cita : citasExistentes) {
+            String[] partesExistente = cita.getHorario().split("-");
+            LocalTime inicioExistente = LocalTime.parse(partesExistente[0].trim());
+            LocalTime finExistente = LocalTime.parse(partesExistente[1].trim());
+
+            boolean seSolapa = inicioNueva.isBefore(finExistente) && finNueva.isAfter(inicioExistente);
+            if (seSolapa) {
+                throw new CitaDuplicadaException("Ya existe una cita que se solapa con este horario ");
+            }
+        }
+
         Cita cita = new Cita();
         cita.setTelefono(citaDTO.getTelefono());
         cita.setEstatus(citaDTO.getEstatus());

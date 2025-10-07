@@ -12,7 +12,7 @@ public class Cita {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = false, updatable = false)
+    @Column(nullable = false, unique = true, updatable = false)
     private UUID uuid;
 
     @Column(nullable = false)
@@ -36,6 +36,13 @@ public class Cita {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.uuid == null) {
+            this.uuid = UUID.randomUUID();
+        }
     }
 
     public UUID getUuid() {
