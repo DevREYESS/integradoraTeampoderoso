@@ -12,11 +12,10 @@ export class Services {
 
   getCitaPorTelefono(telefono: string): Observable<any> {
     
-    const params = {
-      telefono: telefono 
-    };
+    
+     
 
-    return this.http.post<any[]>(this.apiUrl, { params: params })
+    return this.http.post<any[]>(this.apiUrl, { telefono: telefono })
       .pipe(
         map(response => {
           if (response && response.length > 0) {

@@ -632,7 +632,7 @@ margin-bottom: -40px
 }
 
 .custom-modal-icon-success {
-    color: #28a745;
+    color: #bc0c0c;
     font-size: 1.5rem;
     margin-right: 8px;
 }
@@ -666,5 +666,16 @@ margin-bottom: -40px
     color: #aaa;
     cursor: pointer;
 }
+
+
+
+
+.error-msg {
+  text-align: right !important;     
+  margin-top: -10px;        
+  color: red;             
+  font-size: 0.85rem; 
+}
+
 
 

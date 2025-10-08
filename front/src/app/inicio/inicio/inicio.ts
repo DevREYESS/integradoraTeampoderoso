@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewEncapsulation,HostListener, OnInit, ChangeDetectorRef, Renderer2  } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { StepperModule } from 'primeng/stepper';
@@ -29,6 +29,8 @@ export class Inicio implements OnInit {
   private currentWeekStart: Date = new Date();
  public hasNextWeek = true;
   formulario: FormGroup;
+  formulario2: FormGroup;
+
 visiblehome= true;
 regresarf= false;
 mostrarcalendario=false;
@@ -51,8 +53,12 @@ servicioSeleccionado: number | null = null;
       telefono: ['', []],
       serviciodes: ['', []],
       servicio: ['', []],
+      
 
      
+    });
+     this.formulario2 = this.formBuilder.group({
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
  }
 
@@ -327,25 +333,36 @@ this.regresarf = false;
 
 
  public showConfirmationModal: boolean = false; 
+ public showConfirmationModal2: boolean = false; 
  
   regresar2() {
     this.showConfirmationModal = false; 
   }
+ regresar3() {
+    this.showConfirmationModal2 = false; 
+    
+    this.formulario2.get('telefono')?.setValue('');
 
+  }
 
 
   public showConsultaModal: boolean = false;
-  public consultaResult: any = null;
+  public consultaResult: Boolean = false;
   public isLoading: any = null;
 
-  public phoneNumber: string = ''; 
+   
 
   consultarCita() {
+    if (this.formulario2.invalid) {
+      this.formulario2.markAllAsTouched();
+      return;
+    }
+    
      this.isLoading = true;
-    this.consultaResult = null;
+    this.consultaResult = false;
     this.showConsultaModal = false;
 
-    this.consultaService.getCitaPorTelefono(this.phoneNumber)
+    this.consultaService.getCitaPorTelefono(this.telefonoLimpio)
       .subscribe({
         next: (response) => {
           this.isLoading = false; 
@@ -357,11 +374,15 @@ this.regresarf = false;
              this.renderer.addClass(document.body, 'modal-open-scroll-blocker');
           } else {
             console.warn("No se encontró ninguna cita para ese número.");
+              this.showConfirmationModal2 = true;
             this.cdRef.detectChanges(); 
+
           }
         },
         error: (err) => {
           this.isLoading = false;
+          this.consultaResult = false;
+            this.showConsultaModal = false;
           console.error("Falló la consulta de la cita:", err.message);
           this.cdRef.detectChanges(); 
         }
@@ -374,10 +395,29 @@ this.regresarf = false;
 
   closeConsultaModal() {
     this.showConsultaModal = false;
-    this.consultaResult = null; 
-    this.phoneNumber = ''; 
+    this.consultaResult = false; 
+    this.formulario2.get('telefono')?.setValue('');
     this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
   }
 
+
+ telefonoLimpio: string = '';
+
+formatTelefono(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  let numeros = input.value.replace(/\D/g, '').substring(0, 10);
+  this.telefonoLimpio = numeros; 
+
+  this.formulario2.get('telefono')?.setValue(numeros, { emitEvent: false });
+
+  if (numeros.length > 6) {
+    input.value = `${numeros.substring(0,3)}-${numeros.substring(3,6)}-${numeros.substring(6,10)}`;
+  } else if (numeros.length > 3) {
+    input.value = `${numeros.substring(0,3)}-${numeros.substring(3,6)}`;
+  } else {
+    input.value = numeros;
+  }
+}
 
 }
