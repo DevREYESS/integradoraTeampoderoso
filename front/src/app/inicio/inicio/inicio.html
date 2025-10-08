@@ -99,7 +99,7 @@
       <label>Ingresa tu número de teléfono</label>
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
-        <input type="text" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText >
+        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText >
         </span>
       </div>
     </div>
@@ -232,6 +232,7 @@
 
 @if (visiblehome) {
 <div class="seccion-superior">
+ <form [formGroup]="formulario2" (ngSubmit)="consultarCita()">
   <div class="cita-card-container">
     <div class="cita-card">
       <div class="cita-header">
@@ -240,15 +241,24 @@
       </div>
       <div class="cita-body">
         <div class="input-group">
-          <input id="phone-number" type="text"  [(ngModel)]="phoneNumber" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" />
-
+          <input id="phone-number" maxlength="12" type="text" formControlName="telefono" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" (input)="formatTelefono($event)"/>
+         
         </div>
+          <small *ngIf="formulario2.get('telefono')?.touched && formulario2.get('telefono')?.invalid" class="error-msg">
+            Este campo es requerido.
+          </small>
+        
+
         <div class="contenedor-boton">
-        <button pButton type="button"  class="p-button-consultar" (click)="consultarCita()">Consultar</button>
+          <button pButton type="submit" class="p-button-consultar" [disabled]="formulario2.invalid">
+            Consultar
+          </button>
         </div>
       </div>
     </div>
   </div>
+</form>
+
 
   <div class="contenido-derecho">
     <div class="cultura-empresarial">
@@ -279,6 +289,30 @@
 </div>
 
 <app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult" (close)="closeConsultaModal()"></app-consulta-modal>
+
+<div *ngIf="showConfirmationModal2">
+    <div class="modal-backdrop" (click)="regresar3()"></div> 
+
+    <div class="custom-modal-container">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <i class="pi pi-times-circle custom-modal-icon-success"></i> 
+            <div class="custom-modal-title">Warning</div>
+        </div>
+        
+        <div class="custom-modal-message">
+            No existe ninguna cita relacionada con tu numero de telefono.
+        </div>
+
+        <button class="custom-modal-button" (click)="regresar3()">
+            Aceptar
+        </button>
+        
+        <button class="custom-modal-close-btn" (click)="regresar3()">
+            &times; 
+        </button>
+    </div>
+</div>
+
 
   <div class="mision-vision-valores-container">
     <div class="box mision-box">
