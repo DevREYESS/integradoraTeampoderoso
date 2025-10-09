@@ -25,9 +25,19 @@ export class ConsultaModal {
     }
   }
 
-  get appointmentTime(): string {
-      const timePart = this.appointmentData.horario ? 
-                       this.appointmentData.horario.split(' ')[1] : '';
-      return timePart.substring(0, 5);
-  }
+ get appointmentTime(): string {
+  const time = this.appointmentData.horaInicio || '';
+  return time.substring(0, 5); 
+}
+get appoendmentTime(): string {
+  const time = this.appointmentData.horaFin || '';
+  return time.substring(0, 5); 
+}
+get formattedDate(): string {
+  if (!this.appointmentData.fechaCita) return '';
+  const [year, month, day] = this.appointmentData.fechaCita.split('-');
+  return `${day}-${month}-${year}`;
+}
+
+
 }
