@@ -3,6 +3,7 @@ package com.utsem.app.citasbackend.service;
 import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
+import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.repository.CitaRepository;
 import jakarta.persistence.EntityManager;
@@ -55,40 +56,60 @@ public class CitaService {
     }
 
     public CitaResponseDTO crearCita(CitaDTO citaDTO) {
+        validarFechaCita(citaDTO.getFechaCita());
+        validarSolapamiento(citaDTO);
+
+        Cita nuevaCita = crearEntidadCita(citaDTO);
+        Cita citaGuardada = citaRepository.save(nuevaCita);
+
+        return construirRespuesta(citaGuardada);
+    }
+
+
+    private void validarFechaCita(LocalDate fechaCita) {
+        LocalDate fechaMinima = LocalDate.now().plusDays(1);
+        if (fechaCita.isBefore(LocalDate.now())) {
+            throw new FechaAnteriorException("No se puede registrar una cita en una fecha anterior a la actual.");
+        }
+    }
+
+    private void validarSolapamiento(CitaDTO citaDTO) {
         LocalDate fechaCita = citaDTO.getFechaCita();
         LocalTime inicioNueva = citaDTO.getHoraInicio();
         LocalTime finNueva = citaDTO.getHoraFin();
 
-        List<Cita> citasExistentes = citaRepository.findByFechaCitaAndHoraInicioAndHoraFin(fechaCita, inicioNueva, finNueva);
-
-        for (Cita cita : citasExistentes) {
-            LocalTime inicioExistente = cita.getHoraInicio();
-            LocalTime finExistente = cita.getHoraFin();
-
-            boolean seSolapa = inicioNueva.isBefore(finExistente) && finNueva.isAfter(inicioExistente);
-            if (seSolapa) {
-                throw new CitaDuplicadaException("Ya existe una cita que se solapa con este horario ");
-            }
-        }
-
-        Cita cita = new Cita();
-        cita.setTelefono(citaDTO.getTelefono());
-        cita.setEstatus(citaDTO.getEstatus());
-        cita.setNombrePaciente(citaDTO.getNombrePaciente());
-        cita.setHoraInicio(citaDTO.getHoraInicio());
-        cita.setHoraFin(citaDTO.getHoraFin());
-        cita.setFechaCita(citaDTO.getFechaCita());
-        cita.setServicio(citaDTO.getServicio());
-        cita.setUuid(UUID.randomUUID());
-
-        Cita nueva = citaRepository.save(cita);
-
-        return new CitaResponseDTO(
-                "Cita registrada correctamente",
-                nueva.getNombrePaciente(),
-                nueva.getFechaCita(),
-                nueva.getHoraInicio()
+        List<Cita> citasExistentes = citaRepository.findByFechaCitaAndHoraInicioAndHoraFin(
+                fechaCita, inicioNueva, finNueva
         );
 
+        for (Cita cita : citasExistentes) {
+            boolean seSolapa = inicioNueva.isBefore(cita.getHoraFin()) && finNueva.isAfter(cita.getHoraInicio());
+            if (seSolapa) {
+                throw new CitaDuplicadaException("Ya existe una cita que se solapa con este horario.");
+            }
+        }
     }
+
+    private Cita crearEntidadCita(CitaDTO dto) {
+        Cita cita = new Cita();
+        cita.setTelefono(dto.getTelefono());
+        cita.setEstatus(dto.getEstatus());
+        cita.setNombrePaciente(dto.getNombrePaciente());
+        cita.setHoraInicio(dto.getHoraInicio());
+        cita.setHoraFin(dto.getHoraFin());
+        cita.setFechaCita(dto.getFechaCita());
+        cita.setServicio(dto.getServicio());
+        cita.setUuid(UUID.randomUUID());
+        return cita;
+    }
+
+    private CitaResponseDTO construirRespuesta(Cita cita) {
+        return new CitaResponseDTO(
+                "Cita registrada correctamente",
+                cita.getNombrePaciente(),
+                cita.getFechaCita(),
+                cita.getHoraInicio()
+        );
+    }
+
 }
