@@ -70,6 +70,8 @@ public class CitaService {
         LocalDate fechaMinima = LocalDate.now().plusDays(1);
         if (fechaCita.isBefore(LocalDate.now())) {
             throw new FechaAnteriorException("No se puede registrar una cita en una fecha anterior a la actual.");
+        } else if (fechaCita.isBefore(fechaMinima)) {
+            throw new FechaAnteriorException("La cita debe agendarse con al menos un día de anticipación");
         }
     }
 
