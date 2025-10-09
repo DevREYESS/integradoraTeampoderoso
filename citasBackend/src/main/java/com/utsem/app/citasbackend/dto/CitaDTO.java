@@ -1,10 +1,40 @@
 package com.utsem.app.citasbackend.dto;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class CitaDTO {
     private String telefono;
     private String estatus;
     private String nombrePaciente;
-    private String horario;
+    private LocalTime horaInicio;
+    private LocalTime horaFin;
+    private LocalDate fechaCita;
+
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
+    }
+
     private String servicio;
 
     public String getTelefono() {
@@ -29,14 +59,6 @@ public class CitaDTO {
 
     public void setNombrePaciente(String nombrePaciente) {
         this.nombrePaciente = nombrePaciente;
-    }
-
-    public String getHorario() {
-        return horario;
-    }
-
-    public void setHorario(String horario) {
-        this.horario = horario;
     }
 
     public String getServicio() {

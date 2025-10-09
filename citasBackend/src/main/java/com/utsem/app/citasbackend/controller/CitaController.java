@@ -1,6 +1,7 @@
 package com.utsem.app.citasbackend.controller;
 
 import com.utsem.app.citasbackend.dto.CitaDTO;
+import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.service.CitaService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class CitaController {
     }
 
     @PostMapping("/saveCita")
-    public Cita crearCita(@RequestBody CitaDTO citaDTO) {
+    public CitaResponseDTO crearCita(@RequestBody CitaDTO citaDTO) {
         return citaService.crearCita(citaDTO);
     }
 }

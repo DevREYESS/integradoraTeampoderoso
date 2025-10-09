@@ -2,6 +2,8 @@ package com.utsem.app.citasbackend.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +27,13 @@ public class Cita {
     private String  nombrePaciente;
 
     @Column(nullable = false)
-    private String horario;
+    private LocalTime horaInicio;
+
+    @Column(nullable = false)
+    private LocalTime horaFin;
+
+    @Column(nullable = false)
+    private LocalDate fechaCita;
 
     @Column(nullable = false)
     private String servicio;
@@ -77,12 +85,28 @@ public class Cita {
         this.nombrePaciente = nombrePaciente;
     }
 
-    public String getHorario() {
-        return horario;
+    public LocalTime getHoraInicio() {
+        return horaInicio;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public LocalDate getFechaCita() {
+        return fechaCita;
+    }
+
+    public void setFechaCita(LocalDate fechaCita) {
+        this.fechaCita = fechaCita;
     }
 
     public String getServicio() {

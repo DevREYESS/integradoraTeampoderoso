@@ -1,6 +1,7 @@
 package com.utsem.app.citasbackend.service;
 
 import com.utsem.app.citasbackend.dto.CitaDTO;
+import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.repository.CitaRepository;
@@ -12,6 +13,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -52,18 +54,16 @@ public class CitaService {
         return entityManager.createQuery(query).getResultList();
     }
 
-    public Cita crearCita(CitaDTO citaDTO) {
+    public CitaResponseDTO crearCita(CitaDTO citaDTO) {
+        LocalDate fechaCita = citaDTO.getFechaCita();
+        LocalTime inicioNueva = citaDTO.getHoraInicio();
+        LocalTime finNueva = citaDTO.getHoraFin();
 
-        String[] partesNueva = citaDTO.getHorario().split("-");
-        LocalTime inicioNueva = LocalTime.parse(partesNueva[0].trim());
-        LocalTime finNueva = LocalTime.parse(partesNueva[1].trim());
-
-        List<Cita> citasExistentes = citaRepository.findByServicio(citaDTO.getServicio());
+        List<Cita> citasExistentes = citaRepository.findByFechaCitaAndHoraInicioAndHoraFin(fechaCita, inicioNueva, finNueva);
 
         for (Cita cita : citasExistentes) {
-            String[] partesExistente = cita.getHorario().split("-");
-            LocalTime inicioExistente = LocalTime.parse(partesExistente[0].trim());
-            LocalTime finExistente = LocalTime.parse(partesExistente[1].trim());
+            LocalTime inicioExistente = cita.getHoraInicio();
+            LocalTime finExistente = cita.getHoraFin();
 
             boolean seSolapa = inicioNueva.isBefore(finExistente) && finNueva.isAfter(inicioExistente);
             if (seSolapa) {
@@ -75,10 +75,20 @@ public class CitaService {
         cita.setTelefono(citaDTO.getTelefono());
         cita.setEstatus(citaDTO.getEstatus());
         cita.setNombrePaciente(citaDTO.getNombrePaciente());
-        cita.setHorario(citaDTO.getHorario());
+        cita.setHoraInicio(citaDTO.getHoraInicio());
+        cita.setHoraFin(citaDTO.getHoraFin());
+        cita.setFechaCita(citaDTO.getFechaCita());
         cita.setServicio(citaDTO.getServicio());
         cita.setUuid(UUID.randomUUID());
 
-        return citaRepository.save(cita);
+        Cita nueva = citaRepository.save(cita);
+
+        return new CitaResponseDTO(
+                "Cita registrada correctamente",
+                nueva.getNombrePaciente(),
+                nueva.getFechaCita(),
+                nueva.getHoraInicio()
+        );
+
     }
 }
