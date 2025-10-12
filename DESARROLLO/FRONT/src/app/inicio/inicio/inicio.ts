@@ -621,6 +621,7 @@ regresar(){
 this.visiblehome =true;
 this.visiblehome2=false;
 this.regresarf = false;
+this.limpiarFormulario();
 }
 
 
@@ -702,6 +703,22 @@ formatTelefono(event: Event) {
   this.telefonoLimpio = numeros; 
 
   this.formulario2.get('telefono')?.setValue(numeros, { emitEvent: false });
+
+  if (numeros.length > 6) {
+    input.value = `${numeros.substring(0,3)}-${numeros.substring(3,6)}-${numeros.substring(6,10)}`;
+  } else if (numeros.length > 3) {
+    input.value = `${numeros.substring(0,3)}-${numeros.substring(3,6)}`;
+  } else {
+    input.value = numeros;
+  }
+}
+formatTelefono2(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  let numeros = input.value.replace(/\D/g, '').substring(0, 10);
+  this.telefonoLimpio = numeros; 
+
+  this.formulario.get('telefono')?.setValue(numeros, { emitEvent: false });
 
   if (numeros.length > 6) {
     input.value = `${numeros.substring(0,3)}-${numeros.substring(3,6)}-${numeros.substring(6,10)}`;

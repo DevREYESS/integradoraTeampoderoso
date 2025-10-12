@@ -103,7 +103,7 @@
       <label>Ingresa tu número de teléfono</label>
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
-        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText>
+        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText  (input)="formatTelefono2($event)"/>
         </span>
       </div>
       <small *ngIf="formulario.get('telefono')?.touched && formulario.get('telefono')?.invalid" class="error-msg">
