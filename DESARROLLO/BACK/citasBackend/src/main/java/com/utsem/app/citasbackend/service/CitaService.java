@@ -5,7 +5,10 @@ import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
 import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import com.utsem.app.citasbackend.model.Cita;
+import com.utsem.app.citasbackend.model.Servicio;
 import com.utsem.app.citasbackend.repository.CitaRepository;
+import com.utsem.app.citasbackend.repository.ServicioRepository;
+
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,12 +26,14 @@ import java.util.UUID;
 public class CitaService {
 
     private final CitaRepository citaRepository;
+    private final ServicioRepository servicioRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CitaService(CitaRepository citaRepository) {
+    public CitaService(CitaRepository citaRepository, ServicioRepository servicioRepository) {
         this.citaRepository = citaRepository;
+        this.servicioRepository = servicioRepository;
     }
 
     public List<Cita> findCita(CitaDTO citaDTO) {
@@ -100,7 +105,10 @@ public class CitaService {
         cita.setHoraInicio(dto.getHoraInicio());
         cita.setHoraFin(dto.getHoraFin());
         cita.setFechaCita(dto.getFechaCita());
-        cita.setServicio(dto.getServicio());
+
+        Servicio servicio = servicioRepository.findById(dto.getServicioId())
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+        cita.setServicio(servicio); 
         cita.setUuid(UUID.randomUUID());
         return cita;
     }

@@ -35,10 +35,20 @@ public class Cita {
     @Column(nullable = false)
     private LocalDate fechaCita;
 
-    @Column(nullable = false)
-    private String servicio;
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "servicio_id", nullable = false)
+    private Servicio servicio;
 
-    public Long getId() {
+
+    public Servicio getServicio() {
+		return servicio;
+	}
+
+	public void setServicio(Servicio servicio) {
+		this.servicio = servicio;
+	}
+
+	public Long getId() {
         return id;
     }
 
@@ -109,11 +119,6 @@ public class Cita {
         this.fechaCita = fechaCita;
     }
 
-    public String getServicio() {
-        return servicio;
-    }
-
-    public void setServicio(String servicio) {
-        this.servicio = servicio;
-    }
+	
+  
 }
