@@ -7,14 +7,11 @@ import { Observable, map, catchError, throwError } from 'rxjs';
 })
 export class Services {
    private apiUrl = 'http://localhost/citas/sCita';
+   private apiUrlGuardar = 'http://localhost/citas/saveCita';
 
   constructor(private http: HttpClient) { }
 
   getCitaPorTelefono(telefono: string): Observable<any> {
-    
-    
-     
-
     return this.http.post<any[]>(this.apiUrl, { telefono: telefono })
       .pipe(
         map(response => {
@@ -26,6 +23,16 @@ export class Services {
         catchError(this.handleError)
       );
   }
+guardarcita(cita: any): Observable<any> {
+  return this.http.post<any>(this.apiUrlGuardar, cita, {
+    headers: { 'Content-Type': 'application/json' }
+  }).pipe(
+    map(response => response),
+    catchError(this.handleError)
+  );
+}
+
+
 
  
   private handleError(error: HttpErrorResponse): Observable<never> {

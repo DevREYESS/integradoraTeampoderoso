@@ -32,6 +32,8 @@ export class Inicio implements OnInit {
   formulario2: FormGroup;
 
 visiblehome= true;
+visiblehome2 = false;
+
 regresarf= false;
 mostrarcalendario=false;
 mostrarcard1=true;
@@ -239,21 +241,68 @@ servicioSeleccionado: number | null = null;
 
   datos:any;
    agendo:any;
-  guarda(dia:any,nombre:any) {
-    console.log(this.formulario.value);
-    this.datos = {
-      "nombre": this.formulario.get('nombre')?.value,
-      "telefono": this.formulario.get('telefono')?.value,
-      "servicio": this.servicioSeleccionado,
-      "diacita": dia,
-      "cita": nombre
-    }
-  
-this.showConfirmationModal = true;
 
-    console.log(this.datos);
+ guarda(fecha: string, horaInicio: string) {
+  const horaFin = this.calcularHoraFin(horaInicio); // calcula +20 min
+
+const datos = {
+  estatus: "A",
+  horaInicio: this.formatoHora(horaInicio),
+  horaFin: this.formatoHora(horaFin),
+  fechaCita: this.formatoFecha(fecha),
+  nombrePaciente: this.formulario.get('nombre')?.value,
+  servicioId: "1",
+  telefono: this.formulario.get('telefono')?.value
+};
+
+      this.visiblehome2 = true;
+
+  console.log("Datos a enviar:", datos);
+this.consultaService.guardarcita(datos).subscribe({
+  next: (res) => {
+    this.showConfirmationModal = true; 
+    this.cdRef.detectChanges(); 
+    console.log("Cita guardada:", res);
+    this.limpiarFormulario();
+  },
+  error: (err) => {
+    this.showConfirmationModal = false; 
+    this.cdRef.detectChanges(); 
+    console.error("Error al guardar la cita:", err);
+    alert("No se pudo guardar la cita. Por favor intenta de nuevo.");
   }
+});
+      this.visiblehome2 = false;
+      this.visiblehome = true;
+    this.regresarf = false
+}
 
+calcularHoraFin(horaInicio: string): string {
+  const [horas, minutos] = horaInicio.split(':').map(Number);
+  const fecha = new Date();
+  fecha.setHours(horas);
+  fecha.setMinutes(minutos + 20);
+  const h = fecha.getHours().toString().padStart(2, '0'); 
+  const m = fecha.getMinutes().toString().padStart(2, '0');
+  return `${h}:${m}`;
+}
+
+formatoHora(hora: string): string {
+  const [h, m] = hora.split(':');
+  return `${h.padStart(2, '0')}:${m}`;
+}
+
+
+// Convierte "25 Oct" → "2025-10-25"
+formatoFecha(fecha: string): string {
+  const meses: any = {
+    Ene: "01", Feb: "02", Mar: "03", Abr: "04", May: "05", Jun: "06",
+    Jul: "07", Ago: "08", Sep: "09", Oct: "10", Nov: "11", Dic: "12"
+  };
+
+  const [dia, mes] = fecha.split(' ');
+  return `2025-${meses[mes]}-${dia.padStart(2, '0')}`;
+}
 
   items = [
   'Paso 1', 'Paso 2', 'Paso 3', 'Paso 4'
@@ -317,6 +366,7 @@ prev() {
 }
 agendar() {
   this.visiblehome=false;
+  this.visiblehome2=true;
 this.regresarf = true;
 this.activeIndex=0;
  this.mostrarcard1 = true;
@@ -328,6 +378,7 @@ this.activeIndex=0;
 
 regresar(){
 this.visiblehome =true;
+this.visiblehome2=false;
 this.regresarf = false;
 }
 

@@ -126,7 +126,7 @@
 /* 5. Estilo del Botón Aceptar          */
 /* ==================================== */
 .custom-modal-button.primary-button {
-    background-color: #f87289; /* Tu color rosa */
+    background-color: #f06a8f; /* Tu color rosa */
     color: white;
     border: none;
     padding: 12px 30px;
@@ -138,6 +138,7 @@
     transition: background-color 0.3s;
 }
 
+
 .custom-modal-button.primary-button:hover {
-    background-color: #e55c70;
+    background-color: #f06a8f;
 }

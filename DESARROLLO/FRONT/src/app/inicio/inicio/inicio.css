@@ -211,20 +211,20 @@ margin-bottom: -40px
 /* Botón consultar */
 .p-button-consultar {
   background-color: #f06a8f;
-  color: white;
-  font-weight: bold;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 25px;
-  font-size: 1em;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: auto;
-  justify-content: flex-end;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px; /* Estilo píldora */
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    width: 100%; /* Ocupa todo el ancho */
+    transition: background-color 0.3s;
 }
 
+
 .p-button-consultar:hover {
-  background-color: #f06a8f;
+  background-color: #f06a8f !important;
 }
 
 /* =========================

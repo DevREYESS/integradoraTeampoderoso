@@ -57,7 +57,7 @@
 </div>
 
 <div class="main-content">
-  @if (!visiblehome) {
+  @if (visiblehome2) {
 
 <div class="steps-container">
   <div class="progress-bar">
@@ -185,7 +185,7 @@
                      'disponible': schedule.status === 'Disponible' 
                  }">
                 <span>{{ schedule.time }}</span>
-                <button *ngIf="schedule.status === 'Disponible'" (click)="guarda(day.date,day.name)">Agendar</button>
+                <button *ngIf="schedule.status === 'Disponible'" (click)="guarda(day.date, schedule.time)">Agendar</button>
             </div>
             <div *ngIf="!day.schedules || day.schedules.length === 0" class="no-schedules">
               No labora
@@ -195,28 +195,7 @@
 </div>
 }
 
-<div *ngIf="showConfirmationModal">
-    <div class="modal-backdrop" (click)="regresar2()"></div> 
 
-    <div class="custom-modal-container">
-        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <i class="pi pi-check custom-modal-icon-success"></i> 
-            <div class="custom-modal-title">Cita agendada</div>
-        </div>
-        
-        <div class="custom-modal-message">
-            Tu cita se ha agendado correctamente.
-        </div>
-
-        <button class="custom-modal-button" (click)="regresar2()">
-            Aceptar
-        </button>
-        
-        <button class="custom-modal-close-btn" (click)="regresar2()">
-            &times; 
-        </button>
-    </div>
-</div>
 
 <!-- Paso 4 -->
 <div *ngIf="activeIndex === 3">
@@ -229,6 +208,7 @@
 </div>
  
 }
+
 
 @if (visiblehome) {
 <div class="seccion-superior">
@@ -286,8 +266,28 @@
     </div>
     
   
-</div>
+</div><div *ngIf="showConfirmationModal">
+    <div class="modal-backdrop" (click)="regresar2()"></div> 
 
+    <div class="custom-modal-container">
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <i class="pi pi-check custom-modal-icon-success"></i> 
+            <div class="custom-modal-title">Cita agendada</div>
+        </div>
+        
+        <div class="custom-modal-message">
+            Tu cita se ha agendado correctamente.
+        </div>
+
+        <button class="custom-modal-button" (click)="regresar2()">
+            Aceptar
+        </button>
+        
+        <button class="custom-modal-close-btn" (click)="regresar2()">
+            &times; 
+        </button>
+    </div>
+</div>
 <app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult" (close)="closeConsultaModal()"></app-consulta-modal>
 
 <div *ngIf="showConfirmationModal2">
