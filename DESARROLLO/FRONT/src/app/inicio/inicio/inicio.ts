@@ -49,13 +49,260 @@ servicios = [
 
 servicioSeleccionado: number | null = null;
 
+allDaysData: any[] = [
+  {
+    name: 'Dom',
+    date: '2025-10-12', // Mañana
+    schedules: [] // Día no laborable (mostrará "No labora")
+  },
+  {
+    name: 'Lun',
+    date: '2025-10-13',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '10:20', status: 'Agendado' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Mar',
+    date: '2025-10-14',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Agendado' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'No disponible' },
+    ]
+  },
+  {
+    name: 'Mié',
+    date: '2025-10-15',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'No disponible' },
+      { time: '9:00', status: 'No disponible' }, 
+      { time: '9:20', status: 'No disponible' }, 
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Agendado' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Jue',
+    date: '2025-10-16',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'No disponible' }, 
+      { time: '9:20', status: 'No disponible' }, 
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Vie',
+    date: '2025-10-17',
+    schedules: [
+      { time: '8:00', status: 'No disponible' },
+      { time: '8:20', status: 'Agendado' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Sáb',
+    date: '2025-10-18',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Dom',
+    date: '2025-10-19', 
+    schedules: [   { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Agendado' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },] 
+  },
+  {
+    name: 'Lun',
+    date: '2025-10-20',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '10:20', status: 'Agendado' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Mar',
+    date: '2025-10-21',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Agendado' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'No disponible' },
+    ]
+  },
+  {
+    name: 'Mié',
+    date: '2025-10-22',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'No disponible' },
+      { time: '9:00', status: 'No disponible' },
+      { time: '9:20', status: 'No disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Agendado' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Jue',
+    date: '2025-10-23',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'No disponible' },
+      { time: '9:20', status: 'No disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Vie',
+    date: '2025-10-24',
+    schedules: [
+      { time: '8:00', status: 'No disponible' },
+      { time: '8:20', status: 'Agendado' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'No disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  },
+  {
+    name: 'Sáb',
+    date: '2025-10-25',
+    schedules: [
+      { time: '8:00', status: 'Disponible' },
+      { time: '8:20', status: 'Disponible' },
+      { time: '8:40', status: 'Disponible' },
+      { time: '9:00', status: 'Disponible' },
+      { time: '9:20', status: 'Disponible' },
+      { time: '9:40', status: 'Disponible' },
+      { time: '10:00', status: 'Disponible' },
+      { time: '10:20', status: 'Disponible' },
+      { time: '10:40', status: 'Disponible' },
+    ]
+  }
+];
+
+
+  fixedTimes: string[] = [
+    "8:00", "8:20", "8:40", 
+    "9:00", "9:20", "9:40", 
+    "10:00", "10:20", "10:40", 
+  ];
+
+  
+  getScheduleSlot(schedules: any[], time: string): any | null {
+    if (!schedules) return null;
+    return schedules.find(schedule => schedule.time === time);
+  }
+
+  isLarge(time: string, dayName: string): boolean {
+    return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+  }
+
+weekData: any[] = []; 
+
+currentWeekIndex: number = 0; 
+daysPerWeek: number = 7;
+
+isFirstWeek: boolean = true;
+isLastWeek: boolean = false;
+
+
+loadCurrentWeek(): void {
+  const startIndex = this.currentWeekIndex;
+  const endIndex = this.currentWeekIndex + this.daysPerWeek;
+  this.weekData = this.allDaysData.slice(startIndex, endIndex);
+  this.isFirstWeek = (this.currentWeekIndex === 0);
+  this.isLastWeek = (this.currentWeekIndex >= this.allDaysData.length - this.daysPerWeek);
+}
+
+
+goToNextWeek(): void {
+  if (!this.isLastWeek) {
+    this.currentWeekIndex += this.daysPerWeek;
+    this.loadCurrentWeek();
+  }
+}
+
+goToPreviousWeek(): void {
+  if (!this.isFirstWeek) {
+    this.currentWeekIndex -= this.daysPerWeek;
+    this.loadCurrentWeek();
+  }
+}
+
  constructor (private formBuilder: FormBuilder,private messageService: MessageService, private consultaService: Services,private cdRef: ChangeDetectorRef,private renderer: Renderer2 ){
    this.formulario = this.formBuilder.group({
       nombre: ['', []],
-      telefono: ['', []],
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       serviciodes: ['', []],
       servicio: ['', []],
-      
+            
+      descripcionCita: ['',[]]
 
      
     });
@@ -179,19 +426,20 @@ servicioSeleccionado: number | null = null;
     
   ];
   
-  public weekData: any[] = [];
-  public currentWeekIndex = 0;
+  public weekData2: any[] = [];
+  //public currentWeekIndex = 0;
   private daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   ngOnInit(): void {
     this.loadWeekData();
+     this.loadCurrentWeek();
   }
 
   loadWeekData(): void {
     const startIndex = this.currentWeekIndex * 7;
     const rawWeekData = this.allMockData.slice(startIndex, startIndex + 7);
 
-    this.weekData = this.daysOfWeek.map((dayName, index) => {
+    this.weekData2 = this.daysOfWeek.map((dayName, index) => {
       const dayData = rawWeekData.find(d => d.name === dayName);
 
       return dayData || {
@@ -201,7 +449,7 @@ servicioSeleccionado: number | null = null;
       };
     });
   }
-
+/*
   goToPreviousWeek(): void {
     if (this.currentWeekIndex > 0) {
       this.currentWeekIndex--;
@@ -223,6 +471,7 @@ servicioSeleccionado: number | null = null;
   get isLastWeek(): boolean {
     return (this.currentWeekIndex + 1) * 7 >= this.allMockData.length;
   }
+    */
 
 
  
@@ -249,10 +498,10 @@ const datos = {
   estatus: "A",
   horaInicio: this.formatoHora(horaInicio),
   horaFin: this.formatoHora(horaFin),
-  fechaCita: this.formatoFecha(fecha),
-  nombrePaciente: this.formulario.get('nombre')?.value,
+  fechaCita: fecha,
+  nombrePaciente:this.formulario.get('nombre')?.value ? this.formulario.get('nombre')?.value : "" ,
   servicioId: "1",
-  telefono: this.formulario.get('telefono')?.value
+  telefono: this.formulario.get('telefono')?.value ? this.formulario.get('telefono')?.value : "" 
 };
 
       this.visiblehome2 = true;
@@ -294,15 +543,7 @@ formatoHora(hora: string): string {
 
 
 // Convierte "25 Oct" → "2025-10-25"
-formatoFecha(fecha: string): string {
-  const meses: any = {
-    Ene: "01", Feb: "02", Mar: "03", Abr: "04", May: "05", Jun: "06",
-    Jul: "07", Ago: "08", Sep: "09", Oct: "10", Nov: "11", Dic: "12"
-  };
 
-  const [dia, mes] = fecha.split(' ');
-  return `2025-${meses[mes]}-${dia.padStart(2, '0')}`;
-}
 
   items = [
   'Paso 1', 'Paso 2', 'Paso 3', 'Paso 4'

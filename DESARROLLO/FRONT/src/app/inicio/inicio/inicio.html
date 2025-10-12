@@ -86,9 +86,13 @@
         <input type="text" formControlName="nombre" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText required>
         </span>
       </div>
+         <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
+            Este campo es requerido.
+          </small>
     </div>
+ 
     <div class="contenedor-boton">
-  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()"></button>
+  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()" [disabled]="formulario.get('nombre')?.invalid"></button>
 </div>
   </div>
   }
@@ -99,22 +103,25 @@
       <label>Ingresa tu número de teléfono</label>
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
-        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText >
+        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText>
         </span>
       </div>
+      <small *ngIf="formulario.get('telefono')?.touched && formulario.get('telefono')?.invalid" class="error-msg">
+            Este campo es requerido.
+          </small>
     </div>
     
     <div class="contenedor-boton">
   <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
 
-  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()"></button>
+  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()" [disabled]="formulario.get('telefono')?.invalid"></button>
 </div>
   </div>
   }
   </form>
 
   @if (mostrarcard13) {
-  <div class="cita-card reserva-card">
+  <div class="cita-card3 reserva-card">
     <div class="input-container">
       <label>Servicio que desea solicitar</label>
        <div class="p-inputgroup">
@@ -125,8 +132,19 @@
   </span>
       </div>
     </div>
-     
-    <div class="contenedor-boton">
+    <form [formGroup]="formulario">
+        <div class="descripcion-container">
+        <label for="descripcion-cita">Descripción: (Opcional)</label>
+        <textarea 
+            id="descripcion-cita"
+            rows="2" 
+            formControlName="descripcionCita"
+            placeholder=""
+            class="custom-textarea">
+        </textarea>
+    </div>
+    </form>
+    <div class="contenedor-boton2">
       <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
       <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()"></button>
     </div>
@@ -166,7 +184,7 @@
         <h2>Reserva tu cita</h2>
         <p></p>
       </div>
-<div class="calendar-container">
+<!--<div class="calendar-container">
         <h2>Seleccione Horario <i class="pi pi-calendar icon"></i></h2>
 
     <div class="calendar-header">
@@ -174,7 +192,7 @@
         <button (click)="goToNextWeek()" [disabled]="isLastWeek">&#62;</button>
     </div>
     <div class="days-grid">
-        <div *ngFor="let day of weekData" class="day-column">
+        <div *ngFor="let day of weekData2" class="day-column">
             <div class="day-name">{{ day.name }}</div>
             <div class="day-date">{{ day.date }}</div>
 
@@ -192,7 +210,97 @@
             </div>
         </div>
     </div>
+</div>-->
+<div class="calendario-reserva">
+
+    <div class="contenedor-principal">
+        <div class="selector-horario">Seleccione el horario</div>
+        <div class="pestanas">
+            <button class="pestana mes">MES</button>
+            <button class="pestana dia">DIA</button>
+            <button class="pestana hora activo">HORA</button>
+        </div>
+
+        <div class="contenedor-calendario">
+            
+            <div class="nav-fecha">
+                <button 
+                    class="flecha izquierda" 
+                    (click)="goToPreviousWeek()" 
+                    [disabled]="isFirstWeek">
+                    &lt;
+                </button>
+            </div>
+
+            <div class="dias-semana">
+                <div *ngFor="let day of weekData" class="dia">
+                    <span class="nombre-dia">{{ day.name }}</span>
+                    <span class="fecha">{{ day.date | date: 'd MMM' }}</span> 
+                </div>
+            </div>
+
+            <div class="nav-fecha">
+                <button 
+                    class="flecha derecha" 
+                    (click)="goToNextWeek()" 
+                    [disabled]="isLastWeek">
+                    &gt;
+                </button>
+            </div>
+
+        <div class="grilla-horarios">
+
+    <ng-container *ngFor="let time of fixedTimes">
+        
+        <div class="hora-fija">{{ time }}</div>
+
+        <ng-container *ngFor="let day of weekData">
+            
+            <ng-container *ngIf="!day.schedules || day.schedules.length === 0">
+                <div class="celda no-labora-celda">
+                    <span *ngIf="time === fixedTimes[0]" class="no-labora-texto">No labora</span>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="day.schedules && day.schedules.length > 0">
+                <ng-container *ngIf="getScheduleSlot(day.schedules, time) as slot">
+                    <div 
+                        class="celda"
+                        [ngClass]="{ 
+                            'no-disponible-suave': slot.status !== 'Disponible'
+                        }">
+                        
+                        <button 
+                            *ngIf="slot.status === 'Disponible'" 
+                            class="agendar" 
+                            (click)="guarda(day.date, time)">
+                            Agendar
+                        </button>
+                        
+                        <div 
+                            *ngIf="slot.status !== 'Disponible'" 
+                            class="no-disponible"
+                            [class.grande]="isLarge(time, day.name)"> 
+                        </div>
+                    </div>
+                </ng-container>
+                
+                <ng-container *ngIf="!getScheduleSlot(day.schedules, time)">
+                    <div class="celda"></div> 
+                </ng-container>
+            </ng-container>
+            
+        </ng-container>
+        
+    </ng-container>
+    
 </div>
+
+
+        </div>
+    </div>
+</div>
+
 }
 
 
