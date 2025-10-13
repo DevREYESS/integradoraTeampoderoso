@@ -5,7 +5,9 @@ import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
 import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import com.utsem.app.citasbackend.model.Cita;
+import com.utsem.app.citasbackend.model.Servicio;
 import com.utsem.app.citasbackend.repository.CitaRepository;
+import com.utsem.app.citasbackend.repository.ServicioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -23,12 +25,17 @@ import java.util.UUID;
 public class CitaService {
 
     private final CitaRepository citaRepository;
+    private final ServicioRepository servicioRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
-    public CitaService(CitaRepository citaRepository) {
+    public CitaService(
+            CitaRepository citaRepository,
+            ServicioRepository servicioRepository
+    ) {
         this.citaRepository = citaRepository;
+        this.servicioRepository = servicioRepository;
     }
 
     public List<Cita> findCita(CitaDTO citaDTO) {
@@ -50,7 +57,10 @@ public class CitaService {
             predicate = cb.and(predicate, cb.like(root.get("nombrePaciente"), "%" + citaDTO.getNombrePaciente() + "%"));
         }
 
+        //predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("fechaCita"), citaDTO.getFechaCita()) );
+
         query.where(predicate);
+        query.orderBy(cb.asc(root.get("fechaCita")));
 
         return entityManager.createQuery(query).getResultList();
     }
@@ -93,6 +103,15 @@ public class CitaService {
     }
 
     private Cita crearEntidadCita(CitaDTO dto) {
+
+        if (dto.getServicioId() == null) {
+            throw new IllegalArgumentException("El ID del servicio es requerido");
+        }
+
+
+        Servicio servicio = servicioRepository.findById(dto.getServicioId())
+                .orElseThrow(() -> new IllegalArgumentException("El servicio con ID " + dto.getServicioId() + " no existe"));
+
         Cita cita = new Cita();
         cita.setTelefono(dto.getTelefono());
         cita.setEstatus(dto.getEstatus());
@@ -100,7 +119,7 @@ public class CitaService {
         cita.setHoraInicio(dto.getHoraInicio());
         cita.setHoraFin(dto.getHoraFin());
         cita.setFechaCita(dto.getFechaCita());
-        cita.setServicio(dto.getServicio());
+        cita.setServicio(servicio);
         cita.setUuid(UUID.randomUUID());
         return cita;
     }
@@ -110,7 +129,8 @@ public class CitaService {
                 "Cita registrada correctamente",
                 cita.getNombrePaciente(),
                 cita.getFechaCita(),
-                cita.getHoraInicio()
+                cita.getHoraInicio(),
+                cita.getServicio().getNombreServicio()
         );
     }
 

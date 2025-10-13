@@ -1,7 +1,10 @@
 package com.utsem.app.citasbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -10,20 +13,31 @@ public class Servicio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @Column(nullable = false, updatable = false, name = "servicio_id")
     private Long servicioId;
 
-    @Column(nullable = false, unique = false, updatable = false, name = "servicio_uuid")
+    @Column(nullable = false, unique = true, updatable = false, name = "servicio_uuid")
     private UUID servicioUuid;
 
     @Column(nullable = false, name = "nombre_servicio")
     private String nombreServicio;
 
     @Column(nullable = false)
-    private String duracion;
+    private int duracion;
 
     @Column(nullable = false)
     private String prioridad;
+
+    @OneToMany(mappedBy = "servicio", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Cita> citas;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.servicioUuid == null) {
+            this.servicioUuid = UUID.randomUUID();
+        }
+    }
 
     public Long getServicioId() {
         return servicioId;
@@ -49,11 +63,11 @@ public class Servicio {
         this.nombreServicio = nombreServicio;
     }
 
-    public String getDuracion() {
+    public int getDuracion() {
         return duracion;
     }
 
-    public void setDuracion(String duracion) {
+    public void setDuracion(int duracion) {
         this.duracion = duracion;
     }
 
@@ -64,4 +78,7 @@ public class Servicio {
     public void setPrioridad(String prioridad) {
         this.prioridad = prioridad;
     }
+
+    public List<Cita> getCitas() { return citas; }
+    public void setCitas(List<Cita> citas) { this.citas = citas; }
 }

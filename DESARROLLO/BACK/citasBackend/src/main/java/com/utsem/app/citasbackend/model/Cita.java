@@ -1,5 +1,6 @@
 package com.utsem.app.citasbackend.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -35,8 +36,10 @@ public class Cita {
     @Column(nullable = false)
     private LocalDate fechaCita;
 
-    @Column(nullable = false)
-    private String servicio;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "servicio_id",referencedColumnName = "servicio_id", nullable = false)
+    @JsonBackReference
+    private Servicio servicio;
 
     public Long getId() {
         return id;
@@ -109,11 +112,6 @@ public class Cita {
         this.fechaCita = fechaCita;
     }
 
-    public String getServicio() {
-        return servicio;
-    }
-
-    public void setServicio(String servicio) {
-        this.servicio = servicio;
-    }
+    public Servicio getServicio() { return servicio; }
+    public void setServicio(Servicio servicio) { this.servicio = servicio; }
 }

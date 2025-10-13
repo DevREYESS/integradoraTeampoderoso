@@ -9,12 +9,14 @@ public class CitaResponseDTO {
     private String nombrePaciente;
     private LocalTime horaIncio;
     private LocalDate fechaCita;
+    private String nombreServicio;
 
-    public CitaResponseDTO(String mensaje, String nombrePaciente, LocalDate fechaCita, LocalTime horaIncio) {
+    public CitaResponseDTO(String mensaje, String nombrePaciente, LocalDate fechaCita, LocalTime horaIncio, String nombreServicio) {
         this.mensaje = mensaje;
         this.nombrePaciente = nombrePaciente;
         this.fechaCita = fechaCita;
         this.horaIncio = horaIncio;
+        this.nombreServicio = nombreServicio;
     }
 
     public String getMensaje() {
@@ -47,5 +49,13 @@ public class CitaResponseDTO {
 
     public void setFechaCita(LocalDate fechaCita) {
         this.fechaCita = fechaCita;
+    }
+
+    public String getNombreServicio() {
+        return nombreServicio;
+    }
+
+    public void setNombreServicio(String nombreServicio) {
+        this.nombreServicio = nombreServicio;
     }
 }

@@ -10,6 +10,7 @@ public class CitaDTO {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private LocalDate fechaCita;
+    private Long servicioId;
 
     public LocalTime getHoraInicio() {
         return horaInicio;
@@ -35,8 +36,6 @@ public class CitaDTO {
         this.fechaCita = fechaCita;
     }
 
-    private String servicio;
-
     public String getTelefono() {
         return telefono;
     }
@@ -61,11 +60,11 @@ public class CitaDTO {
         this.nombrePaciente = nombrePaciente;
     }
 
-    public String getServicio() {
-        return servicio;
+    public Long getServicioId() {
+        return servicioId;
     }
 
-    public void setServicio(String servicio) {
-        this.servicio = servicio;
+    public void setServicioId(Long servicioId) {
+        this.servicioId = servicioId;
     }
 }
