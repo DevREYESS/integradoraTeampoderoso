@@ -11,7 +11,7 @@ public class Servicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long Id;
+    private Long servicioId;
 
     @Column(nullable = false, unique = false, updatable = false, name = "servicio_uuid")
     private UUID servicioUuid;
@@ -25,16 +25,15 @@ public class Servicio {
     @Column(nullable = false)
     private String prioridad;
 
-    
-    public Long getId() {
-		return Id;
-	}
+    public Long getServicioId() {
+        return servicioId;
+    }
 
-	public void setId(Long id) {
-		Id = id;
-	}
+    public void setServicioId(Long servicioId) {
+        this.servicioId = servicioId;
+    }
 
-	public UUID getServicioUuid() {
+    public UUID getServicioUuid() {
         return servicioUuid;
     }
 

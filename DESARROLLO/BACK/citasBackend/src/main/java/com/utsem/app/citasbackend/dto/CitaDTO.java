@@ -10,19 +10,8 @@ public class CitaDTO {
     private LocalTime horaInicio;
     private LocalTime horaFin;
     private LocalDate fechaCita;
-    private Long servicioId;
 
-    
-    
-    public Long getServicioId() {
-		return servicioId;
-	}
-
-	public void setServicioId(Long servicioId) {
-		this.servicioId = servicioId;
-	}
-
-	public LocalTime getHoraInicio() {
+    public LocalTime getHoraInicio() {
         return horaInicio;
     }
 
