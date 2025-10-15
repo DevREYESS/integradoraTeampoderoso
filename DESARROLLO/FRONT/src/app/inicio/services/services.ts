@@ -6,8 +6,8 @@ import { Observable, map, catchError, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class Services {
-   private apiUrl = 'http://localhost/citas/sCita';
-   private apiUrlGuardar = 'http://localhost/citas/saveCita';
+   private apiUrl = 'http://localhost:8010/citas/sCita';
+   private apiUrlGuardar = 'http://localhost:8010/citas/saveCita';
 
   constructor(private http: HttpClient) { }
 
@@ -32,7 +32,14 @@ guardarcita(cita: any): Observable<any> {
   );
 }
 
-
+servicios(): Observable<any> {
+  return this.http.post<any>(this.apiUrlGuardar, {
+    headers: { 'Content-Type': 'application/json' }
+  }).pipe(
+    map(response => response),
+    catchError(this.handleError)
+  );
+}
 
  
   private handleError(error: HttpErrorResponse): Observable<never> {

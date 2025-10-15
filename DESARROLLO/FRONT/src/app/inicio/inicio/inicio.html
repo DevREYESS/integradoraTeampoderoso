@@ -22,7 +22,7 @@
     </div>
       <div class="contact-info">
          <a
-        href=""
+        href="https://www.tiktok.com/@medicaisor"
         target="_blank"
         class="logo-text"
       >
@@ -32,7 +32,7 @@
     </div>
       <div class="contact-info">
          <a
-        href=""
+        href="https://www.facebook.com/medica.isor?locale=es_LA"
         target="_blank"
         class="logo-text"
       >
@@ -58,8 +58,8 @@
 
 <div class="main-content">
   @if (visiblehome2) {
-
-<div class="steps-container">
+<div class="col-12 col-lg-12 col-md-12">
+<div class=" steps-container">
   <div class="progress-bar">
     <div 
       class="progress" 
@@ -67,16 +67,18 @@
     </div>
   </div>
 </div>
+</div>
 
 
 
 @if (mostrarcard1) {
-  <div class="cita-header">
+  <div class="row col-lg-12 col-md-12 col-12 cita-header">
         <h2>Reserva tu cita</h2>
         <p></p>
       </div>
 <div class="cards-container">
 <form [formGroup]="formulario">
+  
 @if (mostrarcard11) {
   <div class="cita-card reserva-card">
     <div class="input-container">
@@ -96,7 +98,6 @@
 </div>
   </div>
   }
-
   @if (mostrarcard12) {
   <div class="cita-card reserva-card">
     <div class="input-container">
@@ -119,7 +120,6 @@
   </div>
   }
   </form>
-
   @if (mostrarcard13) {
   <div class="cita-card3 reserva-card">
     <div class="input-container">
@@ -151,8 +151,6 @@
   </div>
 }
 
-
-
   <div class="cita-card2 info-card">
     <ul>
       <li>
@@ -173,8 +171,8 @@
       </li>
     </ul>
   </div>
+  </div>
 
-</div>
 }
 
 
@@ -319,10 +317,12 @@
 
 
 @if (visiblehome) {
-<div class="seccion-superior">
+<div class="row seccion-superior">
+  <div class="row col-12 ">
+  <div class="col-lg-3 col-md-6">
  <form [formGroup]="formulario2" (ngSubmit)="consultarCita()">
   <div class="cita-card-container">
-    <div class="cita-card">
+    <div class="cita-card1">
       <div class="cita-header">
         <h2>YA TIENES CITA?</h2>
         <p>Consúltala</p>
@@ -346,8 +346,8 @@
     </div>
   </div>
 </form>
-
-
+</div>
+<div class="col-lg-9 col-md-9">
   <div class="contenido-derecho">
     <div class="cultura-empresarial">
       <h2>CULTURA EMPRESARIAL</h2>
@@ -372,9 +372,12 @@
     </p>
     </div>
     </div>
-    
+</div>
+</div>
+</div>
+
   
-</div><div *ngIf="showConfirmationModal">
+<div *ngIf="showConfirmationModal">
     <div class="modal-backdrop" (click)="regresar2()"></div> 
 
     <div class="custom-modal-container">
@@ -422,8 +425,8 @@
 </div>
 
 
-  <div class="mision-vision-valores-container">
-    <div class="box mision-box">
+  <div class="row mision-vision-valores-container">
+    <div class="col-lg-4 col-md-6 col-12 box mision-box">
      <img src="../../../assets/imagenes/mision.jpg" alt="">
       <h3>Misión</h3>
       <p>
@@ -437,7 +440,7 @@
       </p>
     </div>
 
-    <div class="box vision-box">
+    <div class="col-lg-4 col-md-6 col-12 box vision-box">
        <img src="../../../assets/imagenes/vision.jpg" class="valoresimg" alt="">
       <h3>Visión</h3>
       <p>
@@ -449,7 +452,7 @@
       </p>
     </div>
 
-    <div class="box valores-box">
+    <div class="col-lg-4 col-md-6 col-12 box valores-box">
        <img src="../../../assets/imagenes/valores.jpg" class="valoresimg" alt="">
       <h3>Valores</h3>
       <ol>

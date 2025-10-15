@@ -148,14 +148,14 @@ h2 {
 
 .contenido-derecho {
   flex-grow: 1;
-  max-width: 980px;
+  max-width: 1100px;
 margin-bottom: -40px
 }
 
 /* =========================
    Cita Card
 ========================= */
-.cita-card {
+.cita-card1 {
   width: 100%;
   border-radius: 20px;
   border: 1px solid #84b6f4;

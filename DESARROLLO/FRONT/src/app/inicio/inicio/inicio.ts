@@ -510,17 +510,20 @@ const datos = {
 this.consultaService.guardarcita(datos).subscribe({
   next: (res) => {
     this.showConfirmationModal = true; 
-    this.cdRef.detectChanges(); 
     console.log("Cita guardada:", res);
     this.limpiarFormulario();
+    this.cdRef.detectChanges(); 
   },
   error: (err) => {
     this.showConfirmationModal = false; 
     this.cdRef.detectChanges(); 
+    this.limpiarFormulario();
     console.error("Error al guardar la cita:", err);
     alert("No se pudo guardar la cita. Por favor intenta de nuevo.");
   }
+  
 });
+    this.cdRef.detectChanges(); 
       this.visiblehome2 = false;
       this.visiblehome = true;
     this.regresarf = false
