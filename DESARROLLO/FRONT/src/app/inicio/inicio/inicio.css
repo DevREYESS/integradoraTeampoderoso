@@ -94,8 +94,8 @@
 }
 
 .cta-button {
-  background-color: #f06a8f;
-  color: white;
+  background-color: #ff66c4;
+  color: #213c6c;
   border: none;
   padding: 8px 20px;
   border-radius: 20px;
@@ -106,7 +106,7 @@
 }
 
 .cta-button:hover {
-  background-color: #f06a8f !important;
+  background-color: #ff66c4 !important;
 }
 /* =========================
    Main Content
@@ -170,7 +170,7 @@ margin-bottom: -40px
 
 .cita-header h2 {
   font-size: 1.5em;
-  color: #333;
+  color: #213c6c;
   margin: 0;
   font-weight: bold;
 }
@@ -212,8 +212,8 @@ margin-bottom: -40px
 
 /* Botón consultar */
 .p-button-consultar {
-  background-color: #f06a8f;
-    color: white;
+  background-color: #ff66c4;
+    color: #213c6c;
     border: none;
     padding: 12px 30px;
     border-radius: 25px; /* Estilo píldora */
@@ -226,7 +226,7 @@ margin-bottom: -40px
 
 
 .p-button-consultar:hover {
-  background-color: #f06a8f !important;
+  background-color: #ff66c4 !important;
 }
 
 /* =========================
@@ -249,24 +249,26 @@ margin-bottom: -40px
 }
 
 .mision-box {
-  background-color: #f7a8ca;
+  background-color: #ffc7db;
 }
 
 .vision-box {
-  background-color: #c982d6;
+  background-color: #ff66c4;
 }
 
 .valores-box {
-  background-color: #f06a8f;
+  background-color: #ffb7e4;
 }
 
 .box h3 {
+  color: black;
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
 .box p, .box ol {
+  color: black;
   font-size: 14px;
   line-height: 1.6;
   text-align: justify;
@@ -392,7 +394,7 @@ margin-bottom: -40px
 .reserva-card .input-container label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #666;
+  color: #213c6c;
   font-weight: 500;
 }
 
@@ -465,7 +467,7 @@ margin-bottom: -40px
 .descripcion-container label {
     /* Estilo del texto 'Descripción: (Opcional)' */
     font-size: 0.95rem;
-    color: #444;
+    color: #213c6c;
     display: block;
     margin-bottom: 5px;
     font-weight: 600;
@@ -507,7 +509,7 @@ margin-bottom: -40px
 
 .info-card li p {
   margin: 0;
-  color: #555;
+  color: #213c6c;
   font-size: 0.9rem;
 }
 
@@ -698,8 +700,8 @@ margin-bottom: -40px
 }
 
 .custom-modal-button {
-    background-color: #f87289; /* Rosa */
-    color: white;
+    background-color: #ff66c4; /* Rosa */
+    color: #213c6c;
     border: none;
     padding: 10px 30px;
     border-radius: 20px;
@@ -790,7 +792,7 @@ margin-bottom: -40px
 
 .calendario-reserva .selector-horario {
     font-size: 1.1rem;
-    color: #444;
+    color: #213c6c;
     margin-bottom: 25px;
 }
 
@@ -808,22 +810,22 @@ justify-content: center;
 .calendario-reserva .pestana {
     padding: 8px 20px;
     border: none;
-    border-radius: 10px;
+    border-radius: 20px;
     font-size: 0.9rem;
     font-weight: bold;
     cursor: pointer;
-    color: white;
+    color: #213c6c;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .calendario-reserva .pestana.mes {
-    background-color: #f2b3b8; 
+    background-color: #e2a5aa; 
 }
 .calendario-reserva .pestana.dia {
-    background-color: #f2b3b8;
+    background-color: #e2a5aa;
 }
 .calendario-reserva .pestana.hora {
-     background-color: #f2b3b8;
+     background-color: #e2a5aa;
 }
 
 /* Flechas de Navegación */
@@ -836,7 +838,7 @@ justify-content: center;
 
 .calendario-reserva .flecha {
     background-color: var(--color-pestana); 
-    color: white;
+    color:  #213c6c;
     border: none;
     width: 30px;
     height: 30px;
@@ -901,7 +903,7 @@ justify-content: center;
     text-align: right;
     padding-right: 15px;
     font-weight: bold;
-    color: #666;
+    color: #213c6c;
     font-size: 0.95rem;
     display: flex;
     align-items: center;
@@ -920,7 +922,6 @@ justify-content: center;
 .calendario-reserva .agendar {
     appearance: none; 
     border: none;
-    
     background-color: var(--color-agendar);
     color: #213c6c;
     border-radius: 15px;
@@ -970,3 +971,4 @@ justify-content: center;
 /* Esta clase se aplica a CADA celda de un día no laborable.
    Le da el fondo gris a TODA la columna.
 */
+

@@ -126,8 +126,8 @@
 /* 5. Estilo del Botón Aceptar          */
 /* ==================================== */
 .custom-modal-button.primary-button {
-    background-color: #f06a8f; /* Tu color rosa */
-    color: white;
+    background-color: #ff66c4; /* Tu color rosa */
+    color: #213c6c;
     border: none;
     padding: 12px 30px;
     border-radius: 25px; /* Estilo píldora */
@@ -140,5 +140,5 @@
 
 
 .custom-modal-button.primary-button:hover {
-    background-color: #f06a8f;
+    background-color: #ff66c4;
 }
