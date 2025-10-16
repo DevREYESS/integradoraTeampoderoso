@@ -1,0 +1,138 @@
+<div [class.shrink]="isShrunk" class="header-container">
+  <div class="social-info">
+    <div class="logo-text">
+      <a
+        href="https://www.instagram.com/medica_isor?igsh=MXNic3V6dXYyeHlxcg=="
+        target="_blank"
+        class="logo-text"
+      >
+        <i class="pi pi-instagram icon"></i>
+        <span>Instagram</span>
+      </a>
+    </div>
+    <div class="contact-info">
+         <a
+        href="https://wa.me/5217222619193"
+        target="_blank"
+        class="logo-text"
+      >
+      <i class="pi pi-whatsapp icon"></i>
+      <span>Whatsapp</span>
+      </a>
+    </div>
+      <div class="contact-info">
+         <a
+        href="https://www.tiktok.com/@medicaisor"
+        target="_blank"
+        class="logo-text"
+      >
+      <i class="pi pi-tiktok icon"></i>
+      <span>TikTok</span>
+      </a>
+    </div>
+      <div class="contact-info">
+         <a
+        href="https://www.facebook.com/medica.isor?locale=es_LA"
+        target="_blank"
+        class="logo-text"
+      >
+      <i class="pi pi-facebook icon"></i>
+      <span>Facebook</span>
+      </a>
+    </div>
+  </div>
+  <div class="brand-logo-circle" ></div>
+ <div class="brand-cta">
+    <div class="brand-info">
+    </div>
+    
+  </div>
+</div>
+<div class="calendario-reserva">
+
+    <div class="contenedor-principal">
+        <div class="pestanasmes">
+            <button class="pestana2 nuevo p-button-nuevo ">Nuevo</button>
+</div>
+        <div class="pestanas">
+            <button class="pestana pestana12 mes">Consultar Citas</button>
+        </div>
+            <hr >
+
+
+        <div class="contenedor-calendario">
+            
+            <div class="nav-fecha">
+                <button 
+                    class="flecha izquierda" 
+                    (click)="goToPreviousWeek()" 
+                    [disabled]="isFirstWeek">
+                    &lt;
+                </button>
+            </div>
+
+            <div class="dias-semana">
+                <div *ngFor="let day of weekData" class="dia">
+                    <span class="nombre-dia">{{ day.name }}</span>
+                    <span class="fecha">{{ day.date | date: 'd MMM' }}</span> 
+                </div>
+            </div>
+
+            <div class="nav-fecha">
+                <button 
+                    class="flecha derecha" 
+                    (click)="goToNextWeek()" 
+                    [disabled]="isLastWeek">
+                    &gt;
+                </button>
+            </div>
+
+        <div class="grilla-horarios">
+
+    <ng-container *ngFor="let time of fixedTimes">
+        
+        <div class="hora-fija">{{ time }}</div>
+
+        <ng-container *ngFor="let day of weekData">
+            
+            <ng-container *ngIf="!day.schedules || day.schedules.length === 0">
+                <div class="celda no-labora-celda">
+                    <span *ngIf="time === fixedTimes[0]" class="no-labora-texto">No labora</span>
+                </div>
+            </ng-container>
+
+            <ng-container *ngIf="day.schedules && day.schedules.length > 0">
+                <ng-container *ngIf="getScheduleSlot(day.schedules, time) as slot">
+                    <div 
+                        class="celda"
+                        [ngClass]="{ 
+                            'no-disponible-suave': slot.status !== 'Agendado'
+                        }">
+                        
+                       
+<div class="schedule-item" *ngIf="slot.status === 'Agendado'"  >
+  <div class="color-bar"></div>
+  <div class="info">
+    <div class="name">{{slot.appointment.nombrePaciente}}</div>
+    <div class="time">{{slot.appointment.time}}</div>
+  </div>
+</div>
+                        
+                    </div>
+                </ng-container>
+                
+                <ng-container *ngIf="!getScheduleSlot(day.schedules, time)">
+                    <div class="celda"></div> 
+                </ng-container>
+            </ng-container>
+            
+        </ng-container>
+        
+    </ng-container>
+    
+</div>
+
+
+        </div>
+    </div>
+</div>

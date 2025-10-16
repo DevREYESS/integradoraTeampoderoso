@@ -411,25 +411,21 @@ margin-bottom: -40px
   border-radius: 20px 20px 20px 20px; /* Borde redondeado solo a la derecha */
   border: 1px solid #add8e6;
  background-color: #f0f8ff; /* Color de fondo del ícono */
-   /* Borde redondeado solo a la izquierda */
    margin-top: 50px;
 }
 
 .contenedor-boton {
   display: flex;
-  justify-content: flex-end;
-   /* manda el botón a la derecha */
+  justify-content: flex-end !important;
 }
 .contenedor-boton2 {
   display: flex;
   justify-content: flex-end;
   margin-top: 5px;
-   /* manda el botón a la derecha */
 }
 .contenedor-botonprev {
   display: flex;
   justify-content: flex-start;
-   /* manda el botón a la derecha */
 }
 
 .p-button-siguiente {

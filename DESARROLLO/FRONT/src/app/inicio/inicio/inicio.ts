@@ -11,6 +11,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConsultaModal } from '../componentes/consulta-modal/consulta-modal';
 import { Services } from '../services/services';
 import { HttpClientModule } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -24,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class Inicio implements OnInit {
   
-  
+   irAAdmin() {
+    this.router.navigate(['/login']); // 👈 redirige a la página del admin
+  }
   // Almacenar la fecha de inicio de la semana
   private currentWeekStart: Date = new Date();
  public hasNextWeek = true;
@@ -46,7 +49,7 @@ servicios = [
   { id: 2, nombre: 'Limpieza dental' },
   { id: 3, nombre: 'Ortodoncia' },
 ];
-
+ 
 servicioSeleccionado: number | null = null;
 
 allDaysData: any[] = [
@@ -295,7 +298,7 @@ goToPreviousWeek(): void {
   }
 }
 
- constructor (private formBuilder: FormBuilder,private messageService: MessageService, private consultaService: Services,private cdRef: ChangeDetectorRef,private renderer: Renderer2 ){
+ constructor (private formBuilder: FormBuilder,private router: Router,private messageService: MessageService, private consultaService: Services,private cdRef: ChangeDetectorRef,private renderer: Renderer2 ){
    this.formulario = this.formBuilder.group({
       nombre: ['', []],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],

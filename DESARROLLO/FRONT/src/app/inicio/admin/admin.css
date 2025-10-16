@@ -1,0 +1,402 @@
+
+/* ------------------------------------------------------------------- */
+/* 2. ESTILOS DEL CONTENEDOR PRINCIPAL DEL CALENDARIO (TODO ANIDADO) */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva {
+    max-width: 900px;
+    width: 100%;
+    
+    margin-top: 150px; /* Separación del título o elemento superior */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+  border: 1px solid #84b6f4;
+  background-color: #f9f9f9; /* Color de fondo suave */
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para un efecto 3D */
+
+}
+
+.calendario-reserva .titulo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-principal);
+    margin-bottom: 15px;
+}
+
+.calendario-reserva .contenedor-principal {
+    background-color: white;
+    padding: 30px;
+      
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    position: relative;
+    font-family: Arial, sans-serif; /* Aísla el tipo de letra también */
+}
+
+.calendario-reserva .selector-horario {
+    font-size: 1.1rem;
+    color: #213c6c;
+    margin-bottom: 25px;
+}
+
+
+/* ------------------------------------------------------------------- */
+/* 3. ESTILOS DE PESTAÑAS Y FLECHAS */
+/* ------------------------------------------------------------------- */
+
+
+.calendario-reserva .pestanasmes {
+    display: flex;
+    gap: 10px;
+justify-content: end;
+
+}
+.calendario-reserva .pestanas {
+    display: flex;
+    gap: 10px;
+justify-content: start;
+margin-bottom: 15px;
+
+}
+
+.calendario-reserva .pestana2 {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #213c6c;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.calendario-reserva .pestana {
+    background-color: #ff66c4;
+    color: #213c6c;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px; /* Estilo píldora */
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    width: 40%; /* Ocupa todo el ancho */
+    height: 34px;
+    transition: background-color 0.3s;
+}
+.calendario-reserva .pestana12 {
+     padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #213c6c;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendario-reserva .pestana.nuevo {
+    background-color: #ff66c4; 
+}
+.calendario-reserva .pestana.mes {
+    background-color: #e2a5aa; 
+}
+.calendario-reserva .pestana.dia {
+    background-color: #e2a5aa;
+}
+.calendario-reserva .pestana.hora {
+     background-color: #e2a5aa;
+}
+
+/* Flechas de Navegación */
+.calendario-reserva .nav-fecha {
+    display: flex;
+    align-items: flex-end; 
+    padding-bottom: 15px; 
+    justify-content: center;
+}
+
+.calendario-reserva .flecha {
+    background-color: var(--color-pestana); 
+    color:  #213c6c;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.calendario-reserva .flecha.izquierda { margin-right: 5px; }
+.calendario-reserva .flecha.derecha { margin-left: 5px; }
+
+
+/* ------------------------------------------------------------------- */
+/* 4. ESTILOS DE LA CUADRÍCULA Y DÍAS */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva .contenedor-calendario {
+    display: grid;
+    grid-template-columns: auto repeat(7, 1fr) auto; 
+    gap: 0;
+}
+
+.calendario-reserva .dias-semana {
+    grid-column: 2 / 9; 
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 10px;
+}
+
+.calendario-reserva .dias-semana .dia {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 0 5px;
+}
+
+.calendario-reserva .dias-semana .nombre-dia {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+/* ------------------------------------------------------------------- */
+/* 5. ESTILOS DE HORARIOS Y CELDAS */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva .grilla-horarios {
+    grid-column: 1 / -1; 
+    display: grid;
+    grid-template-columns: auto repeat(7, 1fr) auto; 
+    text-align: center;
+}
+
+.calendario-reserva .hora-fija {
+    grid-column: 1; 
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+    color: #213c6c;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    height: 40px; 
+}
+
+.calendario-reserva .celda {
+    grid-column: span 1;
+    height: 40px; 
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendario-reserva .agendar {
+    appearance: none; 
+    border: none;
+    background-color: var(--color-agendar);
+    color: #213c6c;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    height: 30px;
+    width: 90%; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.calendario-reserva .agendar:hover {
+    background-color: #50b365;
+}
+
+.calendario-reserva .no-disponible {
+    background-color: var(--color-gris-claro);
+    height: 30px;
+    width: 90%; 
+    border-radius: 5px;
+}
+
+.calendario-reserva .celda.no-disponible-suave {
+    background-color: var(--color-fondo-celda-ocupada);
+}
+
+.calendario-reserva .no-disponible.grande {
+    height: 35px;
+    width: 95%;
+}
+.calendario-reserva .no-labora-celda  {
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #999;
+    background-color: var(--color-fondo-claro);
+}
+/* ------------------------------------------------------------------- */
+/* ESTILO FINAL PARA DÍAS NO LABORABLES (Celdas individuales) */
+/* ------------------------------------------------------------------- */
+
+
+/* CSS */
+.schedule-item {
+  display: flex;
+  align-items: center;
+  width: 100px;
+  height: 35px;/* Ajusta según necesites */
+  background-color: #e0f0ff; /* Fondo azul claro similar a la imagen */
+  border-radius: 5px;
+  padding: 8px;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.color-bar {
+  width: 5px;
+  height: 100%;
+  background-color: #00a651; /* Color verde de la barra */
+  border-radius: 2px;
+  margin-right: 10px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 8px;
+  color: #000;
+}
+
+.time {
+  font-size: 6px;
+  color: #333;
+  margin-top: 2px;
+}
+
+.p-button-nuevo {
+  background-color: #ff66c4;
+    color: #213c6c;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px; /* Estilo píldora */
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    width: 20%; /* Ocupa todo el ancho */
+    height: 35px;
+    transition: background-color 0.3s;
+}
+.p-button-nuevo:hover {
+  background-color: #ff66c4 !important;
+}
+
+hr {
+    border: none;
+    height: 3px;
+   width: 40%;
+    background-color: #ff66c4 !important; /* O el código hexadecimal exacto del rosa que desees */
+     margin-bottom: 30px;
+}
+.hr:hover {
+  background-color: #ff66c4 !important;
+    font-weight: bold;
+
+}
+
+
+
+/* =========================
+   Header
+========================= */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 70px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: padding 0.3s ease;
+}
+
+.header-container.shrink {
+  padding: 5px 50px;
+}
+
+/* =========================
+   Social Info
+========================= */
+.social-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.logo-text, .contact-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.icon {
+  font-size: 30px;
+  color: #333;
+  margin-top: 6px;
+}
+
+/* =========================
+   Logo
+========================= */
+.brand-logo-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #f7a8ca;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../../assets/imagenes/logo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header-container.shrink .brand-logo-circle {
+  width: 50px;
+  height: 50px;
+}
+
+
+.brand-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-info {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}

@@ -27,7 +27,7 @@
     z-index: 1000; 
     
     /* Diseño */
-    width: 400px; 
+    width: 500px; 
     max-width: 90%; /* Responsivo en móviles */
     padding: 30px;
     background-color: white;
@@ -141,4 +141,21 @@
 
 .custom-modal-button.primary-button:hover {
     background-color: #ff66c4;
+}
+
+
+/*boton de descargar*/
+.btn-success{
+    text-align: end;
+    align-items: end;
+}
+.btn-secondary{
+    font-size: 13px;
+    background-color: #ff66c4;
+    color: #213c6c;
+ border: none;
+    padding: 7px 18px;
+    border-radius: 25px; /* Estilo píldora */
+    font-weight: bold;
+    cursor: pointer;
 }

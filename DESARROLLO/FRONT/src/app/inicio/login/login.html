@@ -1,0 +1,31 @@
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+  <div class="row w-100 justify-content-center align-items-center">
+
+    <div class="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+      <div class="card p-4 shadow-sm login-card w-100">
+        <h2 class="text-center mb-4 login-title">INICIA SESIÓN</h2>
+        <form [formGroup]="loginForm" (ngSubmit)="acceder()">
+          <div class="p-inputgroup mb-3">
+           
+            <input type="text" placeholder="Usuario" formControlName="usuario"
+                   class="p-inputtext p-inputtext-rounded form-control-lg custom-input" pInputText required>
+          </div>
+          <div class="p-inputgroup mb-4">
+            
+            <input type="password" placeholder="Contraseña" formControlName="contrasena"
+                   class="p-inputtext p-inputtext-rounded form-control-lg custom-input" pInputText required>
+          </div>
+
+          <div class="contenedor-boton">
+            <button pButton type="submit" label="ACCEDER" class="p-button-siguiente w-100">ACCEDER</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 col-lg-5 text-center mt-4 mt-md-0">
+      <img src="../../../assets/imagenes/logo.jpg" alt="Médica ISOR Logo" class="img-fluid logo-img">
+    </div>
+
+  </div>
+</div>
