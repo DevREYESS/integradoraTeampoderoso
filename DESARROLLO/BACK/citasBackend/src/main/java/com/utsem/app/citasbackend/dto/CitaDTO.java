@@ -11,6 +11,8 @@ public class CitaDTO {
     private LocalTime horaFin;
     private LocalDate fechaCita;
     private Long servicioId;
+    private Boolean soloMes;
+    private Boolean soloDia;
 
     public LocalTime getHoraInicio() {
         return horaInicio;
@@ -66,5 +68,21 @@ public class CitaDTO {
 
     public void setServicioId(Long servicioId) {
         this.servicioId = servicioId;
+    }
+
+    public Boolean getSoloMes() {
+        return soloMes;
+    }
+
+    public void setSoloMes(Boolean soloMes) {
+        this.soloMes = soloMes;
+    }
+
+    public Boolean getSoloDia() {
+        return soloDia;
+    }
+
+    public void setSoloDia(Boolean soloDia) {
+        this.soloDia = soloDia;
     }
 }

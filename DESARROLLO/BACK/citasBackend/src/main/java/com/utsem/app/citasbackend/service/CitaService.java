@@ -57,7 +57,33 @@ public class CitaService {
             predicate = cb.and(predicate, cb.like(root.get("nombrePaciente"), "%" + citaDTO.getNombrePaciente() + "%"));
         }
 
-        //predicate = cb.and(predicate, cb.greaterThanOrEqualTo(root.get("fechaCita"), citaDTO.getFechaCita()) );
+        if (citaDTO.getHoraInicio() != null) {
+            predicate = cb.and(predicate, cb.equal(root.get("horaInicio"),citaDTO.getHoraInicio()));
+        }
+
+        if (citaDTO.getFechaCita() != null) {
+
+            if (citaDTO.getSoloMes() != null && citaDTO.getSoloMes()) {
+
+                predicate = cb.and(predicate, cb.equal(
+                        cb.function("MONTH", Integer.class, root.get("fechaCita")),
+                        citaDTO.getFechaCita().getMonthValue()
+                ));
+
+            } else if (citaDTO.getSoloDia() != null && citaDTO.getSoloDia()) {
+
+                predicate = cb.and(predicate, cb.equal(
+                        cb.function("DAY", Integer.class, root.get("fechaCita")),
+                        citaDTO.getFechaCita().getDayOfMonth()
+                ));
+
+            } else {
+
+                predicate = cb.and(predicate, cb.equal(root.get("fechaCita"),citaDTO.getFechaCita()));
+
+            }
+
+        }
 
         query.where(predicate);
         query.orderBy(cb.asc(root.get("fechaCita")));
