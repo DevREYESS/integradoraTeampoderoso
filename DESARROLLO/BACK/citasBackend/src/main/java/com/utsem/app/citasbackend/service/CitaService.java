@@ -3,6 +3,7 @@ package com.utsem.app.citasbackend.service;
 import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
+import com.utsem.app.citasbackend.exceptions.CitaNoEncontrada;
 import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.model.Servicio;
@@ -93,12 +94,31 @@ public class CitaService {
 
     public CitaResponseDTO crearCita(CitaDTO citaDTO) {
         validarFechaCita(citaDTO.getFechaCita());
-        validarSolapamiento(citaDTO);
+        validarSolapamiento(citaDTO, null);
 
         Cita nuevaCita = crearEntidadCita(citaDTO);
         Cita citaGuardada = citaRepository.save(nuevaCita);
 
         return construirRespuesta(citaGuardada);
+    }
+
+    public CitaResponseDTO actualizarCita(CitaDTO citaDTO, String uuid) {
+        Cita citaExistente = citaRepository.findByUuid(UUID.fromString(uuid))
+                .orElseThrow(() -> new CitaNoEncontrada("Cita no encontrada"));
+
+        validarFechaCita(citaDTO.getFechaCita());
+        validarSolapamiento(citaDTO, UUID.fromString(uuid));
+
+        citaExistente.setFechaCita(citaDTO.getFechaCita());
+        citaExistente.setHoraInicio(citaDTO.getHoraInicio());
+        citaExistente.setHoraFin(citaDTO.getHoraFin());
+        citaExistente.setNombrePaciente(citaDTO.getNombrePaciente());
+        citaExistente.setTelefono(citaDTO.getTelefono());
+        citaExistente.setEstatus(citaDTO.getEstatus());
+
+        Cita citaActualizada = citaRepository.save(citaExistente);
+
+        return construirRespuesta(citaActualizada);
     }
 
 
@@ -111,7 +131,7 @@ public class CitaService {
         }
     }
 
-    private void validarSolapamiento(CitaDTO citaDTO) {
+    private void validarSolapamiento(CitaDTO citaDTO, UUID uuid) {
         LocalDate fechaCita = citaDTO.getFechaCita();
         LocalTime inicioNueva = citaDTO.getHoraInicio();
         LocalTime finNueva = citaDTO.getHoraFin();
@@ -121,6 +141,11 @@ public class CitaService {
         );
 
         for (Cita cita : citasExistentes) {
+
+            if (cita.getUuid().equals(uuid)) {
+                continue;
+            }
+
             boolean seSolapa = inicioNueva.isBefore(cita.getHoraFin()) && finNueva.isAfter(cita.getHoraInicio());
             if (seSolapa) {
                 throw new CitaDuplicadaException("Ya existe una cita que se solapa con este horario.");

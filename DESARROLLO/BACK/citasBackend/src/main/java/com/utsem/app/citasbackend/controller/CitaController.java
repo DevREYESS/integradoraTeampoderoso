@@ -4,10 +4,7 @@ import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.service.CitaService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,5 +26,10 @@ public class CitaController {
     @PostMapping("/saveCita")
     public CitaResponseDTO crearCita(@RequestBody CitaDTO citaDTO) {
         return citaService.crearCita(citaDTO);
+    }
+
+    @PutMapping("/uCita/{uuid}")
+    public CitaResponseDTO actualizarCita(@RequestBody CitaDTO citaDTO, @PathVariable String uuid) {
+        return citaService.actualizarCita(citaDTO, uuid);
     }
 }

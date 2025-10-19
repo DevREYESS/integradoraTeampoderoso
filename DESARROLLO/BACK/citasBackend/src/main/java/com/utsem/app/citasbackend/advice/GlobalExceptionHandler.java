@@ -1,6 +1,7 @@
 package com.utsem.app.citasbackend.advice;
 
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
+import com.utsem.app.citasbackend.exceptions.CitaNoEncontrada;
 import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,13 @@ public class GlobalExceptionHandler {
         body.put("error", "Fecha invalida");
         body.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(CitaNoEncontrada.class)
+    public ResponseEntity<Map<String, String>> handleCitaNoEncontrada(CitaNoEncontrada ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Cita no encontrada");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
 }
