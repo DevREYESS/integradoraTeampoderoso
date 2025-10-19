@@ -2,8 +2,9 @@ package com.utsem.app.citasbackend.service;
 
 import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
+import com.utsem.app.citasbackend.exceptions.CamposRequeridos;
 import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
-import com.utsem.app.citasbackend.exceptions.CitaNoEncontrada;
+import com.utsem.app.citasbackend.exceptions.RegistroNoEncontrado;
 import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.model.Servicio;
@@ -104,7 +105,7 @@ public class CitaService {
 
     public CitaResponseDTO actualizarCita(CitaDTO citaDTO, String uuid) {
         Cita citaExistente = citaRepository.findByUuid(UUID.fromString(uuid))
-                .orElseThrow(() -> new CitaNoEncontrada("Cita no encontrada"));
+                .orElseThrow(() -> new RegistroNoEncontrado("Cita no encontrada"));
 
         validarFechaCita(citaDTO.getFechaCita());
         validarSolapamiento(citaDTO, UUID.fromString(uuid));
@@ -156,12 +157,12 @@ public class CitaService {
     private Cita crearEntidadCita(CitaDTO dto) {
 
         if (dto.getServicioId() == null) {
-            throw new IllegalArgumentException("El ID del servicio es requerido");
+            throw new CamposRequeridos("El ID del servicio es requerido");
         }
 
 
         Servicio servicio = servicioRepository.findById(dto.getServicioId())
-                .orElseThrow(() -> new IllegalArgumentException("El servicio con ID " + dto.getServicioId() + " no existe"));
+                .orElseThrow(() -> new RegistroNoEncontrado("El servicio con ID " + dto.getServicioId() + " no existe"));
 
         Cita cita = new Cita();
         cita.setTelefono(dto.getTelefono());
