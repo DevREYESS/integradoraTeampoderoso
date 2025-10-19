@@ -1,0 +1,12 @@
+<div class="modal-backdrop" *ngIf="show" (click)="onClose()"></div>
+
+<div class="modal" *ngIf="show">
+  <div class="modal-content">
+    <h3>Selecciona un mes</h3>
+    <div class="months-grid">
+      <button *ngFor="let month of months" (click)="selectMonth(month)">
+        {{ month }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -12,11 +12,12 @@ import { ConsultaModal } from '../componentes/consulta-modal/consulta-modal';
 import { Services } from '../services/services';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { Meses } from '../componentes/meses/meses';
 
 
 @Component({
   selector: 'app-inicio',
-  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,ToastModule,ConsultaModal,HttpClientModule],
+  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,ToastModule,ConsultaModal,Meses,HttpClientModule],
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
@@ -52,7 +53,7 @@ servicios = [
  
 servicioSeleccionado: number | null = null;
 
-allDaysData: any[] = [
+allDaysData2: any[] = [
   {
     name: 'Dom',
     date: '2025-10-12', // Mañana
@@ -298,7 +299,11 @@ goToPreviousWeek(): void {
   }
 }
 
- constructor (private formBuilder: FormBuilder,private router: Router,private messageService: MessageService, private consultaService: Services,private cdRef: ChangeDetectorRef,private renderer: Renderer2 ){
+ constructor (private formBuilder: FormBuilder,
+  private router: Router,
+  private messageService: MessageService, 
+  private consultaService: Services,
+  private cdRef: ChangeDetectorRef,private renderer: Renderer2){
    this.formulario = this.formBuilder.group({
       nombre: ['', []],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
@@ -312,6 +317,11 @@ goToPreviousWeek(): void {
      this.formulario2 = this.formBuilder.group({
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
+
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth(); // 0-11
+    const currentYear = currentDate.getFullYear();
+    this.filterByMonth(currentMonth, currentYear);
  }
 
 
@@ -433,7 +443,10 @@ goToPreviousWeek(): void {
   //public currentWeekIndex = 0;
   private daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
+  allDaysData: any[] = [];
+
   ngOnInit(): void {
+     this.generateDaysData(new Date('2025-10-12'), new Date('2025-12-31'));
     this.loadWeekData();
      this.loadCurrentWeek();
   }
@@ -735,4 +748,95 @@ formatTelefono2(event: Event) {
   }
 }
 
+noEspacioInicial(event: KeyboardEvent): void {
+  const input = event.target as HTMLInputElement;
+  const cursorPos = input.selectionStart || 0;
+  if (event.key === ' ' && cursorPos === 0) {
+    event.preventDefault();
+  }
+}
+
+
+
+
+  selectedMonth = ''; // mes seleccionado (ej. 'Octubre 2025')
+
+  
+  filteredDays: any[] = []; // días filtrados según el mes elegido
+showMonthModal = false;
+  months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+  openMonthModal() {
+    this.showMonthModal = true;
+  }
+
+  closeMonthModal() {
+    this.showMonthModal = false;
+  }
+
+ showModal = false;
+
+onMonthSelected(month: string) {
+  console.log('Mes elegido:', month);
+  // aquí actualizas tu calendario principal
+}
+
+  /*selectMonth(monthIndex: number): void {
+    const year = 2025; // puedes hacerlo dinámico si tu servicio trae varios años
+    this.filterByMonth(monthIndex, year);
+    const monthName = this.months[monthIndex];
+    this.selectedMonth = `${monthName} ${year}`;
+    this.closeMonthModal();
+  }*/
+
+  filterByMonth(monthIndex: number, year: number): void {
+    const monthStr = (monthIndex + 1).toString().padStart(2, '0');
+    this.filteredDays = this.allDaysData.filter(day =>
+      day.date.startsWith(`${year}-${monthStr}`)
+    );
+  }
+
+  /*months = [
+    'Enero', 'Febrero', 'Marzo', 'Abril',
+    'Mayo', 'Junio', 'Julio', 'Agosto',
+    'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];*/
+
+
+
+
+  generateDaysData(startDate: Date, endDate: Date): void {
+  const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+  const horarios = [
+    '8:00', '8:20', '8:40', '9:00', '9:20', '9:40', '10:00', '10:20', '10:40'
+  ];
+  const estados = ['Disponible', 'Agendado', 'No disponible'];
+
+  const result = [];
+  let currentDate = new Date(startDate);
+
+  while (currentDate <= endDate) {
+    const dayName = diasSemana[currentDate.getDay()];
+    const dateStr = currentDate.toISOString().split('T')[0];
+
+    // Simula que los domingos no se labora
+    const schedules = dayName === 'Dom'
+      ? []
+      : horarios.map(h => ({
+          time: h,
+          status: estados[Math.floor(Math.random() * estados.length)]
+        }));
+
+    result.push({
+      name: dayName,
+      date: dateStr,
+      schedules
+    });
+
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  this.allDaysData = result;
+  console.log(this.allDaysData);
+}
 }

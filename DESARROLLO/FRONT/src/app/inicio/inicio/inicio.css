@@ -968,3 +968,79 @@ justify-content: center;
    Le da el fondo gris a TODA la columna.
 */
 
+
+
+
+
+/*modal meses*/
+
+/* --- Fondo semi-transparente detrás del modal --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;      /* tamaño visible */
+  max-width: 90%;
+  background: #fff;  /* fondo blanco para que contraste */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  z-index: 1001;
+}
+
+
+
+/* --- Contenido del modal --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 90%;
+  background: #fff; /* color de fondo */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  z-index: 1001; /* más alto que el backdrop */
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.months-grid button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.months-grid button:hover {
+  background: #1976d2;
+  color: white;
+}

@@ -56,6 +56,7 @@
 </div>
 
 <div class="main-content">
+  
   @if (visiblehome2) {
 <div class="col-12 col-lg-12 col-md-12">
 <div class=" steps-container">
@@ -84,7 +85,7 @@
       <label>Ingresa tu nombre completo</label>
       <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
-        <input type="text" formControlName="nombre" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText required>
+        <input type="text" formControlName="nombre" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText required (keydown)="noEspacioInicial($event)"/>
         </span>
       </div>
          <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
@@ -139,7 +140,7 @@
             rows="2" 
             formControlName="descripcionCita"
             placeholder=""
-            class="custom-textarea">
+            class="custom-textarea" (keydown)="noEspacioInicial($event)">
         </textarea>
     </div>
     </form>
@@ -175,8 +176,9 @@
 }
 
 
-
 @if (mostrarcalendario) {
+  <app-meses [show]="showModal" [months]="months" (close)="showModal = true" (monthSelected)="onMonthSelected($event)">
+</app-meses>
 <div class="cita-header">
         <h2>Reserva tu cita</h2>
         <p></p>
@@ -208,14 +210,15 @@
         </div>
     </div>
 </div>-->
+
 <div class="calendario-reserva">
 
     <div class="contenedor-principal">
         <div class="selector-horario">Seleccione el horario</div>
         <div class="pestanas">
-            <button class="pestana mes">MES</button>
+            <button class="pestana mes" (click)="showModal = true">MES</button>
             <button class="pestana dia">DIA</button>
-            <button class="pestana hora activo">HORA</button>
+            
         </div>
 
         <div class="contenedor-calendario">
@@ -296,7 +299,10 @@
 
         </div>
     </div>
+   
+
 </div>
+
 
 }
 
