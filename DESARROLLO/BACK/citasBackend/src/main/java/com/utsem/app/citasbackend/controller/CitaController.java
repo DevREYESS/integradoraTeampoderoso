@@ -32,4 +32,9 @@ public class CitaController {
     public CitaResponseDTO actualizarCita(@RequestBody CitaDTO citaDTO, @PathVariable String uuid) {
         return citaService.actualizarCita(citaDTO, uuid);
     }
+
+    @DeleteMapping("/{uuid}")
+    public CitaResponseDTO cancelarCita(@PathVariable String uuid) {
+        return citaService.cancelarCita(uuid);
+    }
 }

@@ -2,10 +2,7 @@ package com.utsem.app.citasbackend.service;
 
 import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
-import com.utsem.app.citasbackend.exceptions.CamposRequeridos;
-import com.utsem.app.citasbackend.exceptions.CitaDuplicadaException;
-import com.utsem.app.citasbackend.exceptions.RegistroNoEncontrado;
-import com.utsem.app.citasbackend.exceptions.FechaAnteriorException;
+import com.utsem.app.citasbackend.exceptions.*;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.model.Servicio;
 import com.utsem.app.citasbackend.repository.CitaRepository;
@@ -19,6 +16,7 @@ import jakarta.persistence.criteria.Root;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
@@ -100,7 +98,7 @@ public class CitaService {
         Cita nuevaCita = crearEntidadCita(citaDTO);
         Cita citaGuardada = citaRepository.save(nuevaCita);
 
-        return construirRespuesta(citaGuardada);
+        return construirRespuesta(citaGuardada, "Cita registrada correctamente");
     }
 
     public CitaResponseDTO actualizarCita(CitaDTO citaDTO, String uuid) {
@@ -119,7 +117,7 @@ public class CitaService {
 
         Cita citaActualizada = citaRepository.save(citaExistente);
 
-        return construirRespuesta(citaActualizada);
+        return construirRespuesta(citaActualizada, "Cita actualizada correctamente");
     }
 
 
@@ -176,14 +174,39 @@ public class CitaService {
         return cita;
     }
 
-    private CitaResponseDTO construirRespuesta(Cita cita) {
+    private CitaResponseDTO construirRespuesta(Cita cita, String mensaje) {
         return new CitaResponseDTO(
-                "Cita registrada correctamente",
+                mensaje,
                 cita.getNombrePaciente(),
                 cita.getFechaCita(),
                 cita.getHoraInicio(),
                 cita.getServicio().getNombreServicio()
         );
+    }
+
+    public CitaResponseDTO cancelarCita(String uuid) {
+        Cita citaExistente = citaRepository.findByUuid(UUID.fromString(uuid))
+                .orElseThrow(() -> new RegistroNoEncontrado("Cita no encontrada"));
+
+        LocalDateTime ahora = LocalDateTime.now();
+        LocalDateTime citaDateTime = citaExistente.getFechaCita().atTime(citaExistente.getHoraInicio());
+
+        if ("X".equalsIgnoreCase(citaExistente.getEstatus())) {
+            throw new CancelarCitaException("Cita ya cancelada");
+        }
+
+        if (citaExistente.getFechaCita().isBefore(LocalDate.now())) {
+            throw new CancelarCitaException("No se puede cancelar una cita en una fecha anterior a la actual");
+        }
+
+        if (citaDateTime.isBefore(ahora.plusHours(24))) {
+            throw new CancelarCitaException("No se puede cancelar con menos de 24 horas de anticipación");
+        }
+
+        citaExistente.setEstatus("X");
+        Cita citaCancelada = citaRepository.save(citaExistente);
+
+        return construirRespuesta(citaCancelada, "Cita cancelada");
     }
 
 }
