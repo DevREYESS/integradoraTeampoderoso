@@ -1,12 +1,17 @@
-<div class="modal-backdrop" *ngIf="show" (click)="onClose()"></div>
+<div class="modal-backdrop" (click)="close.emit()"></div>
 
-<div class="modal" *ngIf="show">
-  <div class="modal-content">
-    <h3>Selecciona un mes</h3>
-    <div class="months-grid">
-      <button *ngFor="let month of months" (click)="selectMonth(month)">
-        {{ month }}
-      </button>
+<div class="custom-modal-container">
+  <button class="custom-modal-close-btn" (click)="close.emit()">&times;</button>
+
+  <div class="mx-auto bg-white p-4 rounded"> 
+    <h3 class="modal-header">Selecciona un mes</h3>
+   
+    <div class="appointment-details">
+      <div class="months-grid">
+        <button *ngFor="let month of months" (click)="selectMonth(month)">
+          {{ month.nombre }}
+        </button>
+      </div>
     </div>
   </div>
 </div>

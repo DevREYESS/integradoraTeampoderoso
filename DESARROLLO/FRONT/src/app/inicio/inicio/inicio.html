@@ -177,8 +177,10 @@
 
 
 @if (mostrarcalendario) {
-  <app-meses [show]="showModal" [months]="months" (close)="showModal = true" (monthSelected)="onMonthSelected($event)">
-</app-meses>
+  <app-meses *ngIf="showModal" [months]="months" (close)="closemodalmeses()" (monthSelected)="onMonthSelected($event)">
+
+  </app-meses>
+
 <div class="cita-header">
         <h2>Reserva tu cita</h2>
         <p></p>
@@ -217,7 +219,7 @@
         <div class="selector-horario">Seleccione el horario</div>
         <div class="pestanas">
             <button class="pestana mes" (click)="showModal = true">MES</button>
-            <button class="pestana dia">DIA</button>
+            <!--<button class="pestana dia">DIA</button>-->
             
         </div>
 

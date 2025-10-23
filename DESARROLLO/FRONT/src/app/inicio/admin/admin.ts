@@ -1,9 +1,10 @@
 import { CommonModule, NgClass } from '@angular/common';
 import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Citas } from '../componentes/citas/citas';
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, 
+  imports: [CommonModule,Citas, 
     NgClass],
   standalone: true,
   templateUrl: './admin.html',
@@ -384,4 +385,16 @@ getAppointment(schedules: any[], time: string) {
   return schedules.find(s => s.time === time);
 }
 // ... (tus funciones existentes como getScheduleSlot, goToNextWeek, etc.)
+
+
+showCitasModal = false;
+
+abrirCitasModal() {
+  this.showCitasModal = true;
+}
+
+cerrarCitasModal() {
+  this.showCitasModal = false;
+}
+
 }

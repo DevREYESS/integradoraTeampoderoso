@@ -37,13 +37,46 @@ export class Inicio implements OnInit {
 
 visiblehome= true;
 visiblehome2 = false;
-
+ currentMonth: number = new Date().getMonth();
+currentYear: number = new Date().getFullYear();
 regresarf= false;
 mostrarcalendario=false;
 mostrarcard1=true;
 mostrarcard11 = true;
 mostrarcard12 = false;
 mostrarcard13 = false;
+
+ constructor (private formBuilder: FormBuilder,
+  private router: Router,
+  private messageService: MessageService, 
+  private consultaService: Services,
+  private cdRef: ChangeDetectorRef,private renderer: Renderer2){
+   this.formulario = this.formBuilder.group({
+      nombre: ['', []],
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      serviciodes: ['', []],
+      servicio: ['', []],
+            
+      descripcionCita: ['',[]]
+
+     
+    });
+     this.formulario2 = this.formBuilder.group({
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+    });
+
+    const currentDate = new Date();
+   
+    this.filterByMonth(this.currentMonth, this.currentYear);
+ }
+
+
+ 
+  ngOnInit(): void {
+     this.generateDaysData(new Date('2025-10-22'), new Date('2025-12-31'));
+     this.loadCurrentWeek();
+  } 
+  
 
 servicios = [
   { id: 1, nombre: 'Consulta general' },
@@ -299,198 +332,13 @@ goToPreviousWeek(): void {
   }
 }
 
- constructor (private formBuilder: FormBuilder,
-  private router: Router,
-  private messageService: MessageService, 
-  private consultaService: Services,
-  private cdRef: ChangeDetectorRef,private renderer: Renderer2){
-   this.formulario = this.formBuilder.group({
-      nombre: ['', []],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-      serviciodes: ['', []],
-      servicio: ['', []],
-            
-      descripcionCita: ['',[]]
 
-     
-    });
-     this.formulario2 = this.formBuilder.group({
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
-    });
-
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // 0-11
-    const currentYear = currentDate.getFullYear();
-    this.filterByMonth(currentMonth, currentYear);
- }
-
-
- private allMockData = [
-    // Semana 1
-    { "name": "Lun", "date": "25 Oct", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Agendado" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "No disponible" }
-    ]},
-    { "name": "Mar", "date": "26 Oct", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Agendado" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Mié", "date": "27 Oct", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "No disponible" },
-      { "time": "9:00", "status": "No disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Jue", "date": "28 Oct", "schedules": [
-      { "time": "8:00", "status": "Agendado" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Vie", "date": "29 Oct", "schedules": [
-      { "time": "8:00", "status": "Agendado" },
-      { "time": "8:20", "status": "Agendado" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Sáb", "date": "30 Oct", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Agendado" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Dom", "date": "31 Oct", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Agendado" }
-    ]},
-    // Semana 2
-    { "name": "Lun", "date": "01 Nov", "schedules": [
-      { "time": "8:00", "status": "Agendado" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Mar", "date": "02 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "No disponible" },
-      { "time": "9:00", "status": "No disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Mié", "date": "03 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "No disponible" },
-      { "time": "9:00", "status": "No disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Jue", "date": "04 Nov", "schedules": [
-      { "time": "8:00", "status": "Agendado" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    
-    { "name": "Sáb", "date": "06 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Agendado" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Dom", "date": "07 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Agendado" }
-    ]}, 
-    { "name": "Lun", "date": "08 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Agendado" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Disponible" }
-    ]},
-    { "name": "Mar", "date": "09 Nov", "schedules": [
-      { "time": "8:00", "status": "Disponible" },
-      { "time": "8:20", "status": "Disponible" },
-      { "time": "8:40", "status": "Disponible" },
-      { "time": "9:00", "status": "Disponible" },
-      { "time": "9:20", "status": "Agendado" },
-       { "time": "10:00", "status": "Disponible" },
-      { "time": "11:00", "status": "Disponible" },
-    ]}
-    
-  ];
-  
   public weekData2: any[] = [];
   //public currentWeekIndex = 0;
   private daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
   allDaysData: any[] = [];
 
-  ngOnInit(): void {
-     this.generateDaysData(new Date('2025-10-12'), new Date('2025-12-31'));
-    this.loadWeekData();
-     this.loadCurrentWeek();
-  }
-
-  loadWeekData(): void {
-    const startIndex = this.currentWeekIndex * 7;
-    const rawWeekData = this.allMockData.slice(startIndex, startIndex + 7);
-
-    this.weekData2 = this.daysOfWeek.map((dayName, index) => {
-      const dayData = rawWeekData.find(d => d.name === dayName);
-
-      return dayData || {
-        name: dayName,
-        date: '', 
-        schedules: []
-      };
-    });
-  }
-/*
-  goToPreviousWeek(): void {
-    if (this.currentWeekIndex > 0) {
-      this.currentWeekIndex--;
-      this.loadWeekData();
-    }
-  }
-
-  goToNextWeek(): void {
-    if ((this.currentWeekIndex + 1) * 7 < this.allMockData.length) {
-      this.currentWeekIndex++;
-      this.loadWeekData();
-    }
-  }
-
-  get isFirstWeek(): boolean {
-    return this.currentWeekIndex === 0;
-  }
-
-  get isLastWeek(): boolean {
-    return (this.currentWeekIndex + 1) * 7 >= this.allMockData.length;
-  }
-    */
-
-
- 
 
 
   isShrunk = false;
@@ -559,9 +407,6 @@ formatoHora(hora: string): string {
   const [h, m] = hora.split(':');
   return `${h.padStart(2, '0')}:${m}`;
 }
-
-
-// Convierte "25 Oct" → "2025-10-25"
 
 
   items = [
@@ -712,7 +557,11 @@ this.limpiarFormulario();
     this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
   }
 
-
+ closemodalmeses() {
+    this.showModal = false;
+    this.consultaResult = false; 
+    this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
+  }
  telefonoLimpio: string = '';
 
 formatTelefono(event: Event) {
@@ -764,7 +613,21 @@ noEspacioInicial(event: KeyboardEvent): void {
   
   filteredDays: any[] = []; // días filtrados según el mes elegido
 showMonthModal = false;
-  months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+months = [
+  { nombre: 'Enero', numero: 0 },
+  { nombre: 'Febrero', numero: 1 },
+  { nombre: 'Marzo', numero: 2 },
+  { nombre: 'Abril', numero: 3 },
+  { nombre: 'Mayo', numero: 4 },
+  { nombre: 'Junio', numero: 5 },
+  { nombre: 'Julio', numero: 6 },
+  { nombre: 'Agosto', numero: 7 },
+  { nombre: 'Septiembre', numero: 8 },
+  { nombre: 'Octubre', numero: 9 },
+  { nombre: 'Noviembre', numero: 10 },
+  { nombre: 'Diciembre', numero: 11 }
+];
+
 
   openMonthModal() {
     this.showMonthModal = true;
@@ -776,10 +639,16 @@ showMonthModal = false;
 
  showModal = false;
 
-onMonthSelected(month: string) {
-  console.log('Mes elegido:', month);
-  // aquí actualizas tu calendario principal
+onMonthSelected(mesNumero: number) {
+  this.currentMonth = mesNumero;
+  this.showModal = false;
+  const start = new Date(this.currentYear, mesNumero, 1);
+  const end = new Date(this.currentYear, mesNumero + 1, 0);
+  this.generateDaysData(start, end);
+  this.currentWeekIndex = 0;
+  this.loadCurrentWeek();
 }
+
 
   /*selectMonth(monthIndex: number): void {
     const year = 2025; // puedes hacerlo dinámico si tu servicio trae varios años
@@ -807,19 +676,23 @@ onMonthSelected(month: string) {
 
   generateDaysData(startDate: Date, endDate: Date): void {
   const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  const horarios = [
-    '8:00', '8:20', '8:40', '9:00', '9:20', '9:40', '10:00', '10:20', '10:40'
-  ];
+  const horarios = ['8:00','8:20','8:40','9:00','9:20','9:40','10:00','10:20','10:40'];
   const estados = ['Disponible', 'Agendado', 'No disponible'];
 
   const result = [];
-  let currentDate = new Date(startDate);
+
+  // Ajustar startDate para que inicie en domingo de la semana
+  const firstDayOffset = startDate.getDay(); // 0=Dom, 1=Lun, ...
+  const firstDayOfWeek = new Date(startDate);
+  firstDayOfWeek.setDate(startDate.getDate() - firstDayOffset); // retrocede hasta el domingo
+
+  let currentDate = new Date(firstDayOfWeek);
 
   while (currentDate <= endDate) {
     const dayName = diasSemana[currentDate.getDay()];
-    const dateStr = currentDate.toISOString().split('T')[0];
+const dateStr = `${currentDate.getFullYear()}-${('0'+(currentDate.getMonth()+1)).slice(-2)}-${('0'+currentDate.getDate()).slice(-2)}`;
 
-    // Simula que los domingos no se labora
+
     const schedules = dayName === 'Dom'
       ? []
       : horarios.map(h => ({
@@ -837,6 +710,6 @@ onMonthSelected(month: string) {
   }
 
   this.allDaysData = result;
-  console.log(this.allDaysData);
 }
+
 }
