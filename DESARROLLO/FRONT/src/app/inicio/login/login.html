@@ -6,13 +6,13 @@
         <h2 class="text-center mb-4 login-title">INICIA SESIÓN</h2>
         <form [formGroup]="loginForm" (ngSubmit)="acceder()">
           <div class="p-inputgroup mb-3">
-           
-            <input type="text" placeholder="Usuario" formControlName="usuario"
+
+            <input type="text" placeholder="Usuario" formControlName="username"
                    class="p-inputtext p-inputtext-rounded form-control-lg custom-input" pInputText required>
           </div>
           <div class="p-inputgroup mb-4">
-            
-            <input type="password" placeholder="Contraseña" formControlName="contrasena"
+
+            <input type="password" placeholder="Contraseña" formControlName="password"
                    class="p-inputtext p-inputtext-rounded form-control-lg custom-input" pInputText required>
           </div>
 
