@@ -64,19 +64,20 @@
 }
 
 .filter-button {
-    background-color: #f2f2f2;
-    color: #555;
+    background-color: #e2a5aa;
+    color: #213c6c;
     border: none;
     border-radius: 20px;
     padding: 6px 12px;
     font-size: 0.85rem;
     cursor: pointer;
+    font-weight: bold;
 }
 
 .filter-button.active {
-    background-color: #f7b4c6;
-    color: white;
-    font-weight: 600;
+    background-color: #e2a5aa;
+    color: #213c6c;
+    font-weight: bold;
 }
 
 .search-input-container {
@@ -100,7 +101,7 @@
 
 .search-button {
     background-color: #f2f2f2;
-    color: #555;
+    color: #213c6c;
     border: none;
     border-radius: 20px;
     padding: 6px 12px;
@@ -109,8 +110,8 @@
 }
 
 .search-button.active {
-    background-color: #f7b4c6;
-    color: white;
+    background-color: #e2a5aa;
+    color: #213c6c;
     font-weight: 600;
 }
 
