@@ -1,0 +1,32 @@
+<div class="modal-backdrop">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Editar Cita</h2>
+      <button class="close-button" (click)="closeModal()">×</button>
+    </div>
+
+    <div *ngIf="loading" class="loading-text">Guardando cambios...</div>
+
+    <form *ngIf="!loading" [formGroup]="formCita" class="edit-form">
+      <label>Nombre:</label>
+      <input type="text" formControlName="nombre" />
+
+      <label>Teléfono:</label>
+      <input type="text" formControlName="telefono" />
+
+      <label>Hora inicio:</label>
+      <input type="time" formControlName="horaInicio" readonly />
+
+      <label>Hora fin:</label>
+      <input type="time" formControlName="horaFin" readonly />
+
+      <label>Fecha:</label>
+      <input type="date" formControlName="fechaCita" readonly/>
+
+      <div class="button-group">
+        <button type="button" class="save-button" (click)="guardarCambios()">Guardar</button>
+        <button type="button" class="cancel-button" (click)="closeModal()">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>

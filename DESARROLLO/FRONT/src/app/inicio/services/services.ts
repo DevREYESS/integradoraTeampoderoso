@@ -42,6 +42,18 @@ guardarcita(cita: any): Observable<any> {
   );
 }
 
+updateCita(cita: any, uuid:any): Observable<any> {
+  
+  return this.http.put<any>(`${this.apiUrlBase}/citas/uCita/${uuid}`, cita, {
+    headers: { 'Content-Type': 'application/json' }
+  }).pipe(
+    map(response => response),
+    catchError(this.handleError)
+  );
+}
+
+
+
 servicios(): Observable<any> {
   return this.http.post<any>(this.apiUrlGuardar, {
     headers: { 'Content-Type': 'application/json' }
@@ -69,4 +81,14 @@ servicios(): Observable<any> {
     console.error('Error HTTP capturado:', error);
     return throwError(() => error);
   }
+
+ getCitas(): Observable<any[]> {
+  return this.http.post<any>(this.apiUrl, {})
+    .pipe(
+      map(response => Array.isArray(response) ? response : [response]),
+      catchError(this.handleError)
+    );
+}
+
+
 }

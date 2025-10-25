@@ -2,15 +2,12 @@
 /* 1. Estilos del Fondo (Backdrop)      */
 /* ==================================== */
 .modal-backdrop {
-    /* Fija el fondo sobre toda la pantalla */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Oscurece el fondo */
     background-color: rgba(0, 0, 0, 0.5); 
-    /* Asegura que esté detrás del modal, pero encima de la página */
     z-index: 999; 
 }
 
@@ -18,25 +15,21 @@
 /* 2. Estilos del Contenedor del Modal  */
 /* ==================================== */
 .custom-modal-container {
-    /* Centrado perfecto en la pantalla */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    /* Asegura que esté al frente */
     z-index: 1000; 
     
-    /* Diseño */
     width: 500px; 
-    max-width: 90%; /* Responsivo en móviles */
+    max-width: 90%; 
     padding: 30px;
     background-color: white;
-    border-radius: 12px; /* Bordes redondeados */
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); /* Sombra marcada */
+    border-radius: 12px; 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); 
     font-family: Arial, sans-serif;
 }
 
-/* Botón de cerrar 'X' */
 .custom-modal-close-btn {
     position: absolute;
     top: 10px;
@@ -53,7 +46,6 @@
     color: #333;
 }
 
-/* Encabezado */
 .modal-header {
     font-size: 1.5rem;
     color: #333;
@@ -66,7 +58,7 @@
 
 .modal-icon {
     margin-right: 10px;
-    color: #007bff; /* Color azul para el ícono de búsqueda/info */
+    color: #007bff; 
 }
 
 /* ==================================== */
@@ -75,22 +67,20 @@
 .appointment-details {
     margin-bottom: 30px;
     padding: 10px;
-    /* Borde suave alrededor de la información */
     border: 1px solid #f0f0f0; 
     border-radius: 8px;
 }
 
 .detail-row {
     display: flex;
-    justify-content: space-between; /* Etiqueta a la izquierda, valor a la derecha */
+    justify-content: space-between;
     padding: 12px 0;
-    /* Líneas punteadas para separar las filas */
     border-bottom: 1px dashed #e0e0e0; 
     align-items: center;
 }
 
 .detail-row:last-child {
-    border-bottom: none; /* Quita la línea de la última fila */
+    border-bottom: none; 
 }
 
 .detail-label {
@@ -108,17 +98,17 @@
 /* 4. Estilos de Estado Dinámicos (Clases de {{ statusInfo.class }}) */
 /* ==================================== */
 .status-success {
-    color: #28a745; /* Verde para Agendada/Activa */
+    color: #28a745; 
     font-weight: bold;
 }
 
 .status-error {
-    color: #dc3545; /* Rojo para Cancelada */
+    color: #dc3545;
     font-weight: bold;
 }
 
 .status-info {
-    color: #ffc107; /* Amarillo/Naranja para Pendiente */
+    color: #ffc107; 
     font-weight: bold;
 }
 
@@ -126,15 +116,15 @@
 /* 5. Estilo del Botón Aceptar          */
 /* ==================================== */
 .custom-modal-button.primary-button {
-    background-color: #ff66c4; /* Tu color rosa */
+    background-color: #ff66c4; 
     color: #213c6c;
     border: none;
     padding: 12px 30px;
-    border-radius: 25px; /* Estilo píldora */
+    border-radius: 25px;
     font-weight: bold;
     cursor: pointer;
     display: block;
-    width: 100%; /* Ocupa todo el ancho */
+    width: 100%;
     transition: background-color 0.3s;
 }
 
@@ -144,7 +134,7 @@
 }
 
 
-/*boton de descargar*/
+
 .btn-success{
     text-align: end;
     align-items: end;
@@ -155,7 +145,7 @@
     color: #213c6c;
  border: none;
     padding: 7px 18px;
-    border-radius: 25px; /* Estilo píldora */
+    border-radius: 25px; 
     font-weight: bold;
     cursor: pointer;
 }

@@ -14,10 +14,8 @@
                 <button class="filter-button">Hora</button>
             </div>
            <div class="search-input-container">
-  <!-- Ícono de búsqueda -->
   <button class="search-icon" (click)="buscar()">🔍</button>
 
-  <!-- Botones de filtro -->
   <button 
       (click)="filterBy='nombre'; searchTerm=''; buscar()" 
       class="search-button" 
@@ -31,7 +29,6 @@
     Número
   </button>
 
-  <!-- Input de búsqueda -->
   <input 
       type="text" 
       class="p-inputtext p-inputtext-rounded custom-input" 
@@ -44,31 +41,47 @@
 
         </div>
 
-        <div class="appointment-list">
-            <div class="appointment-card" *ngFor="let cita of citas" [ngClass]="cita.estatus.toLowerCase()">
-                
-                <div class="initials-circle" [ngClass]="cita.colorIniciales">{{ cita.iniciales }}</div>
+       <div class="appointment-list">
 
-                
-                <div class="appointment-details">
-                    <p class="name">{{ cita.nombre }}</p>
-                    <p>Duracion del servicio: {{ cita.duracion }}</p>
-                    <p class="time start">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
-                    <p class="time end">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
-                </div>
-                
-                <div class="status-details">
-                    <p class="date">{{ cita.dia }} {{ cita.fecha }}</p>
-                    <p>Tipo de servicio: {{ cita.tipoServicio }}</p>
-                    <p class="status" [ngClass]="cita.estatusClass">Estatus cita: {{ cita.estatus }}</p>
-                </div>
-                
-                <div class="actions">
-                    <span class="action-icon action-delete" (click)="eliminarCita(cita)">⊗</span>
-                    <span class="action-icon action-edit" (click)="editarCita(cita)">✎</span>
-                    <button class="comment-button" (click)="agregarComentario(cita)">Agregar cometario</button>
-                </div>
+    <div *ngIf="loading" class="loading-text">
+        Cargando citas...
+    </div>
+    <div *ngIf="!loading && citas.length === 0" class="no-records-text">
+        No se encontraron citas
+    </div>
+    <div *ngIf="!loading">
+        <div class="appointment-card" *ngFor="let cita of citas" [ngClass]="cita.estatus.toLowerCase()">
+            
+            <div class="initials-circle" [ngClass]="cita.colorIniciales">{{ cita.iniciales }}</div>
+
+            <div class="appointment-details">
+                <p class="name">{{ cita.nombre }}</p>
+                <p>Duracion del servicio: {{ cita.duracion }}</p>
+                <p class="time start">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
+                <p class="time end">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
+            </div>
+            
+            <div class="status-details">
+                <p class="date">{{ cita.dia }} {{ cita.fecha }}</p>
+                <p>Tipo de servicio: {{ cita.tipoServicio }}</p>
+                <p class="status" [ngClass]="cita.estatusClass">Estatus cita: {{ cita.estatus }}</p>
+            </div>
+            
+            <div class="actions">
+                <span class="action-icon action-delete" (click)="eliminarCita(cita)">⊗</span>
+                <span class="action-icon action-edit" (click)="editarCita(cita)">✎</span>
+                <button class="comment-button" (click)="agregarComentario(cita)">Agregar comentario</button>
             </div>
         </div>
     </div>
+
 </div>
+
+    </div>
+</div>
+<app-editarcita
+  *ngIf="showEditarModal"
+  [cita]="editarCitaSeleccionada"
+  (close)="cerrarEditarModal()"
+  (updated)="actualizarCitaLista($event)">
+</app-editarcita>
