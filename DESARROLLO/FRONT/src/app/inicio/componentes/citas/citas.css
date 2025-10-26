@@ -309,7 +309,7 @@
     padding: 10px;
     border: none;
     border-radius: 6px;
-    background: #ff66c4;
+    background: #e2a5aa;
     cursor: pointer;
     transition: 0.2s;
     color: #213c6c;
@@ -318,12 +318,12 @@
 }
 
 .boton-mes-small:hover {
-    background: #ff85d1;
+    background: #e2a5aa;
 }
 
 .boton-mes-small.active {
     background: #ff1ab0;
-    color: white;
+    color: #213c6c;
 }
 
 /* Grid Días */
@@ -337,7 +337,7 @@
     padding: 8px;
     border: none;
     border-radius: 6px;
-    background: #ff66c4;
+    background: #e2a5aa;
     cursor: pointer;
     transition: 0.2s;
     color: #213c6c;
@@ -346,12 +346,12 @@
 }
 
 .boton-dia-small:hover {
-    background: #ff85d1;
+    background: #e2a5aa;
 }
 
 .boton-dia-small.active {
     background: #ff1ab0;
-    color: white;
+    color: #213c6c;
 }
 
 /* Grid Horas */
@@ -366,7 +366,7 @@
     padding: 8px;
     border: none;
     border-radius: 6px;
-    background: #ff66c4;
+    background: #e2a5aa;
     cursor: pointer;
     transition: 0.2s;
     color: #213c6c;
@@ -375,12 +375,12 @@
 }
 
 .boton-hora-small:hover {
-    background: #ff85d1;
+    background: #e2a5aa;
 }
 
 .boton-hora-small.active {
     background: #ff1ab0;
-    color: white;
+    color: #213c6c;
 }
 
 
