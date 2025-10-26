@@ -1,400 +1,186 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { Component, HostListener, ViewEncapsulation } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { Citas } from '../componentes/citas/citas';
+import { Services } from '../services/services';
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule,Citas, 
-    NgClass],
+  imports: [CommonModule, Citas, NgClass],
   standalone: true,
   templateUrl: './admin.html',
   styleUrl: './admin.css',
+  providers: [Services],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class Admin {
 
+  constructor(private consultaService: Services, private cd: ChangeDetectorRef) {}
 
-isShrunk = false;
+  isShrunk = false;
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isShrunk = window.scrollY > 50; 
+    this.isShrunk = window.scrollY > 50;
   }
-weekData: any[] = [
-    {
-        name: 'Lun',
-        date: '2025-10-06',
-        schedules: [
-            { 
-                time: '8:00', 
-                status: 'Agendado', // El status sigue siendo útil para la lógica interna
-                appointment: { 
-                    nombrePaciente: 'Itzel Diego Sánchez', 
-                    time: '8:00 - 8:20', 
-                    status: 'confirmado' // Nuevo status para el color de la cita
-                } 
-            },
-            { time: '8:20', status: 'Disponible' }, // Un slot vacío
-            { time: '8:40', status: 'Disponible' },
-            { time: '9:00', status: 'Disponible' },
-            { time: '9:20', status: 'Disponible' },
-        ]
+
+  weekData: any[] = [];
+  allDaysData: any[] = []; 
+  fixedTimes: string[] = ["8:00", "8:20", "8:40", "9:00", "9:20", "9:40", "10:00", "10:20", "10:40"];
+  
+  currentWeekIndex: number = 0;
+  daysPerWeek: number = 7;
+
+  isFirstWeek: boolean = true;
+  isLastWeek: boolean = false;
+
+  showCitasModal = false;
+
+  ngOnInit() {
+    this.cargarCitas();
+  }
+
+  abrirCitasModal() { this.showCitasModal = true; }
+  cerrarCitasModal() { this.showCitasModal = false; }
+
+ cargarCitas() {
+  this.consultaService.getCitas().subscribe({
+    next: (data: any) => {
+      if (!Array.isArray(data)) {
+        console.error('El servicio no devolvió un array de citas');
+        return;
+      }
+
+      // Encontrar fecha mínima y máxima de las citas
+      let minDate = new Date(Math.min(...data.map(c => new Date(c.fechaCita).getTime())));
+      let maxDate = new Date(Math.max(...data.map(c => new Date(c.fechaCita).getTime())));
+
+      // Ajustar a medianoche para evitar desfasajes de hora
+      minDate.setHours(0, 0, 0, 0);
+      maxDate.setHours(0, 0, 0, 0);
+
+      // Generar todos los días entre minDate y maxDate
+      const allDays: any[] = [];
+      const current = new Date(minDate);
+      while (current <= maxDate) {
+        const dateStr = `${current.getFullYear()}-${(current.getMonth()+1).toString().padStart(2,'0')}-${current.getDate().toString().padStart(2,'0')}`;
+        allDays.push({
+          name: this.getShortDayName(current.getDay()),
+          date: dateStr,
+          schedules: [] // se llenará con citas o slots vacíos
+        });
+        current.setDate(current.getDate() + 1);
+      }
+
+      // Asignar citas a los días correspondientes
+      data.forEach((cita: any) => {
+        const dateObj = new Date(cita.fechaCita);
+        dateObj.setHours(0, 0, 0, 0); // Ajustar a medianoche
+        const dateStr = `${dateObj.getFullYear()}-${(dateObj.getMonth()+1).toString().padStart(2,'0')}-${dateObj.getDate().toString().padStart(2,'0')}`;
+        const day = allDays.find(d => d.date === dateStr);
+        if (day) {
+          const horaInicio = cita.horaInicio || '8:00';
+          const duracionMin = this.calcularDuracionMinutos(cita.horaInicio, cita.horaFin);
+          const [h, m] = horaInicio.split(':').map(Number);
+          const startMinutes = h * 60 + m;
+
+          // Dividir la cita en intervalos de 20 min
+          for (let i = 0; i < duracionMin; i += 20) {
+            const totalMinutes = startMinutes + i;
+            const horaSlot = `${Math.floor(totalMinutes / 60)}:${(totalMinutes % 60).toString().padStart(2,'0')}`;
+            day.schedules.push({
+              time: horaSlot,
+              status: 'Agendado',
+              appointment: {
+                nombrePaciente: cita.nombrePaciente || 'Sin nombre',
+                time: `${horaInicio} - ${cita.horaFin}`,
+                status: cita.estatus
+              }
+            });
+          }
+        }
+      });
+
+      // Rellenar horarios vacíos con "Disponible"
+      const fixedTimes = this.fixedTimes;
+      allDays.forEach(day => {
+        fixedTimes.forEach(time => {
+          if (!day.schedules.find((s: any) => s.time === time)) {
+            day.schedules.push({
+              time,
+              status: 'Disponible'
+            });
+          }
+        });
+        // Ordenar los horarios
+        day.schedules.sort((a: any, b: any) => a.time.localeCompare(b.time));
+      });
+
+      this.allDaysData = allDays;
+      this.loadCurrentWeek();
+      this.cd.detectChanges();
     },
-    // MARTES
-    {
-        name: 'Mar',
-        date: '2025-10-07',
-        schedules: [
-            { time: '8:00', status: 'Disponible' },
-            { time: '8:20', status: 'Disponible' },
-            { 
-                time: '8:40', 
-                status: 'Agendado',
-                appointment: { 
-                    nombrePaciente: 'Sofía Salinas Mejía', 
-                    time: '8:40 - 9:20', 
-                    status: 'pendiente' // Otro status
-                } 
-            },
-            { time: '9:00', status: 'Disponible' }, // Este se "oculta" por la cita de 8:40
-            { time: '9:20', status: 'Disponible' },
-        ]
-    },
-    // MIÉRCOLES (Mié)
-    {
-        name: 'Mié',
-        date: '2025-10-08',
-        schedules: [
-            { time: '8:00', status: 'Disponible' },
-            { time: '8:20', status: 'Disponible' },
-            { time: '8:40', status: 'Disponible' },
-            { time: '9:00', status: 'Disponible' },
-            { time: '9:20', status: 'Disponible' },
-        ]
-    },
-    // JUEVES (Jue)
-    {
-        name: 'Jue',
-        date: '2025-10-09',
-        schedules: [
-            { time: '8:00', status: 'Disponible' },
-            { time: '8:20', status: 'Disponible' },
-            { time: '8:40', status: 'Disponible' },
-            { time: '9:00', status: 'Disponible' },
-            { time: '9:20', status: 'Disponible' },
-        ]
-    },
-    // VIERNES (Vie)
-    {
-        name: 'Vie',
-        date: '2025-10-10',
-        schedules: [
-            { 
-                time: '8:00', 
-                status: 'Agendado',
-                appointment: { 
-                    nombrePaciente: 'Rosa Neri Lopez', 
-                    time: '8:00 - 8:40', 
-                    status: 'cancelado' // Otro status
-                } 
-            },
-            { time: '8:20', status: 'Disponible' }, // Este se "oculta" por la cita de 8:00
-            { time: '8:40', status: 'Disponible' },
-            { time: '9:00', status: 'Disponible' },
-            { time: '9:20', status: 'Disponible' },
-        ]
-    },
-    // SÁBADO (Sáb)
-    {
-        name: 'Sáb',
-        date: '2025-10-11',
-        schedules: [
-            { time: '8:00', status: 'Disponible' },
-            { time: '8:20', status: 'Disponible' },
-            { time: '8:40', status: 'Disponible' },
-            { 
-                time: '9:00', 
-                status: 'Agendado',
-                appointment: { 
-                    nombrePaciente: 'Celeste Bautista Romero', 
-                    time: '9:00 - 9:20', 
-                    status: 'confirmado' 
-                } 
-            },
-            { time: '9:20', status: 'Disponible' }, // Este se "oculta" por la cita de 9:00
-        ]
-    },
-    // DOMINGO (Dom)
-    {
-        name: 'Dom',
-        date: '2025-10-12',
-        schedules: [] // Día no laborable
+    error: (err) => console.error('Error al obtener citas:', err)
+  });
+}
+
+
+
+
+  calcularDuracionMinutos(horaInicio: string, horaFin: string): number {
+    if (!horaInicio || !horaFin) return 20;
+    const [hiH, hiM] = horaInicio.split(':').map(Number);
+    const [hfH, hfM] = horaFin.split(':').map(Number);
+    return (hfH * 60 + hfM) - (hiH * 60 + hiM);
+  }
+
+  getShortDayName(dayIndex: number) {
+    const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+    return days[dayIndex];
+  }
+
+  loadCurrentWeek(): void {
+    const startIndex = this.currentWeekIndex;
+    const endIndex = this.currentWeekIndex + this.daysPerWeek;
+    this.weekData = this.allDaysData.slice(startIndex, endIndex);
+    this.isFirstWeek = (this.currentWeekIndex === 0);
+    this.isLastWeek = (this.currentWeekIndex >= this.allDaysData.length - this.daysPerWeek);
+  }
+
+  goToNextWeek(): void {
+    if (!this.isLastWeek) {
+      this.currentWeekIndex += this.daysPerWeek;
+      this.loadCurrentWeek();
     }
-];
-
-fixedTimes: string[] = ["8:00", "8:20", "8:40", "9:00", "9:20", "9:40"];
-
-
-allDaysData: any[] = [
-  {
-    name: 'Dom',
-    date: '2025-10-12', // Mañana
-    schedules: [] // Día no laborable (mostrará "No labora")
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-13',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado',
-                appointment: { 
-                    nombrePaciente: 'Celeste Bautista Romero', 
-                    time: '9:00 - 9:20', 
-                    status: 'confirmado' 
-                }  },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-14',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-15',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-16',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-17',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-18',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Dom',
-    date: '2025-10-19', 
-    schedules: [   { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Agendado' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },] 
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-20',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-21',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-22',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-23',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-24',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'No disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-25',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
   }
-];
 
+  goToPreviousWeek(): void {
+    if (!this.isFirstWeek) {
+      this.currentWeekIndex -= this.daysPerWeek;
+      this.loadCurrentWeek();
+    }
+  }
 
-  
-
-  
   getScheduleSlot(schedules: any[], time: string): any | null {
     if (!schedules) return null;
     return schedules.find(schedule => schedule.time === time);
   }
 
-  isLarge(time: string, dayName: string): boolean {
-    return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+  generateWeekDays(startDate: Date, numDays: number = 30) {
+  const days: any[] = [];
+  const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  for (let i = 0; i < numDays; i++) {
+    const d = new Date(startDate);
+    d.setDate(d.getDate() + i);
+
+    days.push({
+      name: dayNames[d.getDay()],
+      date: d.toISOString().split('T')[0],
+      schedules: [] // se rellenará con las citas si existen
+    });
   }
 
-
-currentWeekIndex: number = 0; 
-daysPerWeek: number = 7;
-
-isFirstWeek: boolean = true;
-isLastWeek: boolean = false;
-
-
-loadCurrentWeek(): void {
-  const startIndex = this.currentWeekIndex;
-  const endIndex = this.currentWeekIndex + this.daysPerWeek;
-  this.weekData = this.allDaysData.slice(startIndex, endIndex);
-  this.isFirstWeek = (this.currentWeekIndex === 0);
-  this.isLastWeek = (this.currentWeekIndex >= this.allDaysData.length - this.daysPerWeek);
-}
-
-
-goToNextWeek(): void {
-  if (!this.isLastWeek) {
-    this.currentWeekIndex += this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
-
-goToPreviousWeek(): void {
-  if (!this.isFirstWeek) {
-    this.currentWeekIndex -= this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
-
-getAppointment(schedules: any[], time: string) {
-  return schedules.find(s => s.time === time);
-}
-// ... (tus funciones existentes como getScheduleSlot, goToNextWeek, etc.)
-
-
-showCitasModal = false;
-
-abrirCitasModal() {
-  this.showCitasModal = true;
-}
-
-cerrarCitasModal() {
-  this.showCitasModal = false;
+  return days;
 }
 
 }

@@ -1,87 +1,139 @@
 <div class="modal-backdrop">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title">Citas</h1>
-            <button class="close-button" (click)="closeModal()">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-
-        <div class="filter-search-container">
-            <div class="filter-buttons">
-                <button class="filter-button active">Mes</button>
-                <button class="filter-button">Día</button>
-                <button class="filter-button">Hora</button>
-            </div>
-           <div class="search-input-container">
-  <button class="search-icon" (click)="buscar()">🔍</button>
-
-  <button 
-      (click)="filterBy='nombre'; searchTerm=''; buscar()" 
-      class="search-button" 
-      [class.active]="filterBy==='nombre'">
-    Nombre
-  </button>
-  <button 
-      (click)="filterBy='numero'; searchTerm=''; buscar()" 
-      class="search-button" 
-      [class.active]="filterBy==='numero'">
-    Número
-  </button>
-
-  <input 
-      type="text" 
-      class="p-inputtext p-inputtext-rounded custom-input" 
-      placeholder="Escribe para buscar..." 
-      [(ngModel)]="searchTerm" 
-      (input)="onSearchInput()" 
-      (keydown.enter)="buscar()" />
-</div>
-
-
-        </div>
-
-       <div class="appointment-list">
-
-    <div *ngIf="loading" class="loading-text">
-        Cargando citas...
+  <div class="modal-content">
+    <div class="modal-header">
+      <h1 class="modal-title">Citas</h1>
+      <button class="close-button" (click)="closeModal()">
+        <span aria-hidden="true">&times;</span>
+      </button>
     </div>
-    <div *ngIf="!loading && citas.length === 0" class="no-records-text">
-        No se encontraron citas
+
+    <div class="filter-search-container">
+      <div class="filter-buttons">
+        <button class="filter-button" [class.active]="mostrarFiltroMes" (click)="abrirFiltroMes()">Mes</button>
+        <button class="filter-button" [class.active]="mostrarFiltroDia" (click)="abrirFiltroDia()">Día</button>
+        <button class="filter-button" [class.active]="mostrarFiltroHora" (click)="abrirFiltroHora()">Hora</button>
+        <button class="filter-button clear" (click)="limpiarFiltros()">Limpiar filtros</button>
+      </div>
+
+      <div class="search-input-container">
+        <button class="search-icon" (click)="buscar()">🔍</button>
+
+        <button 
+            (click)="filterBy='nombre'; searchTerm=''; buscar()" 
+            class="search-button" 
+            [class.active]="filterBy==='nombre'">
+          Nombre
+        </button>
+        <button 
+            (click)="filterBy='numero'; searchTerm=''; buscar()" 
+            class="search-button" 
+            [class.active]="filterBy==='numero'">
+          Número
+        </button>
+
+        <input 
+            type="text" 
+            class="p-inputtext p-inputtext-rounded custom-input" 
+            placeholder="Escribe para buscar..." 
+            [(ngModel)]="searchTerm" 
+            (input)="onSearchInput()" 
+            (keydown.enter)="buscar()" />
+      </div>
     </div>
-    <div *ngIf="!loading">
+
+    <div class="appointment-list">
+      <div *ngIf="loading" class="loading-text">Cargando citas...</div>
+      <div *ngIf="!loading && citas.length === 0" class="no-records-text">No se encontraron citas</div>
+
+      <div *ngIf="!loading">
         <div class="appointment-card" *ngFor="let cita of citas" [ngClass]="cita.estatus.toLowerCase()">
-            
-            <div class="initials-circle" [ngClass]="cita.colorIniciales">{{ cita.iniciales }}</div>
+          <div class="initials-circle" [ngClass]="cita.colorIniciales">{{ cita.iniciales }}</div>
 
-            <div class="appointment-details">
-                <p class="name">{{ cita.nombre }}</p>
-                <p>Duracion del servicio: {{ cita.duracion }}</p>
-                <p class="time start">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
-                <p class="time end">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
-            </div>
-            
-            <div class="status-details">
-                <p class="date">{{ cita.dia }} {{ cita.fecha }}</p>
-                <p>Tipo de servicio: {{ cita.tipoServicio }}</p>
-                <p class="status" [ngClass]="cita.estatusClass">Estatus cita: {{ cita.estatus }}</p>
-            </div>
-            
-            <div class="actions">
-                <span class="action-icon action-delete" (click)="eliminarCita(cita)">⊗</span>
-                <span class="action-icon action-edit" (click)="editarCita(cita)">✎</span>
-                <button class="comment-button" (click)="agregarComentario(cita)">Agregar comentario</button>
-            </div>
+          <div class="appointment-details">
+            <p class="name">{{ cita.nombre }}</p>
+            <p>Duración del servicio: {{ cita.duracion }}</p>
+            <p class="time start">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
+            <p class="time end">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
+          </div>
+
+          <div class="status-details">
+            <p class="date">{{ cita.fecha }}</p>
+            <p>Tipo de servicio: {{ cita.tipoServicio }}</p>
+            <p class="status" [ngClass]="cita.estatusClass">Estatus cita: {{ cita.estatus }}</p>
+          </div>
+
+          <div class="actions">
+            <span class="action-icon action-delete" (click)="eliminarCita(cita)">⊗</span>
+            <span class="action-icon action-edit" (click)="editarCita(cita)">✎</span>
+            <button class="comment-button" (click)="agregarComentario(cita)">Agregar comentario</button>
+          </div>
         </div>
+      </div>
     </div>
-
+  </div>
 </div>
 
-    </div>
-</div>
 <app-editarcita
   *ngIf="showEditarModal"
   [cita]="editarCitaSeleccionada"
   (close)="cerrarEditarModal()"
   (updated)="actualizarCitaLista($event)">
 </app-editarcita>
+
+<!-- MODAL DE MESES -->
+<div class="modal-backdrop-small" *ngIf="mostrarFiltroMes">
+  <div class="custom-modal-container-small">
+    <div class="modal-header-small">
+      <h2>Selecciona un mes</h2>
+      <button class="custom-modal-close-btn-small" (click)="cerrarFiltroMes()">×</button>
+    </div>
+    <div class="grid-meses-small">
+      <button 
+        *ngFor="let mes of meses" 
+        (click)="seleccionarMes(mes)" 
+        class="boton-mes-small"
+        [class.active]="mesSeleccionado === mes">
+        {{ mes | titlecase }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE DÍAS -->
+<div class="modal-backdrop-small" *ngIf="mostrarFiltroDia">
+  <div class="custom-modal-container-small">
+    <div class="modal-header-small">
+      <h2>Selecciona un día</h2>
+      <button class="custom-modal-close-btn-small" (click)="cerrarFiltroDia()">×</button>
+    </div>
+    <div class="grid-dias-small">
+      <button 
+        *ngFor="let dia of dias" 
+        (click)="seleccionarDia(dia)" 
+        class="boton-dia-small"
+        [class.active]="diaSeleccionado === dia">
+        {{ dia }}
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE HORAS -->
+<div class="modal-backdrop-small" *ngIf="mostrarFiltroHora">
+  <div class="custom-modal-container-small">
+    <div class="modal-header-small">
+      <h2>Selecciona una hora</h2>
+      <button class="custom-modal-close-btn-small" (click)="cerrarFiltroHora()">×</button>
+    </div>
+    <div class="grid-horas-small">
+      <button 
+  *ngFor="let hora of horas" 
+  (click)="seleccionarHora(hora)" 
+  class="boton-hora-small"
+  [class.active]="horaSeleccionada === hora">
+  {{ hora }} <!-- Si quieres, puedes mostrar también la hora24: convertirHoraA24h(hora) -->
+</button>
+
+    </div>
+  </div>
+</div>

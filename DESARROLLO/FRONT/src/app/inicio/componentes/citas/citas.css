@@ -240,3 +240,145 @@
   box-sizing: border-box;
   font-size: 1rem;
 }
+
+
+
+/* =============================== */
+/* Backdrop pequeño                */
+/* =============================== */
+.modal-backdrop-small {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    z-index: 1100; /* más alto que el modal principal */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor modal pequeño */
+.custom-modal-container-small {
+    position: fixed; /* importante para sacarlo de cualquier contenedor relativo */
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1101; /* siempre arriba del backdrop y del modal principal */
+    width: 500px;
+    max-width: 90%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    font-family: Arial, sans-serif;
+}
+
+
+/* Header pequeño */
+.modal-header-small {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.custom-modal-close-btn-small {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 1.3rem;
+    color: #aaa;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.custom-modal-close-btn-small:hover {
+    color: #333;
+}
+
+/* Grid Meses */
+.grid-meses-small {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.boton-mes-small {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: #ff66c4;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #213c6c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.boton-mes-small:hover {
+    background: #ff85d1;
+}
+
+.boton-mes-small.active {
+    background: #ff1ab0;
+    color: white;
+}
+
+/* Grid Días */
+.grid-dias-small {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+}
+
+.boton-dia-small {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #ff66c4;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #213c6c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.boton-dia-small:hover {
+    background: #ff85d1;
+}
+
+.boton-dia-small.active {
+    background: #ff1ab0;
+    color: white;
+}
+
+/* Grid Horas */
+.grid-horas-small {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+    gap: 6px;
+    justify-items: center;
+}
+
+.boton-hora-small {
+    padding: 8px;
+    border: none;
+    border-radius: 6px;
+    background: #ff66c4;
+    cursor: pointer;
+    transition: 0.2s;
+    color: #213c6c;
+    font-weight: bold;
+    text-align: center;
+}
+
+.boton-hora-small:hover {
+    background: #ff85d1;
+}
+
+.boton-hora-small.active {
+    background: #ff1ab0;
+    color: white;
+}
