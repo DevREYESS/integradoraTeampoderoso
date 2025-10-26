@@ -28,7 +28,8 @@ export class Editarcita implements OnInit {
       telefono: new FormControl(this.cita?.telefono || '', Validators.required),
       horaInicio: new FormControl(this.convertirHora(this.cita?.inicio) || '', Validators.required),
       horaFin: new FormControl(this.convertirHora(this.cita?.fin) || '', Validators.required),
-      fechaCita: new FormControl(this.parseFechaTexto(this.cita?.fecha) || '', Validators.required)
+      fechaCita: new FormControl(this.parseFechaTexto(this.cita?.fecha) || '', Validators.required),
+      estatus: new FormControl( [this.cita?.estatus],Validators.required)
       // quitamos fechaCita de aquí
     });
 
@@ -66,32 +67,38 @@ export class Editarcita implements OnInit {
 }
 
 
-  guardarCambios() {
-    if (!this.formCita.valid) return;
+guardarCambios() {
+  if (!this.formCita.valid) return;
 
-    this.loading = true;
+  this.loading = true;
 
-    const datosActualizados = {
-      nombrePaciente: this.formCita.value.nombre,
-      telefono: this.formCita.value.telefono,
-      horaInicio: this.formCita.value.horaInicio,
-      horaFin: this.formCita.value.horaFin,
-      fechaCita: this.formCita.value.fechaCita, // <-- tomamos el valor directo del input
-      estatus: 'A'
-    };
+  const estatusMap: any = {
+    Activa: 'A',
+    Cancelada: 'C',
+    Finalizada: 'F'
+  };
 
-    this.consultaService.updateCita(datosActualizados, this.cita.uuid).subscribe({
-      next: (resp) => {
-        this.loading = false;
-        this.updated.emit();
-        this.closeModal();
-      },
-      error: (err) => {
-        this.loading = false;
-        console.error('Error al actualizar cita:', err);
-      }
-    });
-  }
+  const datosActualizados = {
+    nombrePaciente: this.formCita.value.nombre,
+    telefono: this.formCita.value.telefono,
+    horaInicio: this.formCita.value.horaInicio,
+    horaFin: this.formCita.value.horaFin,
+    fechaCita: this.formCita.value.fechaCita,
+    estatus: estatusMap[this.formCita.value.estatus]
+  };
+
+  this.consultaService.updateCita(datosActualizados, this.cita.uuid).subscribe({
+    next: (resp) => {
+      this.loading = false;
+      this.updated.emit();
+      this.closeModal();
+    },
+    error: (err) => {
+      this.loading = false;
+      console.error('Error al actualizar cita:', err);
+    }
+  });
+}
 
   closeModal() {
     this.close.emit();

@@ -148,9 +148,107 @@ export class Citas {
     this.obtenerCitas();
   }
 
-  eliminarCita(cita: any): void {
-    console.log(`Eliminando cita de: ${cita.nombre}`);
+
+// Variables para modales
+showConfirmationModal = false;
+showResultModal = false;
+resultMessage = '';
+selectedCita: any = null;
+
+// Abrir modal de confirmación
+abrirConfirmacion(cita: any) {
+  this.selectedCita = cita;
+  this.showConfirmationModal = true;
+}
+
+// Confirmar cancelación
+confirmarCancelarCita() {
+  if (!this.selectedCita) return;
+
+  // Cerramos el modal de confirmación antes de llamar al servicio
+  this.showConfirmationModal = false;
+
+  const citaParaAPI = {
+    telefono: this.selectedCita.telefono,
+    estatus: 'C',
+    nombrePaciente: this.selectedCita.nombre,
+    horaInicio: this.convertirAHora24(this.selectedCita.inicio),
+    horaFin: this.convertirAHora24(this.selectedCita.fin),
+    fechaCita: this.convertirFechaISO(this.selectedCita.fecha)
+  };
+
+  this.consultaService.updateCita(citaParaAPI, this.selectedCita.uuid).subscribe({
+    next: (res) => {
+      const index = this.citas.findIndex(c => c.uuid === this.selectedCita.uuid);
+      if (index !== -1) this.citas[index].estatus = 'C';
+
+      this.resultMessage = 'Cita cancelada correctamente';
+      this.showResultModal = true;
+
+      this.selectedCita = null;
+      this.obtenerCitas(); // Refresca la lista
+    },
+    error: (err) => {
+      console.error('Error al cancelar la cita', err);
+      this.resultMessage = 'No se pudo cancelar la cita';
+      this.showResultModal = true;
+      this.selectedCita = null;
+    }
+  });
+}
+
+  eliminarCita(cita: any) {
+    if (!cita || !cita.uuid) return;
+
+    const confirmar = confirm(`¿Deseas cancelar la cita de ${cita.nombre} el ${cita.fecha}?`);
+    if (!confirmar) return;
+
+    // Mapear al formato que espera la API
+    const citaParaAPI = {
+      telefono: cita.telefono,
+      estatus: 'C', // cancelada
+      nombrePaciente: cita.nombre,
+      horaInicio: this.convertirAHora24(cita.inicio), // método de la clase
+      horaFin: this.convertirAHora24(cita.fin),
+      fechaCita: this.convertirFechaISO(cita.fecha)
+    };
+
+    this.consultaService.updateCita(citaParaAPI, cita.uuid).subscribe({
+      next: (res) => {
+        const index = this.citas.findIndex(c => c.uuid === cita.uuid);
+        if (index !== -1) this.citas[index].estatus = 'C';
+        alert('Cita cancelada correctamente');
+         this.obtenerCitas();
+      },
+      error: (err) => {
+        console.error('Error al cancelar la cita', err);
+        alert('No se pudo cancelar la cita');
+      }
+    });
   }
+
+  // Métodos auxiliares dentro de la clase
+  private convertirAHora24(hora12: string): string {
+    const [time, modifier] = hora12.split(' ');
+    let [hours, minutes] = time.split(':').map(Number);
+    if (modifier.toLowerCase() === 'pm' && hours !== 12) hours += 12;
+    if (modifier.toLowerCase() === 'am' && hours === 12) hours = 0;
+    return `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:00`;
+  }
+
+private convertirFechaISO(fechaStr: string): string {
+  const meses: any = {
+    enero:1, febrero:2, marzo:3, abril:4, mayo:5, junio:6,
+    julio:7, agosto:8, septiembre:9, octubre:10, noviembre:11, diciembre:12
+  };
+  const partes = fechaStr.split(' '); // ["29", "de", "octubre", "de", "2025"]
+  const dia = partes[0];
+  const mesTexto = partes[2];
+  const año = partes[4]; // <- ahora toma "2025"
+  const mes = meses[mesTexto.toLowerCase()];
+  return `${año}-${mes.toString().padStart(2,'0')}-${dia.padStart(2,'0')}`;
+}
+
 
   buscar() {
     if (this.filterBy === 'nombre') {
