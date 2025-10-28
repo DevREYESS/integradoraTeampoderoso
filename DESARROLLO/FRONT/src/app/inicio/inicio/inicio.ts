@@ -75,14 +75,21 @@ mostrarcard13 = false;
   ngOnInit(): void {
      this.generateDaysData(new Date('2025-10-22'), new Date('2025-12-31'));
      this.loadCurrentWeek();
+
+     this.consultaService.servicios(this.filtrosServicios).subscribe({
+       next: (response) => {
+         this.servicios = response;
+         console.log('Datos obtenidos del servidor => ', this.servicios);
+       },
+       error: (err) => {
+         console.error('Ocurrio un error al consultar servicios => ',err.message);
+       }
+     })
   } 
   
 
-servicios = [
-  { id: 1, nombre: 'Consulta general' },
-  { id: 2, nombre: 'Limpieza dental' },
-  { id: 3, nombre: 'Ortodoncia' },
-];
+filtrosServicios: any = {};
+servicios: any[] = [];
  
 servicioSeleccionado: number | null = null;
 

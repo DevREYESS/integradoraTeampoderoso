@@ -54,12 +54,13 @@ updateCita(cita: any, uuid:any): Observable<any> {
 
 
 
-servicios(): Observable<any> {
-  return this.http.post<any>(this.apiUrlGuardar, {
+servicios(filtros: any): Observable<any> {
+  return this.http.post<any>(`${this.apiUrlBase}/servicios/filtrar`, filtros, {
     headers: { 'Content-Type': 'application/json' }
   }).pipe(
     map(response => response),
-    catchError(this.handleError)
+    catchError(this.handleError),
+    catchError(this.handleErrorLogin)
   );
 }
 

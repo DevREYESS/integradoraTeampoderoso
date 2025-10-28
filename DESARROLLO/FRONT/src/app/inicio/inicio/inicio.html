@@ -127,7 +127,7 @@
        <div class="p-inputgroup">
         <span class="p-inputgroup-addon">
         <select [(ngModel)]="servicioSeleccionado" class="form-select  custom-input2">
-    <option *ngFor="let s of servicios" [value]="s.id">{{ s.nombre }}</option>
+    <option *ngFor="let s of servicios" [value]="s.servicioId">{{ s.nombreServicio }}</option>
   </select>
   </span>
       </div>
