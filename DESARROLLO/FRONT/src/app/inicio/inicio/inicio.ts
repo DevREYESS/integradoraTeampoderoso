@@ -79,7 +79,6 @@ mostrarcard13 = false;
      this.consultaService.servicios(this.filtrosServicios).subscribe({
        next: (response) => {
          this.servicios = response;
-         console.log('Datos obtenidos del servidor => ', this.servicios);
        },
        error: (err) => {
          console.error('Ocurrio un error al consultar servicios => ',err.message);
