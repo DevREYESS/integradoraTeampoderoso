@@ -42,7 +42,7 @@ export class Admin {
   abrirCitasModal() { this.showCitasModal = true; }
   cerrarCitasModal() { this.showCitasModal = false; }
 
- cargarCitas() {
+cargarCitas() {
   this.consultaService.getCitas().subscribe({
     next: (data: any) => {
       if (!Array.isArray(data)) {
@@ -50,9 +50,16 @@ export class Admin {
         return;
       }
 
-      // Encontrar fecha mínima y máxima de las citas
-      let minDate = new Date(Math.min(...data.map(c => new Date(c.fechaCita).getTime())));
-      let maxDate = new Date(Math.max(...data.map(c => new Date(c.fechaCita).getTime())));
+      // Encontrar fecha mínima y máxima de las citas (creadas como locales)
+      let minDate = new Date(Math.min(...data.map(c => {
+        const [y, m, d] = c.fechaCita.split('-').map(Number);
+        return new Date(y, m - 1, d).getTime();
+      })));
+
+      let maxDate = new Date(Math.max(...data.map(c => {
+        const [y, m, d] = c.fechaCita.split('-').map(Number);
+        return new Date(y, m - 1, d).getTime();
+      })));
 
       // Ajustar a medianoche para evitar desfasajes de hora
       minDate.setHours(0, 0, 0, 0);
@@ -62,20 +69,22 @@ export class Admin {
       const allDays: any[] = [];
       const current = new Date(minDate);
       while (current <= maxDate) {
-        const dateStr = `${current.getFullYear()}-${(current.getMonth()+1).toString().padStart(2,'0')}-${current.getDate().toString().padStart(2,'0')}`;
+        const dateStr = `${current.getFullYear()}-${(current.getMonth() + 1).toString().padStart(2, '0')}-${current.getDate().toString().padStart(2, '0')}`;
         allDays.push({
           name: this.getShortDayName(current.getDay()),
           date: dateStr,
-          schedules: [] // se llenará con citas o slots vacíos
+          schedules: []
         });
         current.setDate(current.getDate() + 1);
       }
 
-      // Asignar citas a los días correspondientes
+      // Asignar citas a los días correspondientes (fecha local)
       data.forEach((cita: any) => {
-        const dateObj = new Date(cita.fechaCita);
-        dateObj.setHours(0, 0, 0, 0); // Ajustar a medianoche
-        const dateStr = `${dateObj.getFullYear()}-${(dateObj.getMonth()+1).toString().padStart(2,'0')}-${dateObj.getDate().toString().padStart(2,'0')}`;
+        const [y, m, d] = cita.fechaCita.split('-').map(Number);
+        const dateObj = new Date(y, m - 1, d);
+        dateObj.setHours(0, 0, 0, 0);
+
+        const dateStr = `${dateObj.getFullYear()}-${(dateObj.getMonth() + 1).toString().padStart(2, '0')}-${dateObj.getDate().toString().padStart(2, '0')}`;
         const day = allDays.find(d => d.date === dateStr);
         if (day) {
           const horaInicio = cita.horaInicio || '8:00';
@@ -86,7 +95,7 @@ export class Admin {
           // Dividir la cita en intervalos de 20 min
           for (let i = 0; i < duracionMin; i += 20) {
             const totalMinutes = startMinutes + i;
-            const horaSlot = `${Math.floor(totalMinutes / 60)}:${(totalMinutes % 60).toString().padStart(2,'0')}`;
+            const horaSlot = `${Math.floor(totalMinutes / 60)}:${(totalMinutes % 60).toString().padStart(2, '0')}`;
             day.schedules.push({
               time: horaSlot,
               status: 'Agendado',
