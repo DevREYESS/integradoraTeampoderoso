@@ -26,16 +26,19 @@ public class CitaService {
 
     private final CitaRepository citaRepository;
     private final ServicioRepository servicioRepository;
+    private final WhatsAppService whatsAppService;
 
     @PersistenceContext
     private EntityManager entityManager;
 
     public CitaService(
             CitaRepository citaRepository,
-            ServicioRepository servicioRepository
+            ServicioRepository servicioRepository,
+            WhatsAppService whatsAppService
     ) {
         this.citaRepository = citaRepository;
         this.servicioRepository = servicioRepository;
+        this.whatsAppService = whatsAppService;
     }
 
     public List<Cita> findCita(CitaDTO citaDTO) {
@@ -98,6 +101,14 @@ public class CitaService {
         Cita nuevaCita = crearEntidadCita(citaDTO);
         Cita citaGuardada = citaRepository.save(nuevaCita);
 
+        // Enviar confirmación por WhatsApp
+        try {
+            whatsAppService.enviarConfirmacionCita(citaGuardada);
+        } catch (Exception e) {
+            // Log pero no fallar - la cita ya está guardada
+            System.err.println("Advertencia: Cita creada pero WhatsApp falló: " + e.getMessage());
+        }
+
         return construirRespuesta(citaGuardada, "Cita registrada correctamente");
     }
 
@@ -116,6 +127,13 @@ public class CitaService {
         citaExistente.setEstatus(citaDTO.getEstatus());
 
         Cita citaActualizada = citaRepository.save(citaExistente);
+
+        // Enviar notificación de actualización
+        try {
+            whatsAppService.enviarConfirmacionCita(citaActualizada);
+        } catch (Exception e) {
+            System.err.println("Advertencia: Cita actualizada pero WhatsApp falló: " + e.getMessage());
+        }
 
         return construirRespuesta(citaActualizada, "Cita actualizada correctamente");
     }
@@ -205,6 +223,13 @@ public class CitaService {
 
         citaExistente.setEstatus("X");
         Cita citaCancelada = citaRepository.save(citaExistente);
+
+        // Enviar notificación de cancelación
+        try {
+            whatsAppService.enviarCancelacionCita(citaCancelada);
+        } catch (Exception e) {
+            System.err.println("Advertencia: Cita cancelada pero WhatsApp falló: " + e.getMessage());
+        }
 
         return construirRespuesta(citaCancelada, "Cita cancelada");
     }
