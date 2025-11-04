@@ -14,11 +14,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Meses } from '../componentes/meses/meses';
 import { CitaAgendada } from '../componentes/cita-agendada/cita-agendada';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 @Component({
   selector: 'app-inicio',
-  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,CitaAgendada,ToastModule,ConsultaModal,Meses,HttpClientModule],
+  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,TooltipModule,CommonModule,FormsModule,CitaAgendada,ToastModule,ConsultaModal,Meses,HttpClientModule],
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
@@ -364,7 +365,7 @@ goToPreviousWeek(): void {
 
   datos:any;
    agendo:any;
-   
+
 cerrarModal() {
   this.showModal2 = false;
 }

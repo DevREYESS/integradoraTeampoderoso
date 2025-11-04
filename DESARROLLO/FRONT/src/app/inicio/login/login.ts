@@ -50,6 +50,10 @@ export class Login {
     })
   }
 
+  regresar(){
+      localStorage.removeItem('token');
+  this.router.navigate(['']);
+  }
   mostrarAlertaError(icon: any, title: string, message: string) {
     Swal.fire({
       title: title,

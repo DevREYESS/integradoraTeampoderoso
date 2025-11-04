@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, ElementRef, ViewChild } from '@
 @Component({
   selector: 'app-consulta-modal',
   templateUrl: './consulta-modal.html',
-  styleUrls: ['./consulta-modal.css'] // 👈 Asegúrate de usar "styleUrls" (plural)
+  styleUrls: ['./consulta-modal.css'] 
 })
 export class ConsultaModal {
   @Input() appointmentData: any = {}; 
@@ -13,6 +13,7 @@ export class ConsultaModal {
 
   ubicacion = "De los Planetas SN, Colonia del Sol, 51400 Tejupilco de Hidalgo, Mexico.";
   especialista = "Dr. Irving Saúl Jaimes Macedo";
+  mensaje = "Te esperamos en Medical Isor !!!";
 
   get statusInfo(): { text: string, class: string } {
     const status = this.appointmentData.estatus || '';
