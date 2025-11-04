@@ -13,11 +13,12 @@ import { Services } from '../services/services';
 import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Meses } from '../componentes/meses/meses';
+import { CitaAgendada } from '../componentes/cita-agendada/cita-agendada';
 
 
 @Component({
   selector: 'app-inicio',
-  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,ToastModule,ConsultaModal,Meses,HttpClientModule],
+  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,CommonModule,FormsModule,CitaAgendada,ToastModule,ConsultaModal,Meses,HttpClientModule],
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
@@ -34,6 +35,9 @@ export class Inicio implements OnInit {
  public hasNextWeek = true;
   formulario: FormGroup;
   formulario2: FormGroup;
+showModal2 = false;
+appointmentData: any = null;
+
 
 visiblehome= true;
 visiblehome2 = false;
@@ -360,44 +364,55 @@ goToPreviousWeek(): void {
 
   datos:any;
    agendo:any;
+   
+cerrarModal() {
+  this.showModal2 = false;
+}
 
- guarda(fecha: string, horaInicio: string) {
-  const horaFin = this.calcularHoraFin(horaInicio); // calcula +20 min
+guarda(fecha: string, horaInicio: string) {
+  const horaFin = this.calcularHoraFin(horaInicio); // +20 min
 
-const datos = {
-  estatus: "A",
-  horaInicio: this.formatoHora(horaInicio),
-  horaFin: this.formatoHora(horaFin),
-  fechaCita: fecha,
-  nombrePaciente:this.formulario.get('nombre')?.value ? this.formulario.get('nombre')?.value : "" ,
-  servicioId: "1",
-  telefono: this.formulario.get('telefono')?.value ? this.formulario.get('telefono')?.value : "" 
-};
-
-      this.visiblehome2 = true;
+  const datos = {
+    estatus: "A",
+    horaInicio: this.formatoHora(horaInicio),
+    horaFin: this.formatoHora(horaFin),
+    fechaCita: fecha,
+    nombrePaciente: this.formulario.get('nombre')?.value || "",
+    servicioId: "1",
+    telefono: this.formulario.get('telefono')?.value || ""
+  };
 
   console.log("Datos a enviar:", datos);
-this.consultaService.guardarcita(datos).subscribe({
-  next: (res) => {
-    this.showConfirmationModal = true; 
-    console.log("Cita guardada:", res);
-    this.limpiarFormulario();
-    this.cdRef.detectChanges(); 
-  },
-  error: (err) => {
-    this.showConfirmationModal = false; 
-    this.cdRef.detectChanges(); 
-    this.limpiarFormulario();
-    console.error("Error al guardar la cita:", err);
-    alert("No se pudo guardar la cita. Por favor intenta de nuevo.");
-  }
-  
-});
-    this.cdRef.detectChanges(); 
-      this.visiblehome2 = false;
-      this.visiblehome = true;
-    this.regresarf = false
+
+  this.consultaService.guardarcita(datos).subscribe({
+    next: (res) => {
+      this.appointmentData = {
+        estatus: "A",
+        nombrePaciente: res.nombrePaciente,
+        fechaCita: res.fechaCita,
+        horaInicio: res.horaIncio, 
+        horaFin: this.calcularHoraFin(res.horaIncio),
+        nombreServicio: res.nombreServicio || '',
+      };
+
+      this.showModal2 = true;
+
+      this.limpiarFormulario();
+      this.cdRef.detectChanges();
+    },
+    error: (err) => {
+      console.error("Error al guardar la cita:", err);
+      alert("No se pudo guardar la cita. Por favor intenta de nuevo.");
+      this.showModal2 = false;
+      this.cdRef.detectChanges();
+    }
+  });
+
+  this.visiblehome2 = false;
+  this.visiblehome = true;
+  this.regresarf = false;
 }
+
 
 calcularHoraFin(horaInicio: string): string {
   const [horas, minutos] = horaInicio.split(':').map(Number);

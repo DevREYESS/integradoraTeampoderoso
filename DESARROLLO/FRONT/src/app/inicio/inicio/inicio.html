@@ -383,8 +383,11 @@
 </div>
 </div>
 
-  
-<div *ngIf="showConfirmationModal">
+
+<app-cita-agendada *ngIf="showModal2" [appointmentData]="appointmentData" (close)="cerrarModal()"> </app-cita-agendada>
+
+
+<!--<div *ngIf="showConfirmationModal">
     <div class="modal-backdrop" (click)="regresar2()"></div> 
 
     <div class="custom-modal-container">
@@ -405,7 +408,7 @@
             &times; 
         </button>
     </div>
-</div>
+</div>-->
 <app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult" (close)="closeConsultaModal()"></app-consulta-modal>
 
 <div *ngIf="showConfirmationModal2">
