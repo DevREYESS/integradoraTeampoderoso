@@ -379,7 +379,7 @@ guarda(fecha: string, horaInicio: string) {
     horaFin: this.formatoHora(horaFin),
     fechaCita: fecha,
     nombrePaciente: this.formulario.get('nombre')?.value || "",
-    servicioId: "1",
+    servicioId: this.formulario.get('servicio')?.value || "",
     telefono: this.formulario.get('telefono')?.value || ""
   };
 
@@ -449,6 +449,7 @@ next() {
     this.mostrarcard11=true;
     this.mostrarcard12=false;
     this.mostrarcard13=false;
+    
   }else if(this.activeIndex === 1){
     this.mostrarcard1 = true;
      this.mostrarcard11=false;
@@ -459,6 +460,9 @@ next() {
      this.mostrarcard11=false;
     this.mostrarcard12=false;
     this.mostrarcard13=true;
+        const servicioCtrl = this.formulario.get('servicio');
+    servicioCtrl?.setValidators([Validators.required]);
+    servicioCtrl?.updateValueAndValidity();
   }
 
 }
@@ -467,6 +471,9 @@ prev() {
   if (this.activeIndex > 0) {
     this.activeIndex--;
   }
+ const telefono = this.formulario.get('telefono')?.value;
+this.telefonoFormateado = this.formatVisualPhone(telefono || '');
+
   if(this.activeIndex ===3 ){
   this.mostrarcalendario=true;
   }else if(this.activeIndex ===2 ){
@@ -481,6 +488,9 @@ prev() {
     this.mostrarcard11=false;
     this.mostrarcard12=true;
     this.mostrarcard13=false;
+     const servicioCtrl = this.formulario.get('servicio');
+    servicioCtrl?.clearValidators();
+    servicioCtrl?.updateValueAndValidity();
   }else if(this.activeIndex ===0 ){
   this.mostrarcalendario=false;
   this.mostrarcard1 = true;
@@ -488,7 +498,6 @@ prev() {
   this.mostrarcard12=false;
     this.mostrarcard13=false;
   }
-  
 
 }
 agendar() {
@@ -733,5 +742,74 @@ const dateStr = `${currentDate.getFullYear()}-${('0'+(currentDate.getMonth()+1))
 
   this.allDaysData = result;
 }
+
+
+
+validarpaso2() {
+  const telefonoControl = this.formulario.get('telefono');
+
+  telefonoControl?.markAsTouched();
+
+  if (this.formulario.invalid) {
+    return;
+  }
+
+  this.next();
+}
+validarpaso1() {
+  const nombreControl = this.formulario.get('nombre');
+
+  nombreControl?.markAsTouched();
+
+  if (nombreControl?.invalid) {
+    return;
+  }
+
+  this.next();
+}
+validarPaso3() {
+  const control = this.formulario.get('servicio');
+  control?.markAsTouched();
+
+  if (control?.invalid) {
+    return;
+  }
+
+  this.next(); 
+}
+
+
+telefonoFormateado: string = '';
+
+onTelefonoInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const soloNumeros = input.value.replace(/\D/g, '').substring(0, 10);
+  this.telefonoFormateado = this.formatVisualPhone(soloNumeros);
+
+  this.formulario.get('telefono')?.setValue(soloNumeros, { emitEvent: true });
+
+  this.formulario.get('telefono')?.markAsTouched();
+  this.formulario.get('telefono')?.markAsDirty();
+}
+
+
+
+formatVisualPhone(value: string): string {
+  if (value.length > 6) {
+    return `${value.slice(0, 3)}-${value.slice(3, 6)}-${value.slice(6, 10)}`;
+  } else if (value.length > 3) {
+    return `${value.slice(0, 3)}-${value.slice(3, 6)}`;
+  }
+  return value;
+}
+
+soloNumeros(event: KeyboardEvent) {
+  const charCode = event.which ? event.which : event.keyCode;
+  // Solo permite números (0–9)
+  if (charCode < 48 || charCode > 57) {
+    event.preventDefault();
+  }
+}
+
 
 }

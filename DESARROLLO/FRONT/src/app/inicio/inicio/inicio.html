@@ -1,47 +1,32 @@
 <div [class.shrink]="isShrunk" class="header-container">
   <div class="social-info">
     <div class="logo-text">
-      <a
-        href="https://www.instagram.com/medica_isor?igsh=MXNic3V6dXYyeHlxcg=="
-        target="_blank"
-        class="logo-text"
-      >
+      <a href="https://www.instagram.com/medica_isor?igsh=MXNic3V6dXYyeHlxcg==" target="_blank" class="logo-text">
         <i class="pi pi-instagram icon"></i>
         <span>Instagram</span>
       </a>
     </div>
     <div class="contact-info">
-         <a
-        href="https://wa.me/5217222619193"
-        target="_blank"
-        class="logo-text"
-      >
-      <i class="pi pi-whatsapp icon"></i>
-      <span>Whatsapp</span>
+      <a href="https://wa.me/5217222619193" target="_blank" class="logo-text">
+        <i class="pi pi-whatsapp icon"></i>
+        <span>Whatsapp</span>
       </a>
     </div>
-      <div class="contact-info">
-         <a
-        href="https://www.tiktok.com/@medicaisor"
-        target="_blank"
-        class="logo-text"
-      >
-      <i class="pi pi-tiktok icon"></i>
-      <span>TikTok</span>
+    <div class="contact-info">
+      <a href="https://www.tiktok.com/@medicaisor" target="_blank" class="logo-text">
+        <i class="pi pi-tiktok icon"></i>
+        <span>TikTok</span>
       </a>
     </div>
-      <div class="contact-info">
-         <a
-        href="https://www.facebook.com/medica.isor?locale=es_LA"
-        target="_blank"
-        class="logo-text"
-      >
-      <i class="pi pi-facebook icon"></i>
-      <span>Facebook</span>
+    <div class="contact-info">
+      <a href="https://www.facebook.com/medica.isor?locale=es_LA" target="_blank" class="logo-text">
+        <i class="pi pi-facebook icon"></i>
+        <span>Facebook</span>
       </a>
     </div>
   </div>
-  <div class="brand-logo-circle" pTooltip="Ir al login del administrador"  tooltipPosition="bottom" tooltipStyleClass="mi-tooltip" tooltipZIndex="10000" tooltipEvent="hover" (click)="irAAdmin()"></div>
+  <div class="brand-logo-circle" pTooltip="Ir al login del administrador" tooltipPosition="bottom"
+    tooltipStyleClass="mi-tooltip" tooltipZIndex="10000" tooltipEvent="hover" (click)="irAAdmin()"></div>
   <div class="brand-cta">
     <div class="brand-info">
       <p class="textohe">Transforma tu imagen, empieza hoy</p>
@@ -56,136 +41,170 @@
 </div>
 
 <div class="main-content">
-  
+
   @if (visiblehome2) {
-<div class="col-12 col-lg-12 col-md-12">
-<div class=" steps-container">
-  <div class="progress-bar">
-    <div 
-      class="progress" 
-  [style.width.%]="((activeIndex + 1) / items.length) * 100">
+  <div class="col-12 col-lg-12 col-md-12">
+    <div class=" steps-container">
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="((activeIndex + 1) / items.length) * 100">
+        </div>
+      </div>
     </div>
   </div>
-</div>
-</div>
 
 
 
-@if (mostrarcard1) {
+  @if (mostrarcard1) {
   <div class="row col-lg-12 col-md-12 col-12 cita-header">
-        <h2>Reserva tu cita</h2>
-        <p></p>
-      </div>
-<div class="cards-container">
-<form [formGroup]="formulario">
-  
-@if (mostrarcard11) {
-  <div class="cita-card reserva-card">
-    <div class="input-container">
-      <label>Ingresa tu nombre completo</label>
-      <div class="p-inputgroup">
-        <span class="p-inputgroup-addon">
-        <input type="text" formControlName="nombre" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText required (keydown)="noEspacioInicial($event)"/>
-        </span>
-      </div>
-         <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
-            Este campo es requerido.
-          </small>
-    </div>
- 
-    <div class="contenedor-boton">
-  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()" [disabled]="formulario.get('nombre')?.invalid"></button>
-</div>
+    <h2>Reserva tu cita</h2>
+    <p></p>
   </div>
-  }
-  @if (mostrarcard12) {
-  <div class="cita-card reserva-card">
-    <div class="input-container">
-      <label>Ingresa tu número de teléfono</label>
-      <div class="p-inputgroup">
-        <span class="p-inputgroup-addon">
-        <input type="text" maxlength="12" formControlName="telefono" icon="pi pi-user"class="p-inputtext p-inputtext-rounded custom-input" pInputText  (input)="formatTelefono2($event)"/>
-        </span>
-      </div>
-      <small *ngIf="formulario.get('telefono')?.touched && formulario.get('telefono')?.invalid" class="error-msg">
-            Este campo es requerido.
-          </small>
-    </div>
-    
-    <div class="contenedor-boton">
-  <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
-
-  <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()" [disabled]="formulario.get('telefono')?.invalid"></button>
-</div>
-  </div>
-  }
-  </form>
-  @if (mostrarcard13) {
-  <div class="cita-card3 reserva-card">
-    <div class="input-container">
-      <label>Servicio que desea solicitar</label>
-       <div class="p-inputgroup">
-        <span class="p-inputgroup-addon">
-        <select [(ngModel)]="servicioSeleccionado" class="form-select  custom-input2">
-    <option *ngFor="let s of servicios" [value]="s.servicioId">{{ s.nombreServicio }}</option>
-  </select>
-  </span>
-      </div>
-    </div>
+  <div class="cards-container">
     <form [formGroup]="formulario">
+
+      @if (mostrarcard11) {
+      <div class="cita-card reserva-card">
+        <div class="input-container">
+          <label>Ingresa tu nombre completo</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <input type="text" formControlName="nombre" icon="pi pi-user"
+                class="p-inputtext p-inputtext-rounded custom-input" pInputText required
+                (keydown)="noEspacioInicial($event)" />
+            </span>
+          </div>
+          <div style="margin-left: 10px;">
+            <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
+              Este campo es requerido.
+            </small>
+          </div>
+        </div>
+
+        <div class="contenedor-boton">
+          <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarpaso1()"></button>
+        </div>
+      </div>
+      }
+      @if (mostrarcard12) {
+      <div class="cita-card reserva-card">
+        <div class="input-container">
+          <label>Ingresa tu número de teléfono</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <input type="text" maxlength="12" [value]="telefonoFormateado" (input)="onTelefonoInput($event)" (keypress)="soloNumeros($event)"
+                class="p-inputtext p-inputtext-rounded custom-input" pInputText />
+            </span>
+          </div>
+          <div style="margin-left: 10px;">
+            <small *ngIf="
+  formulario.get('telefono')?.touched &&
+  formulario.get('telefono')?.hasError('required')
+" class="error-msg" style="align-items: center;">
+              Este campo es requerido.
+            </small>
+
+            <small *ngIf="
+    formulario.get('telefono')?.dirty &&
+    formulario.get('telefono')?.hasError('pattern')
+  " class="error-msg">
+              Número de teléfono inválido.
+            </small>
+          </div>
+        </div>
+
+        <div class="contenedor-boton">
+          <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
+
+          <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarpaso2()"></button>
+        </div>
+      </div>
+      }
+    </form>
+    @if (mostrarcard13) {
+    <div class="cita-card3 reserva-card">
+      <form [formGroup]="formulario">
+      <div class="input-container">
+  <label>Servicio que desea solicitar</label>
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <select
+        formControlName="servicio"
+        class="form-select custom-input2"
+      >
+        <option value="" disabled selected>Selecciona un servicio</option>
+        <option *ngFor="let s of servicios" [value]="s.servicioId">
+          {{ s.nombreServicio }}
+        </option>
+      </select>
+    </span>
+  </div>
+
+  <!-- mensaje de error -->
+   <div style="margin-left: 10px;">
+  <small
+    *ngIf="
+      formulario.get('servicio')?.touched &&
+      formulario.get('servicio')?.hasError('required')
+    "
+    class="error-msg" 
+  >
+    Este campo es requerido.
+  </small>
+  </div>
+
+</div>
+
+      
         <div class="descripcion-container">
-        <label for="descripcion-cita">Descripción: (Opcional)</label>
-        <textarea 
-            id="descripcion-cita"
-            rows="2" 
-            formControlName="descripcionCita"
-            placeholder=""
+          <label for="descripcion-cita">Descripción: (Opcional)</label>
+          <textarea id="descripcion-cita" rows="2" formControlName="descripcionCita" placeholder=""
             class="custom-textarea" (keydown)="noEspacioInicial($event)">
         </textarea>
+        </div>
+      </form>
+      <div class="contenedor-boton2">
+        <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
+        <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarPaso3()"></button>
+      </div>
     </div>
-    </form>
-    <div class="contenedor-boton2">
-      <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
-      <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="next()"></button>
+    }
+
+    <div class="cita-card2 info-card">
+      <ul>
+        <li>
+          <i class="pi pi-user"></i>
+          <p>Dr. Irving Saúl Jaimes Macedo</p>
+        </li>
+        <li>
+          <i class="pi pi-map-marker"></i>
+          <p>De los Planetas SN, colonia del Sol. 51400 Tejupilco de Hidalgo Mexico.</p>
+        </li>
+        <li>
+          <i class="pi pi-briefcase"></i>
+          <p>Ofrecemos tratamientos faciales y corporales de vanguardia, desde rejuvenecimiento y rellenos hasta
+            lipoescultura y remodelación estética</p>
+        </li>
+        <li>
+          <i class="pi pi-wallet"></i>
+          <p>Pagos únicamente en el consultorio.</p>
+        </li>
+      </ul>
     </div>
   </div>
-}
 
-  <div class="cita-card2 info-card">
-    <ul>
-      <li>
-        <i class="pi pi-user"></i>
-        <p>Dr. Irving Saúl Jaimes Macedo</p>
-      </li>
-      <li>
-        <i class="pi pi-map-marker"></i>
-        <p>De los Planetas SN, colonia del Sol. 51400 Tejupilco de Hidalgo Mexico.</p>
-      </li>
-      <li>
-        <i class="pi pi-briefcase"></i>
-        <p>Ofrecemos tratamientos faciales y corporales de vanguardia, desde rejuvenecimiento y rellenos hasta lipoescultura y remodelación estética</p>
-      </li>
-      <li>
-        <i class="pi pi-wallet"></i>
-        <p>Pagos únicamente en el consultorio.</p>
-      </li>
-    </ul>
-  </div>
-  </div>
-
-}
+  }
 
 
-@if (mostrarcalendario) {
+  @if (mostrarcalendario) {
   <app-meses *ngIf="showModal" [months]="months" (close)="closemodalmeses()" (monthSelected)="onMonthSelected($event)">
 
   </app-meses>
 
-<div class="cita-header">
-        <h2>Reserva tu cita</h2>
-        <p></p>
-      </div>
-<!--<div class="calendar-container">
+  <div class="cita-header">
+    <h2>Reserva tu cita</h2>
+    <p></p>
+  </div>
+  <!--<div class="calendar-container">
         <h2>Seleccione Horario <i class="pi pi-calendar icon"></i></h2>
 
     <div class="calendar-header">
@@ -213,181 +232,178 @@
     </div>
 </div>-->
 
-<div class="calendario-reserva">
+  <div class="calendario-reserva">
 
     <div class="contenedor-principal">
-        <div class="selector-horario">Seleccione el horario</div>
-        <div class="pestanas">
-            <button class="pestana mes" (click)="showModal = true">MES</button>
-            <!--<button class="pestana dia">DIA</button>-->
-            
+      <div class="selector-horario">Seleccione el horario</div>
+      <div class="pestanas">
+        <button class="pestana mes" (click)="showModal = true">MES</button>
+        <!--<button class="pestana dia">DIA</button>-->
+
+      </div>
+
+      <div class="contenedor-calendario">
+
+        <div class="nav-fecha">
+          <button class="flecha izquierda" (click)="goToPreviousWeek()" [disabled]="isFirstWeek">
+            &lt;
+          </button>
         </div>
 
-        <div class="contenedor-calendario">
-            
-            <div class="nav-fecha">
-                <button 
-                    class="flecha izquierda" 
-                    (click)="goToPreviousWeek()" 
-                    [disabled]="isFirstWeek">
-                    &lt;
-                </button>
-            </div>
+        <div class="dias-semana">
+          <div *ngFor="let day of weekData" class="dia">
+            <span class="nombre-dia">{{ day.name }}</span>
+            <span class="fecha">{{ day.date | date: 'd MMM' }}</span>
+          </div>
+        </div>
 
-            <div class="dias-semana">
-                <div *ngFor="let day of weekData" class="dia">
-                    <span class="nombre-dia">{{ day.name }}</span>
-                    <span class="fecha">{{ day.date | date: 'd MMM' }}</span> 
-                </div>
-            </div>
-
-            <div class="nav-fecha">
-                <button 
-                    class="flecha derecha" 
-                    (click)="goToNextWeek()" 
-                    [disabled]="isLastWeek">
-                    &gt;
-                </button>
-            </div>
+        <div class="nav-fecha">
+          <button class="flecha derecha" (click)="goToNextWeek()" [disabled]="isLastWeek">
+            &gt;
+          </button>
+        </div>
 
         <div class="grilla-horarios">
 
-    <ng-container *ngFor="let time of fixedTimes">
-        
-        <div class="hora-fija">{{ time }}</div>
+          <ng-container *ngFor="let time of fixedTimes">
 
-        <ng-container *ngFor="let day of weekData">
-            
-            <ng-container *ngIf="!day.schedules || day.schedules.length === 0">
+            <div class="hora-fija">{{ time }}</div>
+
+            <ng-container *ngFor="let day of weekData">
+
+              <ng-container *ngIf="!day.schedules || day.schedules.length === 0">
                 <div class="celda no-labora-celda">
-                    <span *ngIf="time === fixedTimes[0]" class="no-labora-texto">No labora</span>
+                  <span *ngIf="time === fixedTimes[0]" class="no-labora-texto">No labora</span>
                 </div>
-            </ng-container>
+              </ng-container>
 
-            <ng-container *ngIf="day.schedules && day.schedules.length > 0">
+              <ng-container *ngIf="day.schedules && day.schedules.length > 0">
                 <ng-container *ngIf="getScheduleSlot(day.schedules, time) as slot">
-                    <div 
-                        class="celda"
-                        [ngClass]="{ 
+                  <div class="celda" [ngClass]="{ 
                             'no-disponible-suave': slot.status !== 'Disponible'
                         }">
-                        
-                        <button 
-                            *ngIf="slot.status === 'Disponible'" 
-                            class="agendar" 
-                            (click)="guarda(day.date, time)">
-                            Agendar
-                        </button>
-                        
-                        <div 
-                            *ngIf="slot.status !== 'Disponible'" 
-                            class="no-disponible"
-                            [class.grande]="isLarge(time, day.name)"> 
-                        </div>
+
+                    <button *ngIf="slot.status === 'Disponible'" class="agendar" (click)="guarda(day.date, time)">
+                      Agendar
+                    </button>
+
+                    <div *ngIf="slot.status !== 'Disponible'" class="no-disponible"
+                      [class.grande]="isLarge(time, day.name)">
                     </div>
+                  </div>
                 </ng-container>
-                
+
                 <ng-container *ngIf="!getScheduleSlot(day.schedules, time)">
-                    <div class="celda"></div> 
+                  <div class="celda"></div>
                 </ng-container>
+              </ng-container>
+
             </ng-container>
-            
-        </ng-container>
-        
-    </ng-container>
-    
-</div>
 
+          </ng-container>
 
         </div>
-    </div>
-   
-
-</div>
 
 
-}
-
-
-
-<!-- Paso 4 -->
-<div *ngIf="activeIndex === 3">
-  <p-button 
-    label="Atrás" 
-    icon="pi pi-arrow-left" 
-    styleClass="p-button-secondary" 
-    (onClick)="prev()">
-  </p-button>
-</div>
- 
-}
-
-
-@if (visiblehome) {
-<div class="row seccion-superior">
-  <div class="row col-12 ">
-  <div class="col-lg-3 col-md-6">
- <form [formGroup]="formulario2" (ngSubmit)="consultarCita()">
-  <div class="cita-card-container">
-    <div class="cita-card1">
-      <div class="cita-header">
-        <h2>YA TIENES CITA?</h2>
-        <p>Consúltala</p>
       </div>
-      <div class="cita-body">
-        <div class="input-group">
-          <input id="phone-number" maxlength="12" type="text" formControlName="telefono" pInputText placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input" (input)="formatTelefono($event)"/>
-         
-        </div>
-          <small *ngIf="formulario2.get('telefono')?.touched && formulario2.get('telefono')?.invalid" class="error-msg">
-            Este campo es requerido.
-          </small>
-        
+    </div>
 
-        <div class="contenedor-boton">
-          <button pButton type="submit" class="p-button-consultar" [disabled]="formulario2.invalid">
-            Consultar
-          </button>
+
+  </div>
+
+
+  }
+
+
+
+  <!-- Paso 4 -->
+  <div *ngIf="activeIndex === 3">
+    <p-button label="Atrás" icon="pi pi-arrow-left" styleClass="p-button-secondary" (onClick)="prev()">
+    </p-button>
+  </div>
+
+  }
+
+
+  @if (visiblehome) {
+  <div class="row seccion-superior">
+    <div class="row col-12 ">
+      <div class="col-lg-3 col-md-6">
+        <form [formGroup]="formulario2" (ngSubmit)="consultarCita()">
+          <div class="cita-card-container">
+            <div class="cita-card1">
+              <div class="cita-header">
+                <h2>YA TIENES CITA?</h2>
+                <p>Consúltala</p>
+              </div>
+              <div class="cita-body">
+                <div class="input-group">
+                  <input id="phone-number" maxlength="12" type="text" formControlName="telefono" pInputText
+                    placeholder="Ingresa tu número de teléfono" class="p-inputtext p-inputtext-rounded custom-input"
+                    (input)="formatTelefono($event)" />
+
+                </div>
+                <!-- Mensaje: campo requerido -->
+                <small *ngIf="
+      formulario2.get('telefono')?.touched &&
+      formulario2.get('telefono')?.hasError('required')
+    " class="error-msg">
+                  Este campo es requerido.
+                </small>
+
+                <!-- Mensaje: número inválido -->
+                <small *ngIf="
+      formulario2.get('telefono')?.dirty &&
+      formulario2.get('telefono')?.hasError('pattern')
+    " class="error-msg">
+                  Número de teléfono inválido.
+                </small>
+
+                <div class="contenedor-boton">
+                  <button pButton type="submit" class="p-button-consultar">
+                    Consultar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-lg-9 col-md-9">
+        <div class="contenido-derecho">
+          <div class="cultura-empresarial">
+            <h2>CULTURA EMPRESARIAL</h2>
+            <p>
+              Somos una clínica con una misión clara, enfocada en empoderar la belleza,
+              los valores como la empatía y la excelencia en la atención. Tenemos la
+              visión de ser líderes en tratamientos seguros y efectivos, creando un
+              ambiente de trabajo colaborativo y enfocado en la aplicación de
+              tratamientos de excelencia y del manejo del equipo para ofrecer una mejor
+              experiencia al paciente.
+            </p>
+          </div>
+          <div class="objetivos">
+            <h2>OBJETIVOS</h2>
+            <p>
+              Buscamos ser una clínica que ofrece un ambiente cordial y seguro en el que
+              los clientes tengan la certeza de que recibirán un trato digno y un
+              tratamiento de acuerdo a sus necesidades, buscamos superar sus
+              expectativas, para lograr un estado de salud físico y bienestar integral
+              ayudando a las personas a sentirse seguras consigo mismas y sean felices
+              con su apariencia.
+            </p>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</form>
-</div>
-<div class="col-lg-9 col-md-9">
-  <div class="contenido-derecho">
-    <div class="cultura-empresarial">
-      <h2>CULTURA EMPRESARIAL</h2>
-    <p>
-      Somos una clínica con una misión clara, enfocada en empoderar la belleza,
-      los valores como la empatía y la excelencia en la atención. Tenemos la
-      visión de ser líderes en tratamientos seguros y efectivos, creando un
-      ambiente de trabajo colaborativo y enfocado en la aplicación de
-      tratamientos de excelencia y del manejo del equipo para ofrecer una mejor
-      experiencia al paciente.
-    </p>
-    </div>
-    <div class="objetivos">
-      <h2>OBJETIVOS</h2>
-    <p>
-      Buscamos ser una clínica que ofrece un ambiente cordial y seguro en el que
-      los clientes tengan la certeza de que recibirán un trato digno y un
-      tratamiento de acuerdo a sus necesidades, buscamos superar sus
-      expectativas, para lograr un estado de salud físico y bienestar integral
-      ayudando a las personas a sentirse seguras consigo mismas y sean felices
-      con su apariencia.
-    </p>
-    </div>
-    </div>
-</div>
-</div>
-</div>
 
 
-<app-cita-agendada *ngIf="showModal2" [appointmentData]="appointmentData" (close)="cerrarModal()"> </app-cita-agendada>
+  <app-cita-agendada *ngIf="showModal2" [appointmentData]="appointmentData" (close)="cerrarModal()">
+  </app-cita-agendada>
 
 
-<!--<div *ngIf="showConfirmationModal">
+  <!--<div *ngIf="showConfirmationModal">
     <div class="modal-backdrop" (click)="regresar2()"></div> 
 
     <div class="custom-modal-container">
@@ -409,35 +425,36 @@
         </button>
     </div>
 </div>-->
-<app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult" (close)="closeConsultaModal()"></app-consulta-modal>
+  <app-consulta-modal *ngIf="showConsultaModal && consultaResult" [appointmentData]="consultaResult"
+    (close)="closeConsultaModal()"></app-consulta-modal>
 
-<div *ngIf="showConfirmationModal2">
-    <div class="modal-backdrop" (click)="regresar3()"></div> 
+  <div *ngIf="showConfirmationModal2">
+    <div class="modal-backdrop" (click)="regresar3()"></div>
 
     <div class="custom-modal-container">
-        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <i class="pi pi-times-circle custom-modal-icon-success"></i> 
-            <div class="custom-modal-title">Warning</div>
-        </div>
-        
-        <div class="custom-modal-message">
-            No existe ninguna cita relacionada con tu numero de telefono.
-        </div>
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+        <i class="pi pi-times-circle custom-modal-icon-success"></i>
+        <div class="custom-modal-title">Warning</div>
+      </div>
 
-        <button class="custom-modal-button" (click)="regresar3()">
-            Aceptar
-        </button>
-        
-        <button class="custom-modal-close-btn" (click)="regresar3()">
-            &times; 
-        </button>
+      <div class="custom-modal-message">
+        No existe ninguna cita relacionada con tu numero de telefono.
+      </div>
+
+      <button class="custom-modal-button" (click)="regresar3()">
+        Aceptar
+      </button>
+
+      <button class="custom-modal-close-btn" (click)="regresar3()">
+        &times;
+      </button>
     </div>
-</div>
+  </div>
 
 
   <div class="row mision-vision-valores-container">
     <div class="col-lg-4 col-md-6 col-12 box mision-box">
-     <img src="../../../assets/imagenes/mision.png" alt="">
+      <img src="../../../assets/imagenes/mision.png" alt="">
       <h3>Misión</h3>
       <p>
         Ofrecer servicios de medicina estética de calidad y personalizada a
@@ -451,7 +468,7 @@
     </div>
 
     <div class="col-lg-4 col-md-6 col-12 box vision-box">
-       <img src="../../../assets/imagenes/vision.png" class="valoresimg" alt="">
+      <img src="../../../assets/imagenes/vision.png" class="valoresimg" alt="">
       <h3>Visión</h3>
       <p>
         Liderar el sector de la medicina estética en nuestra región dando
@@ -463,7 +480,7 @@
     </div>
 
     <div class="col-lg-4 col-md-6 col-12 box valores-box">
-       <img src="../../../assets/imagenes/valores.png" class="valoresimg" alt="">
+      <img src="../../../assets/imagenes/valores.png" class="valoresimg" alt="">
       <h3>Valores</h3>
       <ol>
         <li>Profesionalismo y Ética profesional</li>
