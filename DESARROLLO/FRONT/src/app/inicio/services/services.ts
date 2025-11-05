@@ -6,9 +6,7 @@ import { Observable, map, catchError, throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class Services {
-   private apiUrl = 'http://localhost:8010/citas/sCita';
-   private apiUrlGuardar = 'http://localhost:8010/citas/saveCita';
-   private apiUrlBase: string = 'http://localhost:8010';
+    private apiUrlBase: string = 'http://localhost:8010'; //! Esta ruta sera cambiada una vez que suba al
 
   constructor(private http: HttpClient) { }
 
@@ -22,7 +20,7 @@ export class Services {
   }
 
   getCitaPorTelefono(telefono: string): Observable<any> {
-    return this.http.post<any[]>(this.apiUrl, { telefono: telefono })
+    return this.http.post<any[]>(`${this.apiUrlBase}/citas/sCita`, { telefono: telefono })
       .pipe(
         map(response => {
           if (response && response.length > 0) {
@@ -34,7 +32,7 @@ export class Services {
       );
   }
 guardarcita(cita: any): Observable<any> {
-  return this.http.post<any>(this.apiUrlGuardar, cita, {
+  return this.http.post<any>(`${this.apiUrlBase}/citas/saveCita`, cita, {
     headers: { 'Content-Type': 'application/json' }
   }).pipe(
     map(response => response),
@@ -84,7 +82,7 @@ servicios(filtros: any): Observable<any> {
   }
 
  getCitas(): Observable<any[]> {
-  return this.http.post<any>(this.apiUrl, {})
+  return this.http.post<any>(`${this.apiUrlBase}/citas/sCita`, {})
     .pipe(
       map(response => Array.isArray(response) ? response : [response]),
       catchError(this.handleError)
