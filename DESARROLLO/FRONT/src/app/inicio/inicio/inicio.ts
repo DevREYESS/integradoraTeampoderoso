@@ -741,12 +741,23 @@ onMonthSelected(mesNumero: number) {
   this.selectedMonthName = this.monthsNames[mesNumero]; 
   this.showModal = false;
 
-  const start = new Date(this.currentYear, mesNumero, 1);
-  const end = new Date(this.currentYear, mesNumero + 1, 0);
+  const now = new Date();
+  let targetYear = now.getFullYear();
+
+  if (mesNumero < now.getMonth()) {
+    targetYear += 1;
+  }
+
+  this.currentAno = targetYear;
+
+  const start = new Date(targetYear, mesNumero, 1);
+  const end = new Date(targetYear, mesNumero + 1, 0);
+  
   this.generateDaysData(start, end);
   this.currentWeekIndex = 0;
   this.loadCurrentWeek();
 }
+
 
 
 
