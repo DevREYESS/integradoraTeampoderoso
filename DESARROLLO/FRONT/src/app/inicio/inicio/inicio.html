@@ -200,6 +200,32 @@
 
   </app-meses>
 
+  <!-- Modal de Confirmación -->
+<div *ngIf="showConfirmModal">
+  <div class="modal-backdrop" (click)="cancelarAgendar()"></div>
+
+  <div class="custom-modal-container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+      <i class="pi pi-exclamation-circle custom-modal-icon-warning"></i>
+      <div class="custom-modal-title">Confirmación</div>
+    </div>
+
+    <div class="custom-modal-message">
+      ¿Deseas agendar tu cita el {{ fechaSeleccionada | date:'longDate':'':'es-MX' }} a las {{ horaSeleccionada }}?
+
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+      <button class="custom-modal-button" (click)="confirmarAgendar()">Sí, agendar</button>
+      <button class="custom-modal-button" (click)="cancelarAgendar()">Cancelar</button>
+    </div>
+
+    <button class="custom-modal-close-btn" (click)="cancelarAgendar()">
+      &times;
+    </button>
+  </div>
+</div>
+
   <div class="cita-header">
     <h2>Reserva tu cita</h2>
     <p></p>
@@ -235,12 +261,16 @@
   <div class="calendario-reserva">
 
     <div class="contenedor-principal">
-      <div class="selector-horario">Seleccione el horario</div>
       <div class="pestanas">
-        <button class="pestana mes" (click)="showModal = true">MES</button>
+        <button class="pestana ano">{{ currentAno }}</button>
+       <button class="pestana mes" (click)="showModal = true">{{ selectedMonthName }}</button>
+
+         
         <!--<button class="pestana dia">DIA</button>-->
 
       </div>
+      <div class="selector-horario">Seleccione el horario</div>
+      
 
       <div class="contenedor-calendario">
 
@@ -283,9 +313,11 @@
                             'no-disponible-suave': slot.status !== 'Disponible'
                         }">
 
-                    <button *ngIf="slot.status === 'Disponible'" class="agendar" (click)="guarda(day.date, time)">
-                      Agendar
-                    </button>
+                   <button *ngIf="slot.status === 'Disponible'" class="agendar" 
+        (click)="abrirConfirmacion(day.date, time)">
+  Agendar
+</button>
+
 
                     <div *ngIf="slot.status !== 'Disponible'" class="no-disponible"
                       [class.grande]="isLarge(time, day.name)">
@@ -343,7 +375,6 @@
                     (input)="formatTelefono($event)" />
 
                 </div>
-                <!-- Mensaje: campo requerido -->
                 <small *ngIf="
       formulario2.get('telefono')?.touched &&
       formulario2.get('telefono')?.hasError('required')
@@ -351,7 +382,6 @@
                   Este campo es requerido.
                 </small>
 
-                <!-- Mensaje: número inválido -->
                 <small *ngIf="
       formulario2.get('telefono')?.dirty &&
       formulario2.get('telefono')?.hasError('pattern')
@@ -398,6 +428,10 @@
     </div>
   </div>
 
+<div class="overlay" *ngIf="isLoadingA">
+  <div class="spinner"></div>
+  <p>Cargando...</p>
+</div>
 
   <app-cita-agendada *ngIf="showModal2" [appointmentData]="appointmentData" (close)="cerrarModal()">
   </app-cita-agendada>
@@ -450,6 +484,29 @@
       </button>
     </div>
   </div>
+
+<div *ngIf="showErrorModal">
+  <div class="modal-backdrop" (click)="cerrarErrorModal()"></div>
+
+  <div class="custom-modal-container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+      <i class="pi pi-exclamation-triangle custom-modal-icon-error"></i>
+      <div class="custom-modal-title">Error</div>
+    </div>
+
+    <div class="custom-modal-message">
+      {{ errorMessage }}
+    </div>
+
+    <button class="custom-modal-button" (click)="cerrarErrorModal()">
+      Aceptar
+    </button>
+
+    <button class="custom-modal-close-btn" (click)="cerrarErrorModal()">
+      &times;
+    </button>
+  </div>
+</div>
 
 
   <div class="row mision-vision-valores-container">

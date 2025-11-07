@@ -250,24 +250,47 @@ private convertirFechaISO(fechaStr: string): string {
 }
 
 
-  buscar() {
-    if (this.filterBy === 'nombre') {
-      this.citas = this.citasOriginal.filter(cita =>
-        cita.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    } else {
-      this.citas = this.citasOriginal.filter(cita =>
-        cita.id.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
+ buscar() {
+  const term = this.searchTerm.replace(/-/g, '').toLowerCase();
+
+  if (this.filterBy === 'nombre') {
+    this.citas = this.citasOriginal.filter(cita =>
+      cita.nombre.toLowerCase().includes(term)
+    );
+  } else if (this.filterBy === 'numero') {
+    this.citas = this.citasOriginal.filter(cita =>
+      cita.telefono.replace(/\D/g, '').includes(term)
+    );
+  }
+}
+
+  
+ onSearchInput(event?: any) {
+  if (!this.searchTerm) {
+    this.citas = [...this.citasOriginal];
+    this.citas.forEach(cita => cita.iniciales = this.getInitials(cita.nombre));
+    return;
   }
 
-  onSearchInput() {
-    if (!this.searchTerm) {
-      this.citas = [...this.citasOriginal];
-      this.citas.forEach(cita => cita.iniciales = this.getInitials(cita.nombre));
+  if (this.filterBy === 'numero' && event) {
+    let value = event.target.value;
+
+    value = value.replace(/\D/g, '');
+
+    if (value.length > 10) {
+      value = value.substring(0, 10);
     }
+
+    if (value.length > 6) {
+      value = value.replace(/(\d{3})(\d{3})(\d{1,4})/, '$1-$2-$3');
+    } else if (value.length > 3) {
+      value = value.replace(/(\d{3})(\d{1,3})/, '$1-$2');
+    }
+
+    event.target.value = value;
+    this.searchTerm = value;
   }
+}
 
   // ---------------------------
   // 🔸 FILTROS COMBINADOS

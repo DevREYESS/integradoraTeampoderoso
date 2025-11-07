@@ -16,7 +16,7 @@
       </div>
 
       <div class="search-input-container">
-        <button class="search-icon" (click)="buscar()">🔍</button>
+       
 
         <button 
             (click)="filterBy='nombre'; searchTerm=''; buscar()" 
@@ -30,15 +30,17 @@
             [class.active]="filterBy==='numero'">
           Número
         </button>
+ <input 
+  type="text" 
+  class="p-inputtext p-inputtext-rounded custom-input" 
+  placeholder="Escribe para buscar..." 
+  [(ngModel)]="searchTerm" 
+  (input)="onSearchInput($event)" 
+  (keydown.enter)="buscar()" />
 
-        <input 
-            type="text" 
-            class="p-inputtext p-inputtext-rounded custom-input" 
-            placeholder="Escribe para buscar..." 
-            [(ngModel)]="searchTerm" 
-            (input)="onSearchInput()" 
-            (keydown.enter)="buscar()" />
+            <button class="search-icon" (click)="buscar()">🔍</button>
       </div>
+
     </div>
 
     <div class="appointment-list">

@@ -15,7 +15,11 @@ import { Router } from '@angular/router';
 import { Meses } from '../componentes/meses/meses';
 import { CitaAgendada } from '../componentes/cita-agendada/cita-agendada';
 import { TooltipModule } from 'primeng/tooltip';
+import { LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsMX from '@angular/common/locales/es-MX';
 
+registerLocaleData(localeEsMX, 'es-MX');
 
 @Component({
   selector: 'app-inicio',
@@ -23,7 +27,7 @@ import { TooltipModule } from 'primeng/tooltip';
   standalone: true,
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
-   providers: [MessageService,Services ],
+   providers: [MessageService,Services , { provide: LOCALE_ID, useValue: 'es-MX' }],
   encapsulation: ViewEncapsulation.Emulated
 })
 export class Inicio implements OnInit {
@@ -78,7 +82,11 @@ mostrarcard13 = false;
 
  
   ngOnInit(): void {
-     this.generateDaysData(new Date('2025-10-22'), new Date('2025-12-31'));
+    this.generateMonths();
+    const fechaActual = new Date();
+const fechaSeisMeses = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 6, 0);
+
+this.generateDaysData(fechaActual, fechaSeisMeses);
      this.loadCurrentWeek();
 
      this.consultaService.servicios(this.filtrosServicios).subscribe({
@@ -298,7 +306,8 @@ allDaysData2: any[] = [
   fixedTimes: string[] = [
     "8:00", "8:20", "8:40", 
     "9:00", "9:20", "9:40", 
-    "10:00", "10:20", "10:40", 
+    "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:40", "14:00", "14:20", "14:40"
+    , "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00"
   ];
 
   
@@ -370,8 +379,35 @@ cerrarModal() {
   this.showModal2 = false;
 }
 
+
+showErrorModal: boolean = false;
+errorMessage: string = "";
+
+
+showConfirmModal: boolean = false;
+fechaSeleccionada: string = '';
+horaSeleccionada: string = '';
+
+abrirConfirmacion(fecha: string, hora: string) {
+  this.fechaSeleccionada = fecha;
+  this.horaSeleccionada = hora;
+  this.showConfirmModal = true;
+}
+
+cancelarAgendar() {
+  this.showConfirmModal = false;
+}
+
+confirmarAgendar() {
+  this.showConfirmModal = false;
+  this.guarda(this.fechaSeleccionada, this.horaSeleccionada);
+}
+isLoadingA: boolean = false;
+
 guarda(fecha: string, horaInicio: string) {
-  const horaFin = this.calcularHoraFin(horaInicio); // +20 min
+  this.isLoadingA = true; 
+
+  const horaFin = this.calcularHoraFin(horaInicio);
 
   const datos = {
     estatus: "A",
@@ -387,6 +423,8 @@ guarda(fecha: string, horaInicio: string) {
 
   this.consultaService.guardarcita(datos).subscribe({
     next: (res) => {
+      this.isLoadingA = false; 
+
       this.appointmentData = {
         estatus: "A",
         nombrePaciente: res.nombrePaciente,
@@ -397,14 +435,21 @@ guarda(fecha: string, horaInicio: string) {
       };
 
       this.showModal2 = true;
-
       this.limpiarFormulario();
       this.cdRef.detectChanges();
     },
     error: (err) => {
-      console.error("Error al guardar la cita:", err);
-      alert("No se pudo guardar la cita. Por favor intenta de nuevo.");
+      this.isLoadingA = false; 
+
+      if (err.error && err.error.message) {
+        this.errorMessage = err.error.message;
+      } else {
+        this.errorMessage = "Ocurrió un error al guardar la cita. Intenta de nuevo.";
+      }
+
+      this.showErrorModal = true; 
       this.showModal2 = false;
+      this.limpiarFormulario();
       this.cdRef.detectChanges();
     }
   });
@@ -412,6 +457,11 @@ guarda(fecha: string, horaInicio: string) {
   this.visiblehome2 = false;
   this.visiblehome = true;
   this.regresarf = false;
+}
+
+
+cerrarErrorModal() {
+  this.showErrorModal = false;
 }
 
 
@@ -644,21 +694,29 @@ noEspacioInicial(event: KeyboardEvent): void {
   
   filteredDays: any[] = []; // días filtrados según el mes elegido
 showMonthModal = false;
-months = [
-  { nombre: 'Enero', numero: 0 },
-  { nombre: 'Febrero', numero: 1 },
-  { nombre: 'Marzo', numero: 2 },
-  { nombre: 'Abril', numero: 3 },
-  { nombre: 'Mayo', numero: 4 },
-  { nombre: 'Junio', numero: 5 },
-  { nombre: 'Julio', numero: 6 },
-  { nombre: 'Agosto', numero: 7 },
-  { nombre: 'Septiembre', numero: 8 },
-  { nombre: 'Octubre', numero: 9 },
-  { nombre: 'Noviembre', numero: 10 },
-  { nombre: 'Diciembre', numero: 11 }
-];
+months: { nombre: string; numero: number }[] = [];
 
+
+generateMonths(): void {
+  const meses = [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ];
+
+  const now = new Date();
+  const currentMonth = now.getMonth(); 
+  const result: { nombre: string; numero: number }[] = [];
+
+  for (let i = 0; i < 6; i++) {
+    const nextMonthIndex = (currentMonth + i) % 12;
+    result.push({
+      nombre: meses[nextMonthIndex],
+      numero: nextMonthIndex
+    });
+  }
+
+  this.months = result;
+}
 
   openMonthModal() {
     this.showMonthModal = true;
@@ -669,16 +727,27 @@ months = [
   }
 
  showModal = false;
+currentAno: number = new Date().getFullYear();
+
+monthsNames: string[] = [
+  'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+];
+
+selectedMonthName: string = 'MES';
 
 onMonthSelected(mesNumero: number) {
   this.currentMonth = mesNumero;
+  this.selectedMonthName = this.monthsNames[mesNumero]; 
   this.showModal = false;
+
   const start = new Date(this.currentYear, mesNumero, 1);
   const end = new Date(this.currentYear, mesNumero + 1, 0);
   this.generateDaysData(start, end);
   this.currentWeekIndex = 0;
   this.loadCurrentWeek();
 }
+
 
 
   /*selectMonth(monthIndex: number): void {
@@ -707,7 +776,7 @@ onMonthSelected(mesNumero: number) {
 
   generateDaysData(startDate: Date, endDate: Date): void {
   const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-  const horarios = ['8:00','8:20','8:40','9:00','9:20','9:40','10:00','10:20','10:40'];
+  const horarios = this.fixedTimes;
   const estados = ['Disponible', 'Agendado', 'No disponible'];
 
   const result = [];

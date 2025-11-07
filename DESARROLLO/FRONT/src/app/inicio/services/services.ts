@@ -73,7 +73,7 @@ servicios(filtros: any): Observable<any> {
     }
 
     console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
+    return throwError(() => error);
   }
 
   private handleErrorLogin(error: HttpErrorResponse): Observable<never> {
