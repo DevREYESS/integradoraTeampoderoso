@@ -453,7 +453,7 @@ guarda(fecha: string, horaInicio: string) {
       this.cdRef.detectChanges();
     }
   });
-
+ this.limpiarFormulario();
   this.visiblehome2 = false;
   this.visiblehome = true;
   this.regresarf = false;
@@ -505,6 +505,9 @@ next() {
      this.mostrarcard11=false;
     this.mostrarcard12=true;
     this.mostrarcard13=false;
+     const servicioCtrl = this.formulario.get('servicio');
+    servicioCtrl?.removeValidators([Validators.required]);
+    servicioCtrl?.updateValueAndValidity();
   }else if(this.activeIndex === 2){
     this.mostrarcard1 = true;
      this.mostrarcard11=false;
