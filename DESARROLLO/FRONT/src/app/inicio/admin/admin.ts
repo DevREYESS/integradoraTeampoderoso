@@ -8,7 +8,7 @@ import { Services } from '../services/services';
   imports: [CommonModule, Citas, NgClass],
   standalone: true,
   templateUrl: './admin.html',
-  styleUrl: './admin.css',
+ styleUrls: ['./admin.css'],
   providers: [Services],
   encapsulation: ViewEncapsulation.Emulated
 })
@@ -17,6 +17,12 @@ export class Admin {
   constructor(private consultaService: Services, private cd: ChangeDetectorRef) {}
 
   isShrunk = false;
+  isCollapsed = false;
+   
+
+toggleSidebar() {
+  this.isCollapsed = !this.isCollapsed;
+}
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

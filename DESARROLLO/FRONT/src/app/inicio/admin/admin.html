@@ -1,3 +1,46 @@
+<!-- 🩷 TOOL SIDE BAR -->
+<div class="sidebar" [class.collapsed]="isCollapsed">
+
+  <!-- Menú principal -->
+<br><br><br><br>
+  <div class="sidebar-item active">
+    <i class="material-icons icon"></i>
+    <span class="text">Menú</span>
+  </div>
+
+  <!-- Inicio -->
+  <div class="sidebar-item">
+    <i class="material-icons icon">home</i>
+    <span class="text">Inicio</span>
+  </div>
+
+<!-- Servicios -->
+<div class="sidebar-item">
+  <i class="material-icons icon">medical_services</i>
+  <span class="text">Servicios</span>
+</div>
+
+   <!-- Botón para colapsar -->
+  <div class="toggle-btn" (click)="toggleSidebar()">
+    <i class="material-icons icon">
+      {{ isCollapsed ? 'chevron_right' : 'chevron_left' }}
+    </i>
+  </div>
+  <!-- Salir -->
+  <div class="sidebar-item salir">
+    <i class="material-icons icon">logout</i>
+    <span class="text">Salir</span>
+  </div>
+
+ 
+
+
+
+</div>
+<!-- 🩷 FIN TOOL SIDE BAR -->
+
+
+
 <div [class.shrink]="isShrunk" class="header-container">
   <div class="social-info">
    
