@@ -1,0 +1,392 @@
+<p>nueva-cita works!</p>
+<div [class.shrink]="isShrunk" class="header-container">
+  <div class="social-info">
+   
+  </div>
+  <div class="brand-logo-circle"></div>
+  <div class="brand-cta">
+    <button class="cta-button" (click)="regresar();">Regresar</button>
+   
+  </div>
+</div>
+
+<div class="main-content">
+
+  @if (visiblehome2) {
+  <div class="col-12 col-lg-12 col-md-12">
+    <div class=" steps-container">
+      <div class="progress-bar">
+        <div class="progress" [style.width.%]="((activeIndex + 1) / items.length) * 100">
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  @if (mostrarcard1) {
+  <div class="row col-lg-12 col-md-12 col-12 cita-header">
+    <h2>Reserva tu cita</h2>
+    <p></p>
+  </div>
+  <div class="cards-container">
+    <form [formGroup]="formulario">
+
+      @if (mostrarcard11) {
+      <div class="cita-card reserva-card">
+        <div class="input-container">
+          <label>Ingresa tu nombre completo</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <input type="text" formControlName="nombre" icon="pi pi-user"
+                class="p-inputtext p-inputtext-rounded custom-input" pInputText required
+                (keydown)="noEspacioInicial($event)" />
+            </span>
+          </div>
+          <div style="margin-left: 10px;">
+            <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
+              Este campo es requerido.
+            </small>
+          </div>
+        </div>
+
+        <div class="contenedor-boton">
+          <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarpaso1()"></button>
+        </div>
+      </div>
+      }
+      @if (mostrarcard12) {
+      <div class="cita-card reserva-card">
+        <div class="input-container">
+          <label>Ingresa tu número de teléfono</label>
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <input type="text" maxlength="12" [value]="telefonoFormateado" (input)="onTelefonoInput($event)" (keypress)="soloNumeros($event)"
+                class="p-inputtext p-inputtext-rounded custom-input" pInputText />
+            </span>
+          </div>
+          <div style="margin-left: 10px;">
+            <small *ngIf="
+  formulario.get('telefono')?.touched &&
+  formulario.get('telefono')?.hasError('required')
+" class="error-msg" style="align-items: center;">
+              Este campo es requerido.
+            </small>
+
+            <small *ngIf="
+    formulario.get('telefono')?.dirty &&
+    formulario.get('telefono')?.hasError('pattern')
+  " class="error-msg">
+              Número de teléfono inválido.
+            </small>
+          </div>
+        </div>
+
+        <div class="contenedor-boton">
+          <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
+
+          <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarpaso2()"></button>
+        </div>
+      </div>
+      }
+    </form>
+    @if (mostrarcard13) {
+    <div class="cita-card3 reserva-card">
+      <form [formGroup]="formulario">
+      <div class="input-container">
+  <label>Servicio que desea solicitar</label>
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <select
+        formControlName="servicio"
+        class="form-select custom-input2"
+      >
+        <option value="" disabled selected>Selecciona un servicio</option>
+        <option *ngFor="let s of servicios" [value]="s.servicioId">
+          {{ s.nombreServicio }}
+        </option>
+      </select>
+    </span>
+  </div>
+
+  <!-- mensaje de error -->
+   <div style="margin-left: 10px;">
+  <small
+    *ngIf="
+      formulario.get('servicio')?.touched &&
+      formulario.get('servicio')?.hasError('required')
+    "
+    class="error-msg" 
+  >
+    Este campo es requerido.
+  </small>
+  </div>
+
+</div>
+
+      
+        <div class="descripcion-container">
+          <label for="descripcion-cita">Descripción: (Opcional)</label>
+          <textarea id="descripcion-cita" rows="2" formControlName="descripcionCita" placeholder=""
+            class="custom-textarea" (keydown)="noEspacioInicial($event)">
+        </textarea>
+        </div>
+      </form>
+      <div class="contenedor-boton2">
+        <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>
+        <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarPaso3()"></button>
+      </div>
+    </div>
+    }
+
+    <div class="cita-card2 info-card">
+      <ul>
+        <li>
+          <i class="pi pi-user"></i>
+          <p>Dr. Irving Saúl Jaimes Macedo</p>
+        </li>
+        <li>
+          <i class="pi pi-map-marker"></i>
+          <p>De los Planetas SN, colonia del Sol. 51400 Tejupilco de Hidalgo Mexico.</p>
+        </li>
+        <li>
+          <i class="pi pi-briefcase"></i>
+          <p>Ofrecemos tratamientos faciales y corporales de vanguardia, desde rejuvenecimiento y rellenos hasta
+            lipoescultura y remodelación estética</p>
+        </li>
+        <li>
+          <i class="pi pi-wallet"></i>
+          <p>Pagos únicamente en el consultorio.</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  }
+
+
+  @if (mostrarcalendario) {
+  <app-meses *ngIf="showModal" [months]="months" (close)="closemodalmeses()" (monthSelected)="onMonthSelected($event)">
+
+  </app-meses>
+
+  <!-- Modal de Confirmación -->
+<div *ngIf="showConfirmModal">
+  <div class="modal-backdrop" (click)="cancelarAgendar()"></div>
+
+  <div class="custom-modal-container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+      <i class="pi pi-exclamation-circle custom-modal-icon-warning"></i>
+      <div class="custom-modal-title">Confirmación</div>
+    </div>
+
+    <div class="custom-modal-message">
+      ¿Deseas agendar tu cita el {{ fechaSeleccionada | date:'longDate':'':'es-MX' }} a las {{ horaSeleccionada }}?
+
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+      <button class="custom-modal-button" (click)="confirmarAgendar()">Sí, agendar</button>
+      <button class="custom-modal-button" (click)="cancelarAgendar()">Cancelar</button>
+    </div>
+
+    <button class="custom-modal-close-btn" (click)="cancelarAgendar()">
+      &times;
+    </button>
+  </div>
+</div>
+
+  <div class="cita-header">
+    <h2>Reserva tu cita</h2>
+    <p></p>
+  </div>
+  <!--<div class="calendar-container">
+        <h2>Seleccione Horario <i class="pi pi-calendar icon"></i></h2>
+
+    <div class="calendar-header">
+        <button (click)="goToPreviousWeek()" [disabled]="isFirstWeek">&#60;</button>
+        <button (click)="goToNextWeek()" [disabled]="isLastWeek">&#62;</button>
+    </div>
+    <div class="days-grid">
+        <div *ngFor="let day of weekData2" class="day-column">
+            <div class="day-name">{{ day.name }}</div>
+            <div class="day-date">{{ day.date }}</div>
+
+            <div *ngFor="let schedule of day.schedules" class="schedule-slot" 
+                 [ngClass]="{ 
+                     'agendado': schedule.status === 'Agendado',
+                     'no-disponible': schedule.status === 'No disponible',
+                     'disponible': schedule.status === 'Disponible' 
+                 }">
+                <span>{{ schedule.time }}</span>
+                <button *ngIf="schedule.status === 'Disponible'" (click)="guarda(day.date, schedule.time)">Agendar</button>
+            </div>
+            <div *ngIf="!day.schedules || day.schedules.length === 0" class="no-schedules">
+              No labora
+            </div>
+        </div>
+    </div>
+</div>-->
+
+  <div class="calendario-reserva">
+
+    <div class="contenedor-principal">
+      <div class="pestanas">
+        <button class="pestana ano">{{ currentAno }}</button>
+       <button class="pestana mes" (click)="showModal = true">{{ selectedMonthName }}</button>
+
+         
+        <!--<button class="pestana dia">DIA</button>-->
+
+      </div>
+      <div class="selector-horario">Seleccione el horario</div>
+      
+
+      <div class="contenedor-calendario">
+
+        <div class="nav-fecha">
+          <button class="flecha izquierda" (click)="goToPreviousWeek()" [disabled]="isFirstWeek">
+            &lt;
+          </button>
+        </div>
+
+        <div class="dias-semana">
+          <div *ngFor="let day of weekData" class="dia">
+            <span class="nombre-dia">{{ day.name }}</span>
+            <span class="fecha">{{ day.date | date: 'd MMM' }}</span>
+          </div>
+        </div>
+
+        <div class="nav-fecha">
+          <button class="flecha derecha" (click)="goToNextWeek()" [disabled]="isLastWeek">
+            &gt;
+          </button>
+        </div>
+
+        <div class="grilla-horarios">
+
+          <ng-container *ngFor="let time of fixedTimes">
+
+            <div class="hora-fija">{{ time }}</div>
+
+            <ng-container *ngFor="let day of weekData">
+
+              <ng-container *ngIf="!day.schedules || day.schedules.length === 0">
+                <div class="celda no-labora-celda">
+                  <span *ngIf="time === fixedTimes[0]" class="no-labora-texto">No labora</span>
+                </div>
+              </ng-container>
+
+              <ng-container *ngIf="day.schedules && day.schedules.length > 0">
+                <ng-container *ngIf="getScheduleSlot(day.schedules, time) as slot">
+                  <div class="celda" [ngClass]="{ 
+                            'no-disponible-suave': slot.status !== 'Disponible'
+                        }">
+
+                   <button *ngIf="slot.status === 'Disponible'" class="agendar" 
+        (click)="abrirConfirmacion(day.date, time)">
+  Agendar
+</button>
+
+
+                    <div *ngIf="slot.status !== 'Disponible'" class="no-disponible"
+                      [class.grande]="isLarge(time, day.name)">
+                    </div>
+                  </div>
+                </ng-container>
+
+                <ng-container *ngIf="!getScheduleSlot(day.schedules, time)">
+                  <div class="celda"></div>
+                </ng-container>
+              </ng-container>
+
+            </ng-container>
+
+          </ng-container>
+
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+  }
+
+
+
+  <!-- Paso 4 -->
+  <div *ngIf="activeIndex === 3">
+    <p-button label="Atrás" icon="pi pi-arrow-left" styleClass="p-button-secondary" (onClick)="prev()">
+    </p-button>
+  </div>
+
+  }
+
+
+  @if (visiblehome) {
+
+
+<div class="overlay" *ngIf="isLoadingA">
+  <div class="spinner"></div>
+  <p>Cargando...</p>
+</div>
+
+  <app-cita-agendada *ngIf="showModal2" [appointmentData]="appointmentData" (close)="cerrarModal()">
+  </app-cita-agendada>
+
+
+  <div *ngIf="showConfirmationModal2">
+    <div class="modal-backdrop" (click)="regresar3()"></div>
+
+    <div class="custom-modal-container">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+        <i class="pi pi-times-circle custom-modal-icon-success"></i>
+        <div class="custom-modal-title">Warning</div>
+      </div>
+
+      <div class="custom-modal-message">
+        No existe ninguna cita relacionada con tu numero de telefono.
+      </div>
+
+      <button class="custom-modal-button" (click)="regresar3()">
+        Aceptar
+      </button>
+
+      <button class="custom-modal-close-btn" (click)="regresar3()">
+        &times;
+      </button>
+    </div>
+  </div>
+
+<div *ngIf="showErrorModal">
+  <div class="modal-backdrop" (click)="cerrarErrorModal()"></div>
+
+  <div class="custom-modal-container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+      <i class="pi pi-exclamation-triangle custom-modal-icon-error"></i>
+      <div class="custom-modal-title">Error</div>
+    </div>
+
+    <div class="custom-modal-message">
+      {{ errorMessage }}
+    </div>
+
+    <button class="custom-modal-button" (click)="cerrarErrorModal()">
+      Aceptar
+    </button>
+
+    <button class="custom-modal-close-btn" (click)="cerrarErrorModal()">
+      &times;
+    </button>
+  </div>
+</div>
+
+
+  
+  }
+</div>
+<p-toast></p-toast>

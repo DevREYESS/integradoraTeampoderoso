@@ -5,6 +5,7 @@ import { Services } from '../services/services';
 import { EditarServicio } from '../componentes/editar-servicio/editar-servicio';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { NuevaCita } from '../nueva-cita/nueva-cita';
 export interface Servicio {
   servicioId?: number; // opcional porque al crear aún no existe
   servicioUuid?: string;
@@ -372,8 +373,13 @@ cancelarEliminacion() {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem('token');
-        this.router.navigate(['/login']); // o donde tengas tu ruta de login
+        this.router.navigate(['/']); // o donde tengas tu ruta de login
       }
     });
+  }
+
+
+  nuevaCita(){
+        this.router.navigate(['/nuevacita']); // o donde tengas tu ruta de login
   }
 }

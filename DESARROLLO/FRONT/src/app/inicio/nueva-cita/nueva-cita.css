@@ -1,0 +1,1090 @@
+/* =========================
+   PrimeIcons
+========================= */
+@import "primeicons/primeicons.css";
+
+/* =========================
+   Header
+========================= */
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 70px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: padding 0.3s ease;
+}
+
+.header-container.shrink {
+  padding: 5px 50px;
+}
+
+/* =========================
+   Social Info
+========================= */
+.social-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.logo-text, .contact-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #555;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.icon {
+  font-size: 30px;
+  color: #333;
+  margin-top: 6px;
+}
+
+/* =========================
+   Logo
+========================= */
+.brand-logo-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #f7a8ca;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../../assets/imagenes/logo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header-container.shrink .brand-logo-circle {
+  width: 50px;
+  height: 50px;
+}
+
+/* =========================
+   Call to Action
+========================= */
+.brand-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-info {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.textohe {
+  font-size: 20px;
+  line-height: 1.6;
+  color: #555;
+}
+
+.cta-button {
+  background-color: #ff66c4;
+  color: #213c6c;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: -13px;
+}
+
+.cta-button:hover {
+  background-color: #ff66c4 !important;
+}
+/* =========================
+   Main Content
+========================= */
+.main-content {
+  padding-top: 130px; /* espacio por header fijo */
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555;
+  text-align: justify;
+}
+
+h2 {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   Sección superior (Card + Texto)
+========================= */
+.seccion-superior {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 60px;
+  padding: 40px;
+}
+
+.cita-card-container {
+  width: 380px;
+  max-width: 100%;
+}
+
+.contenido-derecho {
+  flex-grow: 1;
+  max-width: 1100px;
+margin-bottom: -40px
+}
+
+/* =========================
+   Cita Card
+========================= */
+.cita-card1 {
+  width: 100%;
+  height: 280px;
+  border-radius: 20px;
+  border: 1px solid #84b6f4;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+
+.cita-header h2 {
+  font-size: 1.5em;
+  color: #213c6c;
+  margin: 0;
+  font-weight: bold;
+}
+
+.cita-header p {
+  font-size: 20px;
+  color: #666;
+  margin: 5px 0 20px;
+}
+
+.cita-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.input-group {
+  width: 100%;
+}
+
+.custom-input {
+  border-radius: 25px;
+  border: 1px solid #add8e6;
+  padding: 10px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+.custom-input2 {
+  border-radius: 25px;
+  border: 1px solid #add8e6;
+  padding: 10px 15px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1rem;
+}
+
+
+/* Botón consultar */
+.p-button-consultar {
+  background-color: #ff66c4;
+    color: #213c6c;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 25px; /* Estilo píldora */
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    width: 100%; /* Ocupa todo el ancho */
+    transition: background-color 0.3s;
+}
+
+
+.p-button-consultar:hover {
+  background-color: #ff66c4 !important;
+}
+
+/* =========================
+   Misión, Visión, Valores
+========================= */
+.mision-vision-valores-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.box {
+  flex: 1;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.mision-box {
+  background-color: #ffc7db;
+}
+
+.vision-box {
+  background-color: #ff66c4;
+}
+
+.valores-box {
+  background-color: #ffb7e4;
+}
+
+.box h3 {
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.box p, .box ol {
+  color: black;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.box ol {
+  list-style-position: inside;
+  padding-left: 0;
+  text-align: left;
+}
+
+.valoresimg {
+  width: auto;
+  height: 70px;
+}
+
+/* =========================
+   Responsive
+========================= */
+@media (max-width: 900px) {
+  .seccion-superior {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .contenido-derecho {
+    max-width: 100%;
+    text-align: center;
+  }
+}
+
+
+/* estilos de la barra de progreso*/
+.steps-container {
+  width: 100%;
+  margin: 20px 0;
+}
+
+.progress-bar {
+  position: relative;
+  height: 5px;
+  background: #e0e0e0;   /* gris claro */
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  background: #007bff;   /* azul Bootstrap */
+  transition: width 0.3s ease;
+}
+
+
+
+
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap; /* Permite que las tarjetas se apilen en pantallas pequeñas */
+  justify-content: center; /* Centra las tarjetas horizontalmente */
+  gap: 30px; /* Espacio entre las tarjetas */
+  padding: 40px;
+}
+
+
+/* Estilos generales de las tarjetas */
+/* El estilo de cada tarjeta debe seguir siendo el que te di antes */
+.cita-card {
+  border: 1px solid #add8e6;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 2rem;
+  width: 500px;
+  height: 300px;
+  max-width: 95%;
+  box-sizing: border-box;
+}
+.cita-card2 {
+  border: 1px solid #add8e6;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 2rem;
+  width: 500px;
+  height: 300px;
+  max-width: 95%;
+  box-sizing: border-box;
+}
+.cita-card3 {
+  border: 1px solid #add8e6;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  padding: 2rem;
+  width: 500px;
+  height: 300px;
+  max-width: 95%;
+  box-sizing: border-box;
+}
+/* Estilos para que se apilen en pantallas pequeñas */
+@media (max-width: 850px) {
+  .cards-container {
+    flex-direction: column; /* Apila las tarjetas verticalmente */
+    align-items: center; /* Centra las tarjetas cuando están apiladas */
+  }
+}
+
+
+
+/* Estilos de la tarjeta de reserva */
+.reserva-card h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.reserva-card .input-container {
+  text-align: left;
+  margin-bottom: 2rem;
+}
+
+.reserva-card .input-container label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #213c6c;
+  font-weight: 500;
+}
+
+/* Estilos para el input con ícono */
+.p-inputgroup-addon {
+  background-color: #f0f8ff; /* Color de fondo del ícono */
+  border-radius: 20px 0 0 20px; /* Borde redondeado solo a la izquierda */
+ 
+  border-right: none;
+  color: #999;
+}
+
+.p-inputgroup input {
+  border-radius: 20px 20px 20px 20px; /* Borde redondeado solo a la derecha */
+  border: 1px solid #add8e6;
+ background-color: #f0f8ff; /* Color de fondo del ícono */
+   margin-top: 50px;
+}
+
+.contenedor-boton {
+  display: flex;
+  justify-content: flex-end !important;
+}
+.contenedor-boton2 {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 5px;
+}
+.contenedor-botonprev {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.p-button-siguiente {
+  color: #213c6c;
+  width: 150px;
+  text-align: right;
+  display: flex;
+  background-color: #f2b3b8;
+  border: none;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+}
+.p-button-siguiente:hover {
+  background-color: #f2b3b8 !important;
+ 
+}
+
+
+/* ------------------------------------------------------------------- */
+/* ESTILOS DEL CAMPO DE DESCRIPCIÓN (TextArea) */
+/* ------------------------------------------------------------------- */
+
+.descripcion-container {
+    /* Contenedor que simula el recuadro exterior de la descripción */
+    padding: 10px; 
+    margin-top: -20px;
+    border: 1px solid #e0e0e0; /* Borde simple y claro */
+    border-radius: 10px;
+  border: 1px solid #add8e6;
+
+}
+
+.descripcion-container label {
+    /* Estilo del texto 'Descripción: (Opcional)' */
+    font-size: 0.95rem;
+    color: #213c6c;
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.descripcion-container .custom-textarea {
+    /* Estilo del área de texto para que ocupe todo el espacio y se vea limpio */
+    width: 100%;
+    border: none;
+    resize: none; /* Evita que el usuario cambie el tamaño, manteniendo el diseño */
+    font-size: 0.9rem;
+    padding: 0;
+    color: #666;
+    outline: none; /* Quitar el borde de enfoque (focus) por defecto */
+    background-color: transparent; /* Fondo transparente para no cubrir el relleno */
+}
+
+
+
+/* Estilos de la tarjeta de información */
+.info-card ul {
+  list-style: none; /* Quita los puntos de la lista */
+  padding: 0;
+  margin: 0;
+}
+
+.info-card li {
+  display: flex; /* Alinea ícono y texto horizontalmente */
+  align-items: center;
+  margin-bottom: 1.5rem;
+  gap: 15px; /* Espacio entre el ícono y el texto */
+}
+
+.info-card li i {
+  font-size: 1.5rem;
+  color: #f2b3b8; /* Color de los íconos */
+  flex-shrink: 0; /* Evita que el ícono se encoja */
+}
+
+.info-card li p {
+  margin: 0;
+  color: #213c6c;
+  font-size: 0.9rem;
+}
+
+
+
+.calendar-container {
+  /* Contenedor principal del calendario */
+  width: 95%; /* Ocupa casi todo el ancho disponible */
+  max-width: 1200px; /* Evita que sea demasiado grande en pantallas amplias */
+  margin: 20px auto; /* Centra el contenedor en la página */
+  padding: 20px;
+  border-radius: 20px;
+  border: 1px solid #84b6f4;
+  background-color: #f9f9f9; /* Color de fondo suave */
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para un efecto 3D */
+  font-family: Arial, sans-serif;
+}
+
+.calendar-header {
+  /* Cabecera con los botones de navegación */
+  display: flex;
+  justify-content: space-between; /* Espacia los elementos a los extremos */
+  align-items: center; /* Centra verticalmente los elementos */
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  font-size: 1.5rem;
+  color: #333;
+  margin: 0;
+}
+
+.calendar-header button {
+  background-color: #007bff; /* Un color azul llamativo para los botones */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.calendar-header button:hover {
+  background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+}
+
+.days-grid {
+  /* La cuadrícula principal para los días de la semana */
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 columnas de igual ancho para los días */
+  gap: 10px; /* Espacio entre las columnas */
+  text-align: center;
+}
+
+.day-column {
+  /* Contenedor para cada día individual */
+  display: flex;
+  flex-direction: column; /* Apila los elementos verticalmente */
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  overflow: hidden; /* Oculta cualquier contenido que se desborde */
+}
+
+.day-name {
+  /* Estilo para el nombre del día (Lun, Mar, etc.) */
+  background-color: #f0f0f0;
+  padding: 10px;
+  font-weight: bold;
+}
+
+.day-date {
+  /* Estilo para la fecha (Ej. 6 Oct) */
+  background-color: #e9e9e9;
+  padding: 5px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.schedule-slot {
+  /* Estilo para cada bloque de horario */
+  padding: 10px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between; /* Alinea la hora a la izquierda y el botón a la derecha */
+  align-items: center;
+}
+
+.schedule-slot span {
+  font-weight: bold;
+}
+
+.schedule-slot button {
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
+/* Clases para los diferentes estados de los horarios */
+.schedule-slot.agendado {
+  background-color: #e6f7ff; /* Azul claro para "Agendado" */
+}
+
+.schedule-slot.agendado button {
+  background-color: #007bff;
+}
+
+.schedule-slot.no-disponible {
+  background-color: #ffe6e6; /* Rojo claro para "No disponible" */
+  color: #888;
+}
+
+.schedule-slot.no-disponible button {
+  background-color: #ccc;
+  cursor: not-allowed; /* Cambia el cursor para indicar que no se puede presionar */
+}
+
+.schedule-slot.disponible {
+  background-color: #e6ffe6; /* Verde claro para "Disponible" */
+}
+
+.schedule-slot.disponible button {
+  background-color: #28a745; /* Verde llamativo para el botón "Agendar" */
+}
+.no-schedules {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+  padding: 15px;
+  background-color: #f0f0f0;
+}
+
+
+
+
+/* ESTILOS DE LA VENTANA MODAL (Tu Alerta)      */
+/* ============================================== */
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente */
+    z-index: 999; /* Detrás del modal, pero encima de todo lo demás */
+}
+
+.custom-modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centrado Perfecto */
+    z-index: 1000; /* Encima del backdrop */
+    
+    /* Diseño */
+    width: 320px;
+    padding: 25px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); /* Sombra suave */
+    text-align: center;
+}
+
+.custom-modal-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.custom-modal-icon-success {
+    color: #bc0c0c;
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+.custom-modal-message {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.custom-modal-button {
+    background-color: #ff66c4; /* Rosa */
+    color: #213c6c;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Botón de cerrar 'X' */
+.custom-modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: none;
+    background: none;
+    font-size: 1.5rem;
+    color: #aaa;
+    cursor: pointer;
+}
+
+
+
+
+.error-msg {
+  text-align: right !important;     
+  margin-top: -10px;        
+  color: red;             
+  font-size: 0.85rem; 
+}
+
+
+
+
+/* ------------------------------------------------------------------- */
+/* 1. VARIABLES PARA COLORES */
+/* ------------------------------------------------------------------- */
+/* NOTA: Las variables :root pueden seguir en el archivo global de styles.css o app.component.css
+   para evitar mover colores de un lado a otro. Si las dejas aquí, asegúrate que NO te dan error. */
+/* Si tienes problemas, quita el :root y reemplaza las variables por sus valores hexadecimales */
+:root {
+    --color-principal: #3a8ee0;      /* Azul principal del título */
+    --color-fondo-claro: #f8faff; 
+    --color-borde: #e0e6f7;
+    --color-agendar: #60c576;        /* Verde de los botones Agendar */
+    --color-gris-claro: #f0f0f0;     /* Gris de horarios no disponibles */
+    --color-pestana: #ffcdd2;        /* Rosa de las pestañas */
+    --color-pestana-activa: #ff8a80; /* Rojo de la pestaña activa */
+    --color-fondo-celda-ocupada: #f5f5f5; /* Fondo más claro de la celda ocupada */
+}
+
+/* ELIMINÉ EL ESTILO 'body' PARA NO AFECTAR EL FONDO GENERAL */
+
+
+/* ------------------------------------------------------------------- */
+/* 2. ESTILOS DEL CONTENEDOR PRINCIPAL DEL CALENDARIO (TODO ANIDADO) */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva {
+    max-width: 900px;
+    width: 100%;
+    margin-top: 50px; /* Separación del título o elemento superior */
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 20px;
+  border: 1px solid #84b6f4;
+  background-color: #f9f9f9; /* Color de fondo suave */
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil para un efecto 3D */
+
+}
+
+.calendario-reserva .titulo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--color-principal);
+    margin-bottom: 15px;
+}
+
+.calendario-reserva .contenedor-principal {
+    background-color: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); 
+    position: relative;
+    font-family: Arial, sans-serif; /* Aísla el tipo de letra también */
+}
+
+.calendario-reserva .selector-horario {
+    font-size: 1.1rem;
+    color: #213c6c;
+    margin-bottom: 25px;
+}
+
+
+/* ------------------------------------------------------------------- */
+/* 3. ESTILOS DE PESTAÑAS Y FLECHAS */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva .pestanas {
+    display: flex;
+    gap: 10px;
+justify-content: center;
+}
+
+.calendario-reserva .pestana {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #213c6c;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendario-reserva .pestana.mes {
+    background-color: #e2a5aa; 
+}
+.calendario-reserva .pestana.dia {
+    background-color: #e2a5aa;
+}
+.calendario-reserva .pestana.hora {
+     background-color: #e2a5aa;
+}
+
+/* Flechas de Navegación */
+.calendario-reserva .nav-fecha {
+    display: flex;
+    align-items: flex-end; 
+    padding-bottom: 15px; 
+    justify-content: center;
+}
+
+.calendario-reserva .flecha {
+    background-color: var(--color-pestana); 
+    color:  #213c6c;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+.calendario-reserva .flecha.izquierda { margin-right: 5px; }
+.calendario-reserva .flecha.derecha { margin-left: 5px; }
+
+
+/* ------------------------------------------------------------------- */
+/* 4. ESTILOS DE LA CUADRÍCULA Y DÍAS */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva .contenedor-calendario {
+    display: grid;
+    grid-template-columns: auto repeat(7, 1fr) auto; 
+    gap: 0;
+}
+
+.calendario-reserva .dias-semana {
+    grid-column: 2 / 9; 
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    border-bottom: 1px solid var(--color-borde);
+    padding-bottom: 10px;
+}
+
+.calendario-reserva .dias-semana .dia {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.9rem;
+    color: #555;
+    padding: 0 5px;
+}
+
+.calendario-reserva .dias-semana .nombre-dia {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+
+/* ------------------------------------------------------------------- */
+/* 5. ESTILOS DE HORARIOS Y CELDAS */
+/* ------------------------------------------------------------------- */
+
+.calendario-reserva .grilla-horarios {
+    grid-column: 1 / -1; 
+    display: grid;
+    grid-template-columns: auto repeat(7, 1fr) auto; 
+    text-align: center;
+}
+
+.calendario-reserva .hora-fija {
+    grid-column: 1; 
+    text-align: right;
+    padding-right: 15px;
+    font-weight: bold;
+    color: #213c6c;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    height: 40px; 
+}
+
+.calendario-reserva .celda {
+    grid-column: span 1;
+    height: 40px; 
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendario-reserva .agendar {
+    appearance: none; 
+    border: none;
+    background-color: var(--color-agendar);
+    color: #213c6c;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 15px;
+    height: 30px;
+    width: 90%; 
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s;
+}
+
+.calendario-reserva .agendar:hover {
+    background-color: #50b365;
+}
+
+.calendario-reserva .no-disponible {
+    background-color: var(--color-gris-claro);
+    height: 30px;
+    width: 90%; 
+    border-radius: 5px;
+}
+
+.calendario-reserva .celda.no-disponible-suave {
+    background-color: var(--color-fondo-celda-ocupada);
+}
+
+.calendario-reserva .no-disponible.grande {
+    height: 35px;
+    width: 95%;
+}
+.calendario-reserva .no-labora-celda  {
+  
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #999;
+    background-color: var(--color-fondo-claro);
+}
+/* ------------------------------------------------------------------- */
+/* ESTILO FINAL PARA DÍAS NO LABORABLES (Celdas individuales) */
+/* ------------------------------------------------------------------- */
+
+/* Esta clase se aplica a CADA celda de un día no laborable.
+   Le da el fondo gris a TODA la columna.
+*/
+
+
+
+
+
+/*modal meses*/
+
+/* --- Fondo semi-transparente detrás del modal --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;      /* tamaño visible */
+  max-width: 90%;
+  background: #fff;  /* fondo blanco para que contraste */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  z-index: 1001;
+}
+
+
+
+/* --- Contenido del modal --- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  max-width: 90%;
+  background: #fff; /* color de fondo */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  z-index: 1001; /* más alto que el backdrop */
+}
+
+.modal-content h3 {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.months-grid button {
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #f0f0f0;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.months-grid button:hover {
+  background: #1976d2;
+  color: white;
+}
+.custom-modal-icon-error {
+  font-size: 40px;
+  color: #e74c3c; /* rojo */
+  margin-right: 8px;
+}
+
+
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #ff66c4;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.overlay p {
+  font-size: 18px;
+  color: #333;
+  margin-top: 10px;
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
