@@ -2,10 +2,21 @@ import { CommonModule, NgClass } from '@angular/common';
 import { Component, HostListener, ChangeDetectorRef, ViewEncapsulation } from '@angular/core';
 import { Citas } from '../componentes/citas/citas';
 import { Services } from '../services/services';
+import { EditarServicio } from '../componentes/editar-servicio/editar-servicio';
+import Swal from 'sweetalert2';
+import { Router } from '@angular/router';
+export interface Servicio {
+  servicioId?: number; // opcional porque al crear aún no existe
+  servicioUuid?: string;
+  nombreServicio: string;
+  duracion: number; // debe ser número, tu backend usa "int"
+  prioridad: string;
+  estatus?: string; // solo lo usa el front
+}
 
 @Component({
   selector: 'app-admin',
-  imports: [CommonModule, Citas, NgClass],
+  imports: [CommonModule, Citas, NgClass,EditarServicio],
   standalone: true,
   templateUrl: './admin.html',
  styleUrls: ['./admin.css'],
@@ -14,11 +25,17 @@ import { Services } from '../services/services';
 })
 export class Admin {
 
-  constructor(private consultaService: Services, private cd: ChangeDetectorRef) {}
+  constructor(private consultaService: Services, private cd: ChangeDetectorRef,    private router: Router,) {}
+
+  pageSize: number = 10;      // 10 registros por página
+currentPage: number = 1;    // Página inicial
+totalPages: number = 1;
 
   isShrunk = false;
   isCollapsed = false;
    
+  filtrosServicios: any = {};
+servicios: any[] = [];
 
 toggleSidebar() {
   this.isCollapsed = !this.isCollapsed;
@@ -43,7 +60,26 @@ toggleSidebar() {
 
   ngOnInit() {
     this.cargarCitas();
+   this.consultaService.servicios(this.filtrosServicios).subscribe({
+  next: (response) => {
+    this.servicios = response;
+    this.calcularTotalPaginas();
+    this.cd.detectChanges();
+    console.log('Servicios cargados:', this.servicios);
+  },
+  error: (err) => {
+    console.error('Ocurrió un error al consultar servicios =>', err.message);
   }
+});
+
+  }
+calcularTotalPaginas() {
+  if (this.servicios && this.servicios.length > 0) {
+    this.totalPages = Math.ceil(this.servicios.length / this.pageSize);
+  } else {
+    this.totalPages = 1;
+  }
+}
 
   abrirCitasModal() { this.showCitasModal = true; }
   cerrarCitasModal() { this.showCitasModal = false; }
@@ -191,11 +227,153 @@ cargarCitas() {
     days.push({
       name: dayNames[d.getDay()],
       date: d.toISOString().split('T')[0],
-      schedules: [] // se rellenará con las citas si existen
+      schedules: [] 
     });
   }
 
   return days;
 }
 
+
+selectedSection: string = 'inicio'; 
+
+showSection(section: string) {
+  this.selectedSection = section;
+}
+
+
+getPaginatedServicios() {
+  const startIndex = (this.currentPage - 1) * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  return this.servicios.slice(startIndex, endIndex);
+}
+
+nextPage() {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+  }
+}
+
+prevPage() {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+  }
+ }
+
+showEditarServicioModal = false;
+servicioAEditar: Servicio | null = null;
+modoModal: 'editar' | 'nuevo' = 'editar';
+
+// Abrir modal para editar
+abrirEditarServicioModal(servicio: Servicio) {
+  this.servicioAEditar = servicio;
+  this.modoModal = 'editar';
+  this.showEditarServicioModal = true;
+}
+
+abrirAgregarServicioModal() {
+  this.servicioAEditar = null;
+  this.modoModal = 'nuevo';
+  this.showEditarServicioModal = true;
+}
+
+
+  cerrarEditarServicioModal() {
+    this.showEditarServicioModal = false;
+    this.servicioAEditar = null;
+     this.consultaService.servicios(this.filtrosServicios).subscribe({
+  next: (response) => {
+    this.servicios = response;
+    this.calcularTotalPaginas();
+    this.cd.detectChanges();
+    console.log('Servicios cargados:', this.servicios);
+  },
+  error: (err) => {
+    console.error('Ocurrió un error al consultar servicios =>', err.message);
+  }
+});
+  }
+
+  manejarServicioActualizado(servicio: Servicio) {
+  if (!servicio.servicioUuid) return;
+  this.consultaService.updateServicio(servicio.servicioUuid, servicio).subscribe({
+    next: (data) => {
+      const index = this.servicios.findIndex(s => s.servicioUuid === data.servicioUuid);
+      if (index !== -1) this.servicios[index] = data;
+      this.cerrarEditarServicioModal();
+    },
+    error: (err) => console.error('Error al actualizar', err)
+  });
+}
+
+manejarServicioAgregado(servicio: Servicio) {
+  this.consultaService.saveServicio(servicio).subscribe({
+    next: (nuevo) => {
+      this.servicios.push(nuevo);
+      this.cerrarEditarServicioModal();
+    },
+    error: (err) => console.error('Error al crear servicio', err)
+  });
+}
+
+showDeleteModal = false;
+servicioAEliminar: Servicio | null = null;
+
+abrirModalEliminar(servicio: Servicio) {
+  this.servicioAEliminar = servicio;
+  this.showDeleteModal = true;
+}
+
+
+confirmarEliminarServicio() {
+  if (!this.servicioAEliminar?.servicioUuid) return;
+
+  this.consultaService.deleteServicio(this.servicioAEliminar.servicioUuid).subscribe({
+    next: () => {
+      console.log('🗑️ Servicio eliminado');
+   
+      this.showDeleteModal = false;
+      this.servicioAEliminar = null;
+      this.consultaService.servicios(this.filtrosServicios).subscribe({
+  next: (response) => {
+    this.servicios = response;
+    this.calcularTotalPaginas();
+    this.cd.detectChanges();
+    console.log('Servicios cargados:', this.servicios);
+  },
+  error: (err) => {
+    console.error('Ocurrió un error al consultar servicios =>', err.message);
+  }
+});
+    },
+    error: (err) => {
+      console.error('❌ Error al eliminar servicio:', err);
+      this.showDeleteModal = false;
+    }
+  });
+}
+
+cancelarEliminacion() {
+  this.showDeleteModal = false;
+  this.servicioAEliminar = null;
+}
+
+
+ logout() {
+    Swal.fire({
+      title: '¿Deseas cerrar sesión?',
+      text: 'Tu sesión actual se cerrará.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login']); // o donde tengas tu ruta de login
+      }
+    });
+  }
 }

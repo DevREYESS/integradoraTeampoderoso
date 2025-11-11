@@ -317,6 +317,18 @@ hr {
 
 }
 
+.hr2 {
+    border: none;
+    height: 3px;
+   width: 100%;
+    background-color: #3891ce !important; /* O el código hexadecimal exacto del rosa que desees */
+     margin-bottom: 30px;
+}
+.hr2:hover {
+  background-color: #3891ce !important;
+    font-weight: bold;
+
+}
 
 
 /* =========================
@@ -406,8 +418,9 @@ hr {
   position: fixed;
   left: 0;
   top: 0;
+  margin-top: 60px;
   width: 180px;
-  height: 100%;
+  height: 92%;
   background-color: #ffebef;
   display: flex;
   flex-direction: column;
@@ -513,4 +526,299 @@ margin-left: 48%;
 
 .sidebar.collapsed .icon {
   font-size: 24px;
+}
+
+
+
+
+/* Estilos generales del contenedor */
+.modulo-servicios-container {
+    padding: 20px;
+    font-family: Arial, sans-serif; /* Fuente similar a la de la imagen */
+    max-width: 1200px;
+    height: 200px;
+    margin-top: 100px;
+  margin-left: 280px;
+}
+
+/* Estilo del título "Módulo Servicios" */
+.modulo-servicios-title {
+    text-align: right;
+    font-size: 23px;
+    font-weight: 400; /* Un poco más ligero */
+    color: #4A90E2; /* Azul para el subrayado/borde */
+    border-bottom: 2px solid #D0E3F8; /* Línea de base, usa un color más claro */
+    display: inline-block;
+    float: right; /* Para que quede alineado a la derecha */
+    margin-bottom: 30px;
+    padding-bottom: 5px;
+}
+
+.modulo-servicios-title::after {
+    display: block;
+    width: 100%;
+    height: 2px;
+    color: #ff66c4;
+    background-color: #ff66c4; /* Color azul más oscuro para el subrayado */
+    transform: translateY(3px); /* Ajusta la posición del subrayado */
+}
+
+/* Limpiar el float del título */
+.modulo-servicios-container::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+
+/* Estilos de la tabla */
+.servicios-table {
+    width: 100%;
+    border-collapse: collapse; /* Eliminar el espacio entre celdas */
+    table-layout: fixed; /* Ayuda a controlar el ancho de las columnas */
+    font-size: 0.95em;
+}
+
+/* Estilos de las celdas de encabezado (Duracion, Nombre, Prioridad) */
+.servicios-table th {
+    font-weight: 500; /* Grosor similar al de la imagen */
+    color: #4D4D4D; /* Color de texto más oscuro */
+    text-align: left;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd; /* Separador sutil */
+    cursor: pointer;
+    user-select: none;
+}
+
+.servicios-table th:last-child {
+    width: 100px; /* Ancho fijo para la columna de acciones */
+}
+
+/* Estilos para el indicador de orden (▽) */
+.servicios-table .arrow {
+    font-size: 0.7em;
+    vertical-align: middle;
+    margin-left: 5px;
+}
+
+/* Estilos de las filas de datos */
+.servicios-table td {
+    padding: 10px 15px;
+    color: #666;
+    text-align: left;
+}
+
+/* Efecto de color de fondo alternado */
+.servicios-table tbody tr {
+    background-color: #F8F8F8; /* Color de fondo claro por defecto */
+}
+
+.servicios-table tbody tr:nth-child(even) {
+    background-color: #EFEFEF; /* Color de fondo un poco más oscuro para filas pares */
+}
+
+/* Estilos para los iconos de acción (X y Lápiz) */
+.servicios-table td:last-child {
+    text-align: right;
+    padding-right: 15px;
+}
+
+.action-icon {
+    font-size: 0.9em;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Estilos específicos para los iconos para que se parezcan a los de la imagen (rojo y rosa/gris) */
+.delete-icon {
+    color: #E24A4A; /* Rojo para la X */
+    font-weight: bold;
+}
+
+.edit-icon {
+    color: #E395A3; /* Un color rosa pálido/gris para el lápiz (simulando el diseño original) */
+    font-weight: bold;
+}
+
+
+
+
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  font-size: 15px;
+  color: #333;
+
+  button {
+    background-color: #ff66a3;
+    border: none;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #e05591;
+      transform: scale(1.03);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+/* Fondo del modal */
+.modal-backdrop-small2 {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.4);
+  z-index: 1000;
+}
+
+/* Contenedor del modal */
+.custom-modal-container-small2 {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 25px;
+  z-index: 1001;
+  width: 320px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+/* Título del modal */
+.modal-header-small, .custom-modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Mensaje del modal */
+.custom-modal-message {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Botones principales */
+.custom-modal-button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 4px;
+  transition: background 0.2s, color 0.2s;
+  font-weight: bold
+}
+
+/* Botón de confirmar/cancelar */
+.custom-modal-button:first-of-type {
+  background-color: #e2a5aa; /* rojo */
+  color: #213c6c;
+}
+
+.custom-modal-button:first-of-type:hover {
+  background-color: #e2a5aa;
+}
+
+/* Botón de cerrar / no */
+.custom-modal-button:last-of-type {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.custom-modal-button:last-of-type:hover {
+  background-color: #e0e0e0;
+}
+
+/* Botón de cerrar X */
+.custom-modal-close-btn {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.custom-modal-close-btn:hover {
+  color: #333;
+}
+
+
+.logo-placeholder {
+  width: 30px; 
+  height: 30px;
+  border-radius: 50%;
+      background-image: url('../../../assets/imagenes/logo.jpg');
+       background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin-right: 8px;
+}
+
+
+.servicios-modulo {
+  display: block;
+  text-align: center;
+  margin-left: 870px; /* o los px que necesites */
+  width:280px;
+}
+
+.textoo{
+  font-size: 20px;
+  color: #2b5f82;
+}
+
+
+.acciones-servicios {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.btn-nuevo-servicio {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.btn-nuevo-servicio:hover {
+  background-color: #0056b3;
 }

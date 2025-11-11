@@ -1,6 +1,14 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map, catchError, throwError } from 'rxjs';
+export interface Servicio {
+  servicioId?: number; // opcional porque al crear aún no existe
+  servicioUuid?: string;
+  nombreServicio: string;
+  duracion: number; // debe ser número, tu backend usa "int"
+  prioridad: string;
+  estatus?: string; // solo lo usa el front
+}
 
 @Injectable({
   providedIn: 'root'
@@ -89,5 +97,34 @@ servicios(filtros: any): Observable<any> {
     );
 }
 
+  saveServicio(servicio: Servicio): Observable<Servicio> {
+    return this.http.post<Servicio>(`${this.apiUrlBase}/servicios/saveService`, servicio)
+      .pipe(
+        catchError(err => {
+          console.error('Error al guardar el servicio', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  updateServicio(uuid: string, servicio: Servicio): Observable<Servicio> {
+    return this.http.put<Servicio>(`${this.apiUrlBase}/servicios/updateService/${uuid}`, servicio)
+      .pipe(
+        catchError(err => {
+          console.error('Error al actualizar el servicio', err);
+          return throwError(() => err);
+        })
+      );
+  }
+
+  deleteServicio(uuid: string): Observable<any> {
+    return this.http.delete(`${this.apiUrlBase}/servicios/deleteService/${uuid}`)
+      .pipe(
+        catchError(err => {
+          console.error('Error al eliminar el servicio', err);
+          return throwError(() => err);
+        })
+      );
+  }
 
 }
