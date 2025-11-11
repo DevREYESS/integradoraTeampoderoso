@@ -9,12 +9,12 @@
     <span class="text">Menú</span>
   </div>
 
-  <div class="sidebar-item" (click)="showSection('inicio')">
+  <div class="sidebar-item" (click)="showSection('inicio')"  [class.active]="selectedSection === 'inicio'">
     <i class="material-icons icon">home</i>
     <span class="text">Inicio</span>
   </div>
 
-  <div class="sidebar-item" (click)="showSection('servicios')">
+  <div class="sidebar-item" (click)="showSection('servicios')" [class.active]="selectedSection === 'servicios'">
     <i class="material-icons icon">medical_services</i>
     <span class="text">Servicios</span>
   </div>
@@ -53,7 +53,7 @@
   <div class="calendario-reserva">
     <div class="contenedor-principal">
       <div class="pestanasmes">
-        <button class="pestana2 nuevo p-button-nuevo">Nuevo</button>
+        <button class="pestana2 nuevo p-button-nuevo" (click)="nuevaCita()">Nuevo</button>
       </div>
 
       <div class="pestanas">
