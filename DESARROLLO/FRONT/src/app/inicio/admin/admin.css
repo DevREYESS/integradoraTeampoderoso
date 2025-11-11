@@ -801,13 +801,13 @@ margin-left: 48%;
 
 .acciones-servicios {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
   margin-bottom: 15px;
 }
 
 .btn-nuevo-servicio {
-  background-color: #007bff;
-  color: white;
+  background-color: #e2a5aa;
+  color: #213c6c;
   border: none;
   padding: 8px 16px;
   border-radius: 8px;
@@ -820,5 +820,5 @@ margin-left: 48%;
 }
 
 .btn-nuevo-servicio:hover {
-  background-color: #0056b3;
+  background-color: #e2a5aa;
 }
