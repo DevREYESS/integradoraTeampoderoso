@@ -31,10 +31,17 @@ registerLocaleData(localeEsMX, 'es-MX');
   encapsulation: ViewEncapsulation.Emulated
 })
 export class Inicio implements OnInit {
-  
+
    irAAdmin() {
     this.router.navigate(['/login']); // 👈 redirige a la página del admin
   }
+
+  // Agregar el método getScheduleSlot que falta
+  getScheduleSlot(schedules: any[], time: string): any | null {
+    if (!schedules) return null;
+    return schedules.find(schedule => schedule.time === time);
+  }
+
   // Almacenar la fecha de inicio de la semana
   private currentWeekStart: Date = new Date();
  public hasNextWeek = true;
@@ -55,9 +62,20 @@ mostrarcard11 = true;
 mostrarcard12 = false;
 mostrarcard13 = false;
 
+ // Agregar estas propiedades a la clase Inicio
+private horarioDefault = {
+  horaInicio: '10:00',
+  horaFin: '17:00'
+};
+
+// Reemplazar las propiedades existentes relacionadas con datos estáticos
+allDaysData: any[] = []; // ya existe, mantenerla vacía
+weekData: any[] = [];   // ya existe
+fixedTimes: string[] = []; // ya existe, se generará dinámicamente
+
  constructor (private formBuilder: FormBuilder,
   private router: Router,
-  private messageService: MessageService, 
+  private messageService: MessageService,
   private consultaService: Services,
   private cdRef: ChangeDetectorRef,private renderer: Renderer2){
    this.formulario = this.formBuilder.group({
@@ -65,299 +83,272 @@ mostrarcard13 = false;
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       serviciodes: ['', []],
       servicio: ['', []],
-            
+
       descripcionCita: ['',[]]
 
-     
+
     });
      this.formulario2 = this.formBuilder.group({
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
 
     const currentDate = new Date();
-   
+
     this.filterByMonth(this.currentMonth, this.currentYear);
  }
 
 
- 
+
   ngOnInit(): void {
     this.generateMonths();
     const fechaActual = new Date();
 const fechaSeisMeses = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 6, 0);
 
 this.generateDaysData(fechaActual, fechaSeisMeses);
-     this.loadCurrentWeek();
 
-     this.consultaService.servicios(this.filtrosServicios).subscribe({
-       next: (response) => {
-         this.servicios = response;
-       },
-       error: (err) => {
-         console.error('Ocurrio un error al consultar servicios => ',err.message);
-       }
-     })
-  } 
-  
+  // Cargar la semana actual con datos dinámicos
+  this.loadCurrentWeek();
+
+  this.consultaService.servicios(this.filtrosServicios).subscribe({
+    next: (response) => {
+      this.servicios = response;
+    },
+    error: (err) => {
+      console.error('Ocurrió un error al consultar servicios => ', err.message);
+    }
+  });
+}
+
 
 filtrosServicios: any = {};
 servicios: any[] = [];
- 
+
 servicioSeleccionado: number | null = null;
 
-allDaysData2: any[] = [
-  {
-    name: 'Dom',
-    date: '2025-10-12', // Mañana
-    schedules: [] // Día no laborable (mostrará "No labora")
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-13',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-14',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-15',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-16',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-17',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-18',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Dom',
-    date: '2025-10-19', 
-    schedules: [   { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Agendado' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },] 
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-20',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-21',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-22',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-23',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-24',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'No disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-25',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  }
-];
+  // Modificar el método loadCurrentWeek para que sea dinámico
+loadCurrentWeek(): void {
+  const fechaInicio = this.getWeekStartDate();
+  const fechaFin = this.getWeekEndDate(fechaInicio);
 
+  this.consultarDatosSemana(fechaInicio, fechaFin);
+}
 
-  fixedTimes: string[] = [
-    "8:00", "8:20", "8:40", 
-    "9:00", "9:20", "9:40", 
-    "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:40", "14:00", "14:20", "14:40"
-    , "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00"
-  ];
+// Nuevo método para obtener fecha de inicio de la semana actual
+private getWeekStartDate(): Date {
+  const hoy = new Date();
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1); // Solo mostrar desde mañana
 
-  
-  getScheduleSlot(schedules: any[], time: string): any | null {
-    if (!schedules) return null;
-    return schedules.find(schedule => schedule.time === time);
+  // Si es domingo, comenzar desde mañana; si no, ir al domingo de esa semana
+  const diaSemana = manana.getDay();
+  const diasHastaDomingo = diaSemana === 0 ? 0 : 7 - diaSemana;
+
+  const inicioSemana = new Date(manana);
+  inicioSemana.setDate(manana.getDate() + diasHastaDomingo);
+
+  return inicioSemana;
+}
+
+// Nuevo método para obtener fecha de fin de la semana
+private getWeekEndDate(fechaInicio: Date): Date {
+  const fechaFin = new Date(fechaInicio);
+  fechaFin.setDate(fechaInicio.getDate() + 6);
+  return fechaFin;
+}
+
+// Método principal para consultar los datos de la semana
+private consultarDatosSemana(fechaInicio: Date, fechaFin: Date): void {
+  const rangoFechas = {
+    fechaInicio: this.formatDateForAPI(fechaInicio),
+    fechaFin: this.formatDateForAPI(fechaFin)
+  };
+
+  // Consultar horarios especiales y citas agendadas en paralelo
+  Promise.all([
+    this.consultaService.horariosPorRango(rangoFechas).toPromise(),
+    this.consultaService.citasPorRango(rangoFechas).toPromise()
+  ]).then(([horarios, citasAgendadas]) => {
+    this.generarDatosSemana(fechaInicio, fechaFin, horarios || [], citasAgendadas || []);
+  }).catch(error => {
+    console.error('Error al consultar datos de la semana:', error);
+    // En caso de error, generar con datos por defecto
+    this.generarDatosSemana(fechaInicio, fechaFin, [], []);
+  });
+}
+
+// Generar los datos de la semana con horarios y citas
+private generarDatosSemana(fechaInicio: Date, fechaFin: Date, horarios: any[], citasAgendadas: any[]): void {
+  this.weekData = [];
+  const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  for (let i = 0; i < 7; i++) {
+    const fechaActual = new Date(fechaInicio);
+    fechaActual.setDate(fechaInicio.getDate() + i);
+
+    const fechaString = this.formatDateForAPI(fechaActual);
+    const horarioDelDia = horarios.find(h => h.fecha === fechaString);
+
+    // Usar horario especial si existe, si no usar el por defecto
+    const horaInicio = horarioDelDia ? horarioDelDia.horaInicio : this.horarioDefault.horaInicio;
+    const horaFin = horarioDelDia ? horarioDelDia.horaFin : this.horarioDefault.horaFin;
+
+    // Generar horarios disponibles para el día
+    const horariosDelDia = this.generarHorariosDelDia(horaInicio, horaFin, fechaString, citasAgendadas);
+
+    this.weekData.push({
+      name: daysOfWeek[i],
+      date: fechaString,
+      schedules: horariosDelDia
+    });
   }
 
-  isLarge(time: string, dayName: string): boolean {
-    return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+  // Generar fixedTimes basado en el horario más amplio
+  this.generarFixedTimes();
+
+  // Actualizar estados de navegación
+  this.updateNavigationStates();
+}
+
+// Generar los horarios de un día específico
+private generarHorariosDelDia(horaInicio: string, horaFin: string, fecha: string, citasAgendadas: any[]): any[] {
+  const horarios: any[] = [];
+
+  // Verificar si es domingo (día no laborable por defecto)
+  const fechaObj = new Date(fecha);
+  if (fechaObj.getDay() === 6) {
+    return []; // Domingo sin horarios (mostrará "No labora")
   }
 
-weekData: any[] = []; 
+  const [horaInicioH, horaInicioM] = horaInicio.split(':').map(Number);
+  const [horaFinH, horaFinM] = horaFin.split(':').map(Number);
 
-currentWeekIndex: number = 0; 
+  const minutosInicio = horaInicioH * 60 + horaInicioM;
+  const minutosFin = horaFinH * 60 + horaFinM;
+
+  // Generar horarios en intervalos de 20 minutos
+  for (let minutos = minutosInicio; minutos < minutosFin; minutos += 20) {
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
+    const horaFormateada = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+
+    // Verificar si hay cita agendada en este horario
+    const citaEnEsteHorario = citasAgendadas.find(cita =>
+      cita.fechaCita === fecha && cita.horaInicio === horaFormateada + ':00'
+    );
+
+    let status = 'Disponible';
+    if (citaEnEsteHorario) {
+      status = citaEnEsteHorario.estatus === 'A' ? 'Agendado' :
+               citaEnEsteHorario.estatus === 'C' ? 'Disponible' : 'No disponible';
+    }
+
+    horarios.push({
+      time: horaFormateada,
+      status: status
+    });
+  }
+
+  return horarios;
+}
+
+// Generar fixedTimes dinámicamente basado en todos los horarios
+private generarFixedTimes(): void {
+  const todasLasHoras = new Set<string>();
+
+  this.weekData.forEach(day => {
+    if (day.schedules && day.schedules.length > 0) {
+      day.schedules.forEach((schedule: any) => {
+        todasLasHoras.add(schedule.time);
+      });
+    }
+  });
+
+  // Si no hay horarios específicos, usar el rango por defecto
+  if (todasLasHoras.size === 0) {
+    const [horaInicioH, horaInicioM] = this.horarioDefault.horaInicio.split(':').map(Number);
+    const [horaFinH, horaFinM] = this.horarioDefault.horaFin.split(':').map(Number);
+
+    const minutosInicio = horaInicioH * 60 + horaInicioM;
+    const minutosFin = horaFinH * 60 + horaFinM;
+
+    for (let minutos = minutosInicio; minutos < minutosFin; minutos += 20) {
+      const horas = Math.floor(minutos / 60);
+      const mins = minutos % 60;
+      todasLasHoras.add(`${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`);
+    }
+  }
+
+  this.fixedTimes = Array.from(todasLasHoras).sort();
+}
+
+// Formatear fecha para la API
+private formatDateForAPI(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+// Actualizar estados de navegación
+private updateNavigationStates(): void {
+  const hoy = new Date();
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1);
+
+  // Verificar si es la primera semana (contiene mañana o días posteriores)
+  const primerDiaSemana = new Date(this.weekData[0]?.date || '');
+  this.isFirstWeek = primerDiaSemana <= manana;
+
+  // Para verificar si es la última semana, puedes establecer un límite
+  // Por ejemplo, 6 meses desde hoy
+  const fechaLimite = new Date(hoy);
+  fechaLimite.setMonth(hoy.getMonth() + 6);
+
+  const ultimoDiaSemana = new Date(this.weekData[6]?.date || '');
+  this.isLastWeek = ultimoDiaSemana >= fechaLimite;
+}
+
+// Modificar goToNextWeek para que consulte la siguiente semana
+goToNextWeek(): void {
+  if (!this.isLastWeek && this.weekData.length > 0) {
+    const fechaActual = new Date(this.weekData[0].date);
+    fechaActual.setDate(fechaActual.getDate() + 7);
+
+    const fechaInicio = fechaActual;
+    const fechaFin = this.getWeekEndDate(fechaInicio);
+
+    this.consultarDatosSemana(fechaInicio, fechaFin);
+  }
+}
+
+// Modificar goToPreviousWeek para que consulte la semana anterior
+goToPreviousWeek(): void {
+  if (!this.isFirstWeek && this.weekData.length > 0) {
+    const fechaActual = new Date(this.weekData[0].date);
+    fechaActual.setDate(fechaActual.getDate() - 7);
+
+    const fechaInicio = fechaActual;
+    const fechaFin = this.getWeekEndDate(fechaInicio);
+
+    this.consultarDatosSemana(fechaInicio, fechaFin);
+  }
+}
+
+isLarge(time: string, dayName: string): boolean {
+  return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+}
+
+
+currentWeekIndex: number = 0;
 daysPerWeek: number = 7;
 
 isFirstWeek: boolean = true;
 isLastWeek: boolean = false;
 
 
-loadCurrentWeek(): void {
-  const startIndex = this.currentWeekIndex;
-  const endIndex = this.currentWeekIndex + this.daysPerWeek;
-  this.weekData = this.allDaysData.slice(startIndex, endIndex);
-  this.isFirstWeek = (this.currentWeekIndex === 0);
-  this.isLastWeek = (this.currentWeekIndex >= this.allDaysData.length - this.daysPerWeek);
-}
-
-
-goToNextWeek(): void {
-  if (!this.isLastWeek) {
-    this.currentWeekIndex += this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
-
-goToPreviousWeek(): void {
-  if (!this.isFirstWeek) {
-    this.currentWeekIndex -= this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
-
 
   public weekData2: any[] = [];
   //public currentWeekIndex = 0;
   private daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-  allDaysData: any[] = [];
+
 
 
 
@@ -365,7 +356,7 @@ goToPreviousWeek(): void {
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isShrunk = window.scrollY > 50; 
+    this.isShrunk = window.scrollY > 50;
   }
 
   limpiarFormulario() {
@@ -405,7 +396,7 @@ confirmarAgendar() {
 isLoadingA: boolean = false;
 
 guarda(fecha: string, horaInicio: string) {
-  this.isLoadingA = true; 
+  this.isLoadingA = true;
 
   const horaFin = this.calcularHoraFin(horaInicio);
 
@@ -423,13 +414,13 @@ guarda(fecha: string, horaInicio: string) {
 
   this.consultaService.guardarcita(datos).subscribe({
     next: (res) => {
-      this.isLoadingA = false; 
+      this.isLoadingA = false;
 
       this.appointmentData = {
         estatus: "A",
         nombrePaciente: res.nombrePaciente,
         fechaCita: res.fechaCita,
-        horaInicio: res.horaIncio, 
+        horaInicio: res.horaIncio,
         horaFin: this.calcularHoraFin(res.horaIncio),
         nombreServicio: res.nombreServicio || '',
       };
@@ -439,7 +430,7 @@ guarda(fecha: string, horaInicio: string) {
       this.cdRef.detectChanges();
     },
     error: (err) => {
-      this.isLoadingA = false; 
+      this.isLoadingA = false;
 
       if (err.error && err.error.message) {
         this.errorMessage = err.error.message;
@@ -447,7 +438,7 @@ guarda(fecha: string, horaInicio: string) {
         this.errorMessage = "Ocurrió un error al guardar la cita. Intenta de nuevo.";
       }
 
-      this.showErrorModal = true; 
+      this.showErrorModal = true;
       this.showModal2 = false;
       this.limpiarFormulario();
       this.cdRef.detectChanges();
@@ -470,7 +461,7 @@ calcularHoraFin(horaInicio: string): string {
   const fecha = new Date();
   fecha.setHours(horas);
   fecha.setMinutes(minutos + 20);
-  const h = fecha.getHours().toString().padStart(2, '0'); 
+  const h = fecha.getHours().toString().padStart(2, '0');
   const m = fecha.getMinutes().toString().padStart(2, '0');
   return `${h}:${m}`;
 }
@@ -499,7 +490,7 @@ next() {
     this.mostrarcard11=true;
     this.mostrarcard12=false;
     this.mostrarcard13=false;
-    
+
   }else if(this.activeIndex === 1){
     this.mostrarcard1 = true;
      this.mostrarcard11=false;
@@ -573,15 +564,15 @@ this.limpiarFormulario();
 }
 
 
- public showConfirmationModal: boolean = false; 
- public showConfirmationModal2: boolean = false; 
- 
+ public showConfirmationModal: boolean = false;
+ public showConfirmationModal2: boolean = false;
+
   regresar2() {
-    this.showConfirmationModal = false; 
+    this.showConfirmationModal = false;
   }
  regresar3() {
-    this.showConfirmationModal2 = false; 
-    
+    this.showConfirmationModal2 = false;
+
     this.formulario2.get('telefono')?.setValue('');
 
   }
@@ -591,14 +582,14 @@ this.limpiarFormulario();
   public consultaResult: Boolean = false;
   public isLoading: any = null;
 
-   
+
 
   consultarCita() {
     if (this.formulario2.invalid) {
       this.formulario2.markAllAsTouched();
       return;
     }
-    
+
      this.isLoading = true;
     this.consultaResult = false;
     this.showConsultaModal = false;
@@ -606,17 +597,17 @@ this.limpiarFormulario();
     this.consultaService.getCitaPorTelefono(this.telefonoLimpio)
       .subscribe({
         next: (response) => {
-          this.isLoading = false; 
+          this.isLoading = false;
 
           if (response) {
             this.consultaResult = response;
-            this.showConsultaModal = true; 
-            this.cdRef.detectChanges(); 
+            this.showConsultaModal = true;
+            this.cdRef.detectChanges();
              this.renderer.addClass(document.body, 'modal-open-scroll-blocker');
           } else {
             console.warn("No se encontró ninguna cita para ese número.");
               this.showConfirmationModal2 = true;
-            this.cdRef.detectChanges(); 
+            this.cdRef.detectChanges();
 
           }
         },
@@ -625,25 +616,25 @@ this.limpiarFormulario();
           this.consultaResult = false;
             this.showConsultaModal = false;
           console.error("Falló la consulta de la cita:", err.message);
-          this.cdRef.detectChanges(); 
+          this.cdRef.detectChanges();
         }
       });
 
-  
 
-  
+
+
   }
 
   closeConsultaModal() {
     this.showConsultaModal = false;
-    this.consultaResult = false; 
+    this.consultaResult = false;
     this.formulario2.get('telefono')?.setValue('');
     this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
   }
 
  closemodalmeses() {
     this.showModal = false;
-    this.consultaResult = false; 
+    this.consultaResult = false;
     this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
   }
  telefonoLimpio: string = '';
@@ -652,7 +643,7 @@ formatTelefono(event: Event) {
   const input = event.target as HTMLInputElement;
 
   let numeros = input.value.replace(/\D/g, '').substring(0, 10);
-  this.telefonoLimpio = numeros; 
+  this.telefonoLimpio = numeros;
 
   this.formulario2.get('telefono')?.setValue(numeros, { emitEvent: false });
 
@@ -668,7 +659,7 @@ formatTelefono2(event: Event) {
   const input = event.target as HTMLInputElement;
 
   let numeros = input.value.replace(/\D/g, '').substring(0, 10);
-  this.telefonoLimpio = numeros; 
+  this.telefonoLimpio = numeros;
 
   this.formulario.get('telefono')?.setValue(numeros, { emitEvent: false });
 
@@ -694,7 +685,7 @@ noEspacioInicial(event: KeyboardEvent): void {
 
   selectedMonth = ''; // mes seleccionado (ej. 'Octubre 2025')
 
-  
+
   filteredDays: any[] = []; // días filtrados según el mes elegido
 showMonthModal = false;
 months: { nombre: string; numero: number }[] = [];
@@ -707,7 +698,7 @@ generateMonths(): void {
   ];
 
   const now = new Date();
-  const currentMonth = now.getMonth(); 
+  const currentMonth = now.getMonth();
   const result: { nombre: string; numero: number }[] = [];
 
   for (let i = 0; i < 6; i++) {
@@ -741,7 +732,7 @@ selectedMonthName: string = 'MES';
 
 onMonthSelected(mesNumero: number) {
   this.currentMonth = mesNumero;
-  this.selectedMonthName = this.monthsNames[mesNumero]; 
+  this.selectedMonthName = this.monthsNames[mesNumero];
   this.showModal = false;
 
   const now = new Date();
@@ -755,7 +746,7 @@ onMonthSelected(mesNumero: number) {
 
   const start = new Date(targetYear, mesNumero, 1);
   const end = new Date(targetYear, mesNumero + 1, 0);
-  
+
   this.generateDaysData(start, end);
   this.currentWeekIndex = 0;
   this.loadCurrentWeek();
@@ -858,7 +849,7 @@ validarPaso3() {
     return;
   }
 
-  this.next(); 
+  this.next();
 }
 
 

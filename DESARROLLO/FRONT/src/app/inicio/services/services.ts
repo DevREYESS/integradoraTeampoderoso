@@ -14,7 +14,7 @@ export interface Servicio {
   providedIn: 'root'
 })
 export class Services {
-    private apiUrlBase: string = 'http://localhost:8010'; //! Esta ruta sera cambiada una vez que suba al
+    private apiUrlBase: string = 'http://localhost:8010'; //! Esta ruta sera cambiada una vez que suba al hosting
 
   constructor(private http: HttpClient) { }
 
@@ -49,7 +49,6 @@ guardarcita(cita: any): Observable<any> {
 }
 
 updateCita(cita: any, uuid:any): Observable<any> {
-  
   return this.http.put<any>(`${this.apiUrlBase}/citas/uCita/${uuid}`, cita, {
     headers: { 'Content-Type': 'application/json' }
   }).pipe(
@@ -66,6 +65,25 @@ servicios(filtros: any): Observable<any> {
   }).pipe(
     map(response => response),
     catchError(this.handleError),
+    catchError(this.handleErrorLogin)
+  );
+}
+
+  citasPorRango(rango: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlBase}/citas/sCita`, rango, {
+      headers: {'Content-Type': 'application/json' }
+    }).pipe(
+      map(response => response),
+      catchError(this.handleErrorLogin)
+    );
+  }
+
+
+horariosPorRango(rango: any): Observable<any> {
+  return this.http.post<any>(`${this.apiUrlBase}/horarios/rango`, rango, {
+    headers: {'Content-Type': 'application/json' }
+  }).pipe(
+    map(response => response),
     catchError(this.handleErrorLogin)
   );
 }
