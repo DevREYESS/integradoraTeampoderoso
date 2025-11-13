@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/citas/**").permitAll()
                         .requestMatchers("/servicios/**").permitAll()
+                        .requestMatchers("/horarios/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(basic -> basic.disable())

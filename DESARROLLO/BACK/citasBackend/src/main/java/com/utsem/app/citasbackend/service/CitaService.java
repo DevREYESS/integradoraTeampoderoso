@@ -61,31 +61,30 @@ public class CitaService {
         }
 
         if (citaDTO.getHoraInicio() != null) {
-            predicate = cb.and(predicate, cb.equal(root.get("horaInicio"),citaDTO.getHoraInicio()));
+            predicate = cb.and(predicate, cb.equal(root.get("horaInicio"), citaDTO.getHoraInicio()));
         }
 
-        if (citaDTO.getFechaCita() != null) {
-
+        // Manejo de fechas
+        if (citaDTO.getFechaInicio() != null && citaDTO.getFechaFin() != null) {
+            // Filtro por rango de fechas
+            predicate = cb.and(predicate,
+                    cb.between(root.get("fechaCita"), citaDTO.getFechaInicio(), citaDTO.getFechaFin())
+            );
+        } else if (citaDTO.getFechaCita() != null) {
+            // Mantiene la lógica existente para una fecha específica
             if (citaDTO.getSoloMes() != null && citaDTO.getSoloMes()) {
-
                 predicate = cb.and(predicate, cb.equal(
                         cb.function("MONTH", Integer.class, root.get("fechaCita")),
                         citaDTO.getFechaCita().getMonthValue()
                 ));
-
             } else if (citaDTO.getSoloDia() != null && citaDTO.getSoloDia()) {
-
                 predicate = cb.and(predicate, cb.equal(
                         cb.function("DAY", Integer.class, root.get("fechaCita")),
                         citaDTO.getFechaCita().getDayOfMonth()
                 ));
-
             } else {
-
-                predicate = cb.and(predicate, cb.equal(root.get("fechaCita"),citaDTO.getFechaCita()));
-
+                predicate = cb.and(predicate, cb.equal(root.get("fechaCita"), citaDTO.getFechaCita()));
             }
-
         }
 
         query.where(predicate);
@@ -93,7 +92,6 @@ public class CitaService {
 
         return entityManager.createQuery(query).getResultList();
     }
-
     public CitaResponseDTO crearCita(CitaDTO citaDTO) {
         validarFechaCita(citaDTO.getFechaCita());
         validarSolapamiento(citaDTO, null);
