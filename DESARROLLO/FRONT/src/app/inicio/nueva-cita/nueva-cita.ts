@@ -49,6 +49,18 @@ mostrarcard11 = true;
 mostrarcard12 = false;
 mostrarcard13 = false;
 
+ // Agregar estas propiedades a la clase Inicio
+private horarioDefault = {
+  horaInicio: '10:00',
+  horaFin: '17:00'
+};
+
+
+// Reemplazar las propiedades existentes relacionadas con datos estáticos
+allDaysData: any[] = []; // ya existe, mantenerla vacía
+weekData: any[] = [];   // ya existe
+fixedTimes: string[] = []; // ya existe, se generará dinámicamente
+
  constructor (private formBuilder: FormBuilder,
   private router: Router,
   private messageService: MessageService, 
@@ -74,284 +86,267 @@ mostrarcard13 = false;
  }
 
 
- 
-  ngOnInit(): void {
+ ngOnInit(): void {
     this.generateMonths();
     const fechaActual = new Date();
 const fechaSeisMeses = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 6, 0);
 
 this.generateDaysData(fechaActual, fechaSeisMeses);
-     this.loadCurrentWeek();
 
-     this.consultaService.servicios(this.filtrosServicios).subscribe({
-       next: (response) => {
-         this.servicios = response;
-       },
-       error: (err) => {
-         console.error('Ocurrio un error al consultar servicios => ',err.message);
-       }
-     })
-  } 
-  
+  // Cargar la semana actual con datos dinámicos
+  this.loadCurrentWeek();
 
-filtrosServicios: any = {};
-servicios: any[] = [];
- 
-servicioSeleccionado: number | null = null;
-
-allDaysData2: any[] = [
-  {
-    name: 'Dom',
-    date: '2025-10-12', // Mañana
-    schedules: [] // Día no laborable (mostrará "No labora")
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-13',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-14',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-15',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-16',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' }, 
-      { time: '9:20', status: 'No disponible' }, 
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-17',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-18',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Dom',
-    date: '2025-10-19', 
-    schedules: [   { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Agendado' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },] 
-  },
-  {
-    name: 'Lun',
-    date: '2025-10-20',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Mar',
-    date: '2025-10-21',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Agendado' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'No disponible' },
-    ]
-  },
-  {
-    name: 'Mié',
-    date: '2025-10-22',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'No disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Agendado' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Jue',
-    date: '2025-10-23',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'No disponible' },
-      { time: '9:20', status: 'No disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Vie',
-    date: '2025-10-24',
-    schedules: [
-      { time: '8:00', status: 'No disponible' },
-      { time: '8:20', status: 'Agendado' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'No disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  },
-  {
-    name: 'Sáb',
-    date: '2025-10-25',
-    schedules: [
-      { time: '8:00', status: 'Disponible' },
-      { time: '8:20', status: 'Disponible' },
-      { time: '8:40', status: 'Disponible' },
-      { time: '9:00', status: 'Disponible' },
-      { time: '9:20', status: 'Disponible' },
-      { time: '9:40', status: 'Disponible' },
-      { time: '10:00', status: 'Disponible' },
-      { time: '10:20', status: 'Disponible' },
-      { time: '10:40', status: 'Disponible' },
-    ]
-  }
-];
-
-
-  fixedTimes: string[] = [
-    "8:00", "8:20", "8:40", 
-    "9:00", "9:20", "9:40", 
-    "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:40", "14:00", "14:20", "14:40"
-    , "15:00", "15:20", "15:40", "16:00", "16:20", "16:40", "17:00"
-  ];
-
+  this.consultaService.servicios(this.filtrosServicios).subscribe({
+    next: (response) => {
+      this.servicios = response;
+    },
+    error: (err) => {
+      console.error('Ocurrió un error al consultar servicios => ', err.message);
+    }
+  });
+}
   
   getScheduleSlot(schedules: any[], time: string): any | null {
     if (!schedules) return null;
     return schedules.find(schedule => schedule.time === time);
   }
 
-  isLarge(time: string, dayName: string): boolean {
-    return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+
+
+filtrosServicios: any = {};
+servicios: any[] = [];
+
+servicioSeleccionado: number | null = null; 
+
+  // Modificar el método loadCurrentWeek para que sea dinámico
+loadCurrentWeek(): void {
+  const fechaInicio = this.getWeekStartDate();
+  const fechaFin = this.getWeekEndDate(fechaInicio);
+
+  this.consultarDatosSemana(fechaInicio, fechaFin);
+}
+
+
+// Nuevo método para obtener fecha de inicio de la semana actual
+private getWeekStartDate(): Date {
+  const hoy = new Date();
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1); // Solo mostrar desde mañana
+
+  // Si es domingo, comenzar desde mañana; si no, ir al domingo de esa semana
+  const diaSemana = manana.getDay();
+  const diasHastaDomingo = diaSemana === 0 ? 0 : 7 - diaSemana;
+
+  const inicioSemana = new Date(manana);
+  inicioSemana.setDate(manana.getDate() + diasHastaDomingo);
+
+  return inicioSemana;
+}
+
+// Nuevo método para obtener fecha de fin de la semana
+private getWeekEndDate(fechaInicio: Date): Date {
+  const fechaFin = new Date(fechaInicio);
+  fechaFin.setDate(fechaInicio.getDate() + 6);
+  return fechaFin;
+}
+
+
+// Método principal para consultar los datos de la semana
+private consultarDatosSemana(fechaInicio: Date, fechaFin: Date): void {
+  const rangoFechas = {
+    fechaInicio: this.formatDateForAPI(fechaInicio),
+    fechaFin: this.formatDateForAPI(fechaFin)
+  };
+
+  // Consultar horarios especiales y citas agendadas en paralelo
+  Promise.all([
+    this.consultaService.horariosPorRango(rangoFechas).toPromise(),
+    this.consultaService.citasPorRango(rangoFechas).toPromise()
+  ]).then(([horarios, citasAgendadas]) => {
+    this.generarDatosSemana(fechaInicio, fechaFin, horarios || [], citasAgendadas || []);
+  }).catch(error => {
+    console.error('Error al consultar datos de la semana:', error);
+    // En caso de error, generar con datos por defecto
+    this.generarDatosSemana(fechaInicio, fechaFin, [], []);
+  });
+}
+
+// Generar los datos de la semana con horarios y citas
+private generarDatosSemana(fechaInicio: Date, fechaFin: Date, horarios: any[], citasAgendadas: any[]): void {
+  this.weekData = [];
+  const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  for (let i = 0; i < 7; i++) {
+    const fechaActual = new Date(fechaInicio);
+    fechaActual.setDate(fechaInicio.getDate() + i);
+
+    const fechaString = this.formatDateForAPI(fechaActual);
+    const horarioDelDia = horarios.find(h => h.fecha === fechaString);
+
+    // Usar horario especial si existe, si no usar el por defecto
+    const horaInicio = horarioDelDia ? horarioDelDia.horaInicio : this.horarioDefault.horaInicio;
+    const horaFin = horarioDelDia ? horarioDelDia.horaFin : this.horarioDefault.horaFin;
+
+    // Generar horarios disponibles para el día
+    const horariosDelDia = this.generarHorariosDelDia(horaInicio, horaFin, fechaString, citasAgendadas);
+
+    this.weekData.push({
+      name: daysOfWeek[i],
+      date: fechaString,
+      schedules: horariosDelDia
+    });
   }
 
-weekData: any[] = []; 
+  // Generar fixedTimes basado en el horario más amplio
+  this.generarFixedTimes();
 
-currentWeekIndex: number = 0; 
+  // Actualizar estados de navegación
+  this.updateNavigationStates();
+}
+
+// Generar los horarios de un día específico
+private generarHorariosDelDia(horaInicio: string, horaFin: string, fecha: string, citasAgendadas: any[]): any[] {
+  const horarios: any[] = [];
+
+  // Verificar si es domingo (día no laborable por defecto)
+  const fechaObj = new Date(fecha);
+  if (fechaObj.getDay() === 6) {
+    return []; // Domingo sin horarios (mostrará "No labora")
+  }
+
+  const [horaInicioH, horaInicioM] = horaInicio.split(':').map(Number);
+  const [horaFinH, horaFinM] = horaFin.split(':').map(Number);
+
+  const minutosInicio = horaInicioH * 60 + horaInicioM;
+  const minutosFin = horaFinH * 60 + horaFinM;
+
+  // Generar horarios en intervalos de 20 minutos
+  for (let minutos = minutosInicio; minutos < minutosFin; minutos += 20) {
+    const horas = Math.floor(minutos / 60);
+    const mins = minutos % 60;
+    const horaFormateada = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+
+    // Verificar si hay cita agendada en este horario
+    const citaEnEsteHorario = citasAgendadas.find(cita =>
+      cita.fechaCita === fecha && cita.horaInicio === horaFormateada + ':00'
+    );
+
+    let status = 'Disponible';
+    if (citaEnEsteHorario) {
+      status = citaEnEsteHorario.estatus === 'A' ? 'Agendado' :
+               citaEnEsteHorario.estatus === 'C' ? 'Disponible' : 'No disponible';
+    }
+
+    horarios.push({
+      time: horaFormateada,
+      status: status
+    });
+  }
+
+  return horarios;
+}
+
+// Generar fixedTimes dinámicamente basado en todos los horarios
+private generarFixedTimes(): void {
+  const todasLasHoras = new Set<string>();
+
+  this.weekData.forEach(day => {
+    if (day.schedules && day.schedules.length > 0) {
+      day.schedules.forEach((schedule: any) => {
+        todasLasHoras.add(schedule.time);
+      });
+    }
+  });
+
+  // Si no hay horarios específicos, usar el rango por defecto
+  if (todasLasHoras.size === 0) {
+    const [horaInicioH, horaInicioM] = this.horarioDefault.horaInicio.split(':').map(Number);
+    const [horaFinH, horaFinM] = this.horarioDefault.horaFin.split(':').map(Number);
+
+    const minutosInicio = horaInicioH * 60 + horaInicioM;
+    const minutosFin = horaFinH * 60 + horaFinM;
+
+    for (let minutos = minutosInicio; minutos < minutosFin; minutos += 20) {
+      const horas = Math.floor(minutos / 60);
+      const mins = minutos % 60;
+      todasLasHoras.add(`${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`);
+    }
+  }
+
+  this.fixedTimes = Array.from(todasLasHoras).sort();
+}
+
+
+// Formatear fecha para la API
+private formatDateForAPI(date: Date): string {
+  return date.toISOString().split('T')[0];
+}
+
+// Actualizar estados de navegación
+private updateNavigationStates(): void {
+  const hoy = new Date();
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1);
+
+  // Verificar si es la primera semana (contiene mañana o días posteriores)
+  const primerDiaSemana = new Date(this.weekData[0]?.date || '');
+  this.isFirstWeek = primerDiaSemana <= manana;
+
+  // Para verificar si es la última semana, puedes establecer un límite
+  // Por ejemplo, 6 meses desde hoy
+  const fechaLimite = new Date(hoy);
+  fechaLimite.setMonth(hoy.getMonth() + 6);
+
+  const ultimoDiaSemana = new Date(this.weekData[6]?.date || '');
+  this.isLastWeek = ultimoDiaSemana >= fechaLimite;
+}
+
+// Modificar goToNextWeek para que consulte la siguiente semana
+goToNextWeek(): void {
+  if (!this.isLastWeek && this.weekData.length > 0) {
+    const fechaActual = new Date(this.weekData[0].date);
+    fechaActual.setDate(fechaActual.getDate() + 7);
+
+    const fechaInicio = fechaActual;
+    const fechaFin = this.getWeekEndDate(fechaInicio);
+
+    this.consultarDatosSemana(fechaInicio, fechaFin);
+  }
+}
+
+// Modificar goToPreviousWeek para que consulte la semana anterior
+goToPreviousWeek(): void {
+  if (!this.isFirstWeek && this.weekData.length > 0) {
+    const fechaActual = new Date(this.weekData[0].date);
+    fechaActual.setDate(fechaActual.getDate() - 7);
+
+    const fechaInicio = fechaActual;
+    const fechaFin = this.getWeekEndDate(fechaInicio);
+
+    this.consultarDatosSemana(fechaInicio, fechaFin);
+  }
+}
+
+isLarge(time: string, dayName: string): boolean {
+  return (time === '9:00' || time === '9:20') && (dayName === 'Mié' || dayName === 'Jue');
+}
+
+
+currentWeekIndex: number = 0;
 daysPerWeek: number = 7;
 
 isFirstWeek: boolean = true;
 isLastWeek: boolean = false;
 
 
-loadCurrentWeek(): void {
-  const startIndex = this.currentWeekIndex;
-  const endIndex = this.currentWeekIndex + this.daysPerWeek;
-  this.weekData = this.allDaysData.slice(startIndex, endIndex);
-  this.isFirstWeek = (this.currentWeekIndex === 0);
-  this.isLastWeek = (this.currentWeekIndex >= this.allDaysData.length - this.daysPerWeek);
-}
 
-
-goToNextWeek(): void {
-  if (!this.isLastWeek) {
-    this.currentWeekIndex += this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
-
-goToPreviousWeek(): void {
-  if (!this.isFirstWeek) {
-    this.currentWeekIndex -= this.daysPerWeek;
-    this.loadCurrentWeek();
-  }
-}
 
 
   public weekData2: any[] = [];
   //public currentWeekIndex = 0;
   private daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
 
-  allDaysData: any[] = [];
+
 
 
 
@@ -429,7 +424,15 @@ guarda(fecha: string, horaInicio: string) {
       };
 
       this.showModal2 = true;
-     
+     this.regresarf = true;
+this.activeIndex=0;
+this.telefonoFormateado="";
+ this.mostrarcard1 = true;
+  this.mostrarcard11 = true;
+  this.mostrarcard12=false;
+    this.mostrarcard13=false;
+    this.mostrarcalendario=false;
+  this.regresarf = false;
       this.limpiarFormulario();
       this.cdRef.detectChanges();
     },
@@ -444,7 +447,13 @@ guarda(fecha: string, horaInicio: string) {
 
       this.showErrorModal = true; 
       this.showModal2 = false;
-
+this.telefonoFormateado="";
+ this.mostrarcard1 = false;
+  this.mostrarcard11 = false;
+  this.mostrarcard12=false;
+    this.mostrarcard13=false;
+    this.mostrarcalendario=true;
+  this.regresarf = false;
 
       this.limpiarFormulario();
       this.cdRef.detectChanges();
@@ -454,15 +463,7 @@ guarda(fecha: string, horaInicio: string) {
   this.visiblehome2 = true;
   this.visiblehome = true;
       
-this.regresarf = true;
-this.activeIndex=0;
-this.telefonoFormateado="";
- this.mostrarcard1 = true;
-  this.mostrarcard11 = true;
-  this.mostrarcard12=false;
-    this.mostrarcard13=false;
-    this.mostrarcalendario=false;
-  this.regresarf = false;
+
 }
 
 
