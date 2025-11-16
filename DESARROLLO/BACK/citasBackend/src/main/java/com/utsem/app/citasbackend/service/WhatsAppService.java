@@ -29,8 +29,17 @@ public class WhatsAppService {
     @Value("${whatsapp.api.access-token}")
     private String accessToken;
 
-    @Value("${whatsapp.api.template-name}")
-    private String templateName;
+    @Value("${whatsapp.api.template.confirmacion}")
+    private String platillaConfirmacionCita;
+
+    @Value("${whatsapp.api.template.actualizacion}")
+    private String plantillaActualizacionCita;
+
+    @Value("${whatsapp.api.template.cancelacion}")
+    private String platillaCancelacionCita;
+
+    @Value("${whatsapp.api.template.recordatorio}")
+    private String platillaRecordatorioCita;
 
     @Value("${whatsapp.api.template-language}")
     private String templateLanguage;
@@ -51,10 +60,10 @@ public class WhatsAppService {
     /**
      * Envía confirmación de cita por WhatsApp
      */
-    public void enviarConfirmacionCita(Cita cita) {
+    public void enviarConfirmacionCita(Cita cita,String tipoMensaje) {
         try {
             String numeroFormateado = formatearNumero(cita.getTelefono());
-            enviarMensaje(numeroFormateado, cita);
+            enviarMensaje(numeroFormateado, cita, tipoMensaje);
             log.info("WhatsApp enviado exitosamente a {} para cita {}",
                     numeroFormateado, cita.getUuid());
         } catch (Exception e) {
@@ -69,7 +78,18 @@ public class WhatsAppService {
     public void enviarCancelacionCita(Cita cita) {
         try {
             String numeroFormateado = formatearNumero(cita.getTelefono());
-            enviarMensaje(numeroFormateado, cita);
+            enviarMensaje(numeroFormateado, cita, "cancelacion" );
+            log.info("Notificación de cancelación enviada a {}", numeroFormateado);
+        } catch (Exception e) {
+            log.error("Error al enviar notificación de cancelación a {}: {}",
+                    cita.getTelefono(), e.getMessage());
+        }
+    }
+
+    public void enviarRecordatorioCita(Cita cita) {
+        try {
+            String numeroFormateado = formatearNumero(cita.getTelefono());
+            enviarMensaje(numeroFormateado, cita, "recordatorio" );
             log.info("Notificación de cancelación enviada a {}", numeroFormateado);
         } catch (Exception e) {
             log.error("Error al enviar notificación de cancelación a {}: {}",
@@ -80,14 +100,14 @@ public class WhatsAppService {
     /**
      * Envía el mensaje a través de la API de WhatsApp
      */
-    private void enviarMensaje(String numeroDestino, Cita cita) {
+    private void enviarMensaje(String numeroDestino, Cita cita, String tipoMensaje) {
         String url = String.format("%s/%s/messages", apiUrl, phoneNumberId);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(accessToken);
 
-        Map<String, Object> body = construirCuerpoMensaje(numeroDestino, cita);
+        Map<String, Object> body = construirCuerpoMensaje(numeroDestino, cita, tipoMensaje);
 
         log.debug("Enviando mensaje a WhatsApp: {}", body);
 
@@ -106,14 +126,22 @@ public class WhatsAppService {
     /**
      * Construye el cuerpo del mensaje con la plantilla y parámetros
      */
-    private Map<String, Object> construirCuerpoMensaje(String numeroDestino, Cita cita) {
+    private Map<String, Object> construirCuerpoMensaje(String numeroDestino, Cita cita, String tipoMensaje) {
         Map<String, Object> body = new HashMap<>();
         body.put("messaging_product", "whatsapp");
         body.put("to", numeroDestino);
         body.put("type", "template");
 
         Map<String, Object> template = new HashMap<>();
-        template.put("name", templateName);
+        if (tipoMensaje.equalsIgnoreCase("confirmacion")) {
+            template.put("name", platillaConfirmacionCita);
+        } else if (tipoMensaje.equalsIgnoreCase("actualizacion")) {
+            template.put("name", plantillaActualizacionCita);
+        } else if (tipoMensaje.equalsIgnoreCase("cancelacion")) {
+            template.put("name", platillaCancelacionCita);
+        } else if (tipoMensaje.equalsIgnoreCase("recordatorio")) {
+            template.put("name", platillaRecordatorioCita);
+        }
 
         Map<String, String> language = new HashMap<>();
         language.put("code", templateLanguage);
@@ -131,9 +159,12 @@ public class WhatsAppService {
         // Parámetro 1: Nombre del paciente
         parameters.add(crearParametro(cita.getNombrePaciente()));
 
-        // Parámetro 2: Fecha formateada
-        String fechaFormateada = cita.getFechaCita().format(FECHA_FORMATTER);
-        parameters.add(crearParametro(fechaFormateada));
+        // Opcional para la plantilla de recordatorio
+        if (!tipoMensaje.equalsIgnoreCase("recordatorio")) {
+            // Parámetro 2: Fecha formateada
+            String fechaFormateada = cita.getFechaCita().format(FECHA_FORMATTER);
+            parameters.add(crearParametro(fechaFormateada));
+        }
 
         // Parámetro 3: Hora formateada
         String horaFormateada = cita.getHoraInicio().format(HORA_FORMATTER);

@@ -101,7 +101,7 @@ public class CitaService {
 
         // Enviar confirmación por WhatsApp
         try {
-            whatsAppService.enviarConfirmacionCita(citaGuardada);
+            whatsAppService.enviarConfirmacionCita(citaGuardada, "confirmacion");
         } catch (Exception e) {
             // Log pero no fallar - la cita ya está guardada
             System.err.println("Advertencia: Cita creada pero WhatsApp falló: " + e.getMessage());
@@ -128,7 +128,7 @@ public class CitaService {
 
         // Enviar notificación de actualización
         try {
-            whatsAppService.enviarConfirmacionCita(citaActualizada);
+            whatsAppService.enviarConfirmacionCita(citaActualizada, "actualizacion");
         } catch (Exception e) {
             System.err.println("Advertencia: Cita actualizada pero WhatsApp falló: " + e.getMessage());
         }

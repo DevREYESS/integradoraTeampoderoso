@@ -36,6 +36,8 @@ public class Cita {
     @Column(nullable = false)
     private LocalDate fechaCita;
 
+    private boolean recordatorioEnviado;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "servicio_id",referencedColumnName = "servicio_id", nullable = false)
     @JsonBackReference
@@ -113,5 +115,10 @@ public class Cita {
     }
 
     public Servicio getServicio() { return servicio; }
+
     public void setServicio(Servicio servicio) { this.servicio = servicio; }
+
+    public boolean isRecordatorioEnviado() { return recordatorioEnviado; }
+
+    public void setRecordatorioEnviado(boolean recordatorioEnviado) { this.recordatorioEnviado = recordatorioEnviado; }
 }
