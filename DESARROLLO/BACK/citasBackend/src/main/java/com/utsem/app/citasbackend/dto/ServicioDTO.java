@@ -4,7 +4,7 @@ public class ServicioDTO {
     private String servicioUuid;
     private String nombreServicio;
     private String duracion;
-    private String prioridad;
+    private String color;
 
     public String getServicioUuid() {
         return servicioUuid;
@@ -30,11 +30,11 @@ public class ServicioDTO {
         this.duracion = duracion;
     }
 
-    public String getPrioridad() {
-        return prioridad;
+    public String getcolor() {
+        return color;
     }
 
-    public void setPrioridad(String prioridad) {
-        this.prioridad = prioridad;
+    public void setcolor(String color) {
+        this.color = color;
     }
 }

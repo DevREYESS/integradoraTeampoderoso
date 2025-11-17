@@ -26,7 +26,7 @@ public class Servicio {
     private int duracion;
 
     @Column(nullable = false)
-    private String prioridad;
+    private String color;
 
     @OneToMany(mappedBy = "servicio", fetch = FetchType.LAZY)
     @JsonIgnore
@@ -71,12 +71,12 @@ public class Servicio {
         this.duracion = duracion;
     }
 
-    public String getPrioridad() {
-        return prioridad;
+    public String getcolor() {
+        return color;
     }
 
-    public void setPrioridad(String prioridad) {
-        this.prioridad = prioridad;
+    public void setcolor(String color) {
+        this.color = color;
     }
 
     public List<Cita> getCitas() { return citas; }

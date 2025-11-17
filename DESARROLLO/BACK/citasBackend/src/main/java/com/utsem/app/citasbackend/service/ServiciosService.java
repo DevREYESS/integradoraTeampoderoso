@@ -58,7 +58,7 @@ public class ServiciosService {
                 .map(servicioExistente -> {
                     servicioExistente.setNombreServicio(servicioActualizado.getNombreServicio());
                     servicioExistente.setDuracion(servicioActualizado.getDuracion());
-                    servicioExistente.setPrioridad(servicioActualizado.getPrioridad());
+                    servicioExistente.setcolor(servicioActualizado.getcolor());
                     return servicioRepository.save(servicioExistente);
                 });
     }
