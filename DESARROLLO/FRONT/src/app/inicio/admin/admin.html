@@ -4,7 +4,7 @@
 
   <div class="sidebar-item active" (click)="toggleSidebar()">
 <div class="logo-placeholder">
-   
+
           </div>
     <span class="text">Menú</span>
   </div>
@@ -35,7 +35,7 @@
 <!-- 🩷 TOOLBAR -->
 <header class="header-container" [class.shrink]="isShrunk">
   <div class="social-info">
-   
+
   </div>
 
   <div class="brand-logo-circle"></div>
@@ -134,17 +134,29 @@
   <table class="servicios-table">
     <thead>
       <tr>
-        <th>Duración</th>
         <th>Nombre del servicio</th>
-        <th>Prioridad</th>
+        <th>Duración</th>
+        <th>Color</th>
         <th></th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let s of getPaginatedServicios()">
-        <td>{{ s.duracion }}</td>
         <td>{{ s.nombreServicio }}</td>
-        <td>{{ s.prioridad }}</td>
+        <td>{{ s.duracion }}</td>
+        <td>
+  <span
+    [style.background]="s.color"
+    style="
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1px solid #ccc;
+    ">
+  </span>
+        </td>
+
         <td>
   <i class="pi pi-trash action-icon delete-icon" title="Eliminar" (click)="abrirModalEliminar(s)"></i>
   <i class="pi pi-pencil action-icon edit-icon" title="Editar" (click)="abrirEditarServicioModal(s)"></i>

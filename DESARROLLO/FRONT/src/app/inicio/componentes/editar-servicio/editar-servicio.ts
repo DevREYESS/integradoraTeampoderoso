@@ -1,15 +1,17 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgModel } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 
 export interface Servicio {
   servicioId?: number;
   servicioUuid?: string;
   nombreServicio: string;
   duracion: number;
-  prioridad: string;
-  estatus?: string;
+  color?:string;
 }
+
 
 @Component({
   selector: 'app-editar-servicio',
@@ -25,35 +27,47 @@ export class EditarServicio {
   @Output() servicioAgregado = new EventEmitter<Servicio>(); // 👈 NUEVO
 
   servicioEditado: Servicio = {} as Servicio;
-  
-  opcionesEstatus: string[] = ['Alta', 'Media', 'Baja'];
+
+
   opcionesDuracion: number[] = [20, 40, 60, 80, 120, 140, 180];
 
   ngOnInit() {
     if (this.modo === 'editar' && this.servicioSeleccionado) {
       this.servicioEditado = { ...this.servicioSeleccionado };
-      if (!this.servicioEditado.estatus) this.servicioEditado.estatus = 'Alta';
+
     } else if (this.modo === 'nuevo') {
       // 🆕 Si es modo nuevo, inicializa un objeto vacío
       this.servicioEditado = {
         nombreServicio: '',
         duracion: 20,
-        prioridad: 'Media',
-        estatus: 'Alta'
+        color: '#ff00ff'
       };
     } else {
       this.cancelar();
     }
   }
 
-  guardar() {
+
+
+
+ guardar(form: NgForm) {
+    if (!form.valid) {
+      form.control.markAllAsTouched();
+      return;
+    }
+
     if (this.modo === 'editar') {
       this.servicioActualizado.emit(this.servicioEditado);
+
     } else {
-      this.servicioAgregado.emit(this.servicioEditado); // 👈 emitir al padre
+      this.servicioAgregado.emit(this.servicioEditado);
+
     }
-    this.close.emit();
+
+    setTimeout(() => this.close.emit(), 1500);
   }
+
+
 
   cancelar() {
     this.close.emit();

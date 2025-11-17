@@ -1,49 +1,72 @@
 <div class="modal-overlay" (click)="cancelar()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    
+
     <div class="modal-header">
       <h3 class="modal-title">{{ modo === 'editar' ? 'Editar servicio' : 'Nuevo servicio' }}</h3>
       <button class="close-button" (click)="cancelar()">&times;</button>
     </div>
 
-    <form class="modal-form" (ngSubmit)="guardar()">
+    <!-- Formulario con validación -->
+    <form class="modal-form" (ngSubmit)="guardar(servicioForm)" #servicioForm="ngForm">
+
+      <!-- Nombre -->
       <div class="form-group">
-        <label>Servicio</label>
-        <input 
-          type="text" 
+        <label>Nombre</label>
+        <input
+          type="text"
           class="custom-select"
           [(ngModel)]="servicioEditado.nombreServicio"
           name="nombreServicio"
-          required>
+          required
+          #nombre="ngModel">
+        <div class="error" *ngIf="nombre.invalid && nombre.touched">
+          El nombre es obligatorio.
+        </div>
       </div>
 
-      <div class="form-group">
-        <label>Estatus</label>
-        <select class="custom-select" [(ngModel)]="servicioEditado.estatus" name="estatus">
-          <option *ngFor="let estatus of opcionesEstatus" [value]="estatus">{{ estatus }}</option>
-        </select>
-      </div>
-
+      <!-- Duración -->
       <div class="form-group">
         <label>Duración</label>
-        <select class="custom-select" [(ngModel)]="servicioEditado.duracion" name="duracion">
-          <option *ngFor="let duracion of opcionesDuracion" [value]="duracion">{{ duracion }} minutos</option>
+        <select
+          class="custom-select"
+          [(ngModel)]="servicioEditado.duracion"
+          name="duracion"
+          required
+          #duracion="ngModel">
+          <option value="" disabled>Selecciona duración</option>
+          <option *ngFor="let d of opcionesDuracion" [value]="d">{{ d }} minutos</option>
         </select>
+        <div class="error" *ngIf="duracion.invalid && duracion.touched">
+          La duración es obligatoria.
+        </div>
       </div>
 
+      <!-- Color -->
       <div class="form-group">
-        <label>Prioridad</label>
-        <select class="custom-select" [(ngModel)]="servicioEditado.prioridad" name="prioridad">
-          <option value="Alta">Alta</option>
-          <option value="Media">Media</option>
-          <option value="Baja">Baja</option>
-        </select>
+        <label>Color</label>
+        <input
+          type="color"
+          class="form-control"
+          [(ngModel)]="servicioEditado.color"
+          name="color"
+          required
+          #color="ngModel"
+          style="width: 60px; padding: 0; border: none; background: none;">
+        <div class="error" *ngIf="color.invalid && color.touched">
+          El color es obligatorio.
+        </div>
       </div>
 
+      <!-- Botones -->
       <div class="modal-actions">
         <button type="button" class="cancel-button" (click)="cancelar()">CANCELAR</button>
-        <button type="submit" class="save-button">{{ modo === 'editar' ? 'GUARDAR' : 'CREAR' }}</button>
+        <button type="submit" class="save-button" [disabled]="servicioForm.invalid">
+          {{ modo === 'editar' ? 'GUARDAR' : 'CREAR' }}
+        </button>
       </div>
+
     </form>
+
   </div>
+
 </div>
