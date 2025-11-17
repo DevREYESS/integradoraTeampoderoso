@@ -6,8 +6,7 @@ export interface Servicio {
   servicioUuid?: string;
   nombreServicio: string;
   duracion: number; // debe ser número, tu backend usa "int"
-  prioridad: string;
-  estatus?: string; // solo lo usa el front
+
 }
 
 @Injectable({

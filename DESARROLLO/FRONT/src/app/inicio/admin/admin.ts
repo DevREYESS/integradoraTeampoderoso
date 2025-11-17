@@ -7,12 +7,11 @@ import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { NuevaCita } from '../nueva-cita/nueva-cita';
 export interface Servicio {
-  servicioId?: number; // opcional porque al crear aún no existe
+  servicioId?: number;
   servicioUuid?: string;
   nombreServicio: string;
-  duracion: number; // debe ser número, tu backend usa "int"
-  prioridad: string;
-  estatus?: string; // solo lo usa el front
+  duracion: number;
+  color?:string;
 }
 
 @Component({
@@ -34,7 +33,7 @@ totalPages: number = 1;
 
   isShrunk = false;
   isCollapsed = false;
-   
+
   filtrosServicios: any = {};
 servicios: any[] = [];
 
@@ -48,9 +47,9 @@ toggleSidebar() {
   }
 
   weekData: any[] = [];
-  allDaysData: any[] = []; 
+  allDaysData: any[] = [];
   fixedTimes: string[] = ["8:00", "8:20", "8:40", "9:00", "9:20", "9:40", "10:00", "10:20", "10:40", "11:00", "11:20", "11:40", "12:00", "12:20", "12:40", "13:00"];
-  
+
   currentWeekIndex: number = 0;
   daysPerWeek: number = 7;
 
@@ -228,7 +227,7 @@ cargarCitas() {
     days.push({
       name: dayNames[d.getDay()],
       date: d.toISOString().split('T')[0],
-      schedules: [] 
+      schedules: []
     });
   }
 
@@ -236,7 +235,7 @@ cargarCitas() {
 }
 
 
-selectedSection: string = 'inicio'; 
+selectedSection: string = 'inicio';
 
 showSection(section: string) {
   this.selectedSection = section;
@@ -332,7 +331,7 @@ confirmarEliminarServicio() {
   this.consultaService.deleteServicio(this.servicioAEliminar.servicioUuid).subscribe({
     next: () => {
       console.log('🗑️ Servicio eliminado');
-   
+
       this.showDeleteModal = false;
       this.servicioAEliminar = null;
       this.consultaService.servicios(this.filtrosServicios).subscribe({
