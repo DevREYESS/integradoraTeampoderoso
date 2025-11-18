@@ -1,11 +1,12 @@
-<div class="modal-backdrop">
-  <div class="modal-content">
-    <div class="modal-header">
-      <h1 class="modal-title">Citas</h1>
+<div class = "container-fluid h-100">
+  <div>
+      <!--
+    <div>
       <button class="close-button" (click)="closeModal()">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
+      -->
 
     <div class="filter-search-container">
       <div class="filter-buttons">
@@ -16,26 +17,26 @@
       </div>
 
       <div class="search-input-container">
-       
 
-        <button 
-            (click)="filterBy='nombre'; searchTerm=''; buscar()" 
-            class="search-button" 
+
+        <button
+            (click)="filterBy='nombre'; searchTerm=''; buscar()"
+            class="search-button"
             [class.active]="filterBy==='nombre'">
           Nombre
         </button>
-        <button 
-            (click)="filterBy='numero'; searchTerm=''; buscar()" 
-            class="search-button" 
+        <button
+            (click)="filterBy='numero'; searchTerm=''; buscar()"
+            class="search-button"
             [class.active]="filterBy==='numero'">
           Número
         </button>
- <input 
-  type="text" 
-  class="p-inputtext p-inputtext-rounded custom-input" 
-  placeholder="Escribe para buscar..." 
-  [(ngModel)]="searchTerm" 
-  (input)="onSearchInput($event)" 
+ <input
+  type="text"
+  class="p-inputtext p-inputtext-rounded custom-input"
+  placeholder="Escribe para buscar..."
+  [(ngModel)]="searchTerm"
+  (input)="onSearchInput($event)"
   (keydown.enter)="buscar()" />
 
             <button class="search-icon" (click)="buscar()">🔍</button>
@@ -60,7 +61,7 @@
 
           <div class="status-details">
             <p class="date">{{ cita.fecha }}</p>
-            <p>Tipo de servicio: {{ cita.tipoServicio }}</p>
+            <p>Tipo de servicio: {{ cita.nombreServicio }}</p>
             <p class="status" [ngClass]="cita.estatusClass">Estatus cita: {{ cita.estatus }}</p>
           </div>
 
@@ -90,9 +91,9 @@
       <button class="custom-modal-close-btn-small" (click)="cerrarFiltroMes()">×</button>
     </div>
     <div class="grid-meses-small">
-      <button 
-        *ngFor="let mes of meses" 
-        (click)="seleccionarMes(mes)" 
+      <button
+        *ngFor="let mes of meses"
+        (click)="seleccionarMes(mes)"
         class="boton-mes-small"
         [class.active]="mesSeleccionado === mes">
         {{ mes | titlecase }}
@@ -109,9 +110,9 @@
       <button class="custom-modal-close-btn-small" (click)="cerrarFiltroDia()">×</button>
     </div>
     <div class="grid-dias-small">
-      <button 
-        *ngFor="let dia of dias" 
-        (click)="seleccionarDia(dia)" 
+      <button
+        *ngFor="let dia of dias"
+        (click)="seleccionarDia(dia)"
         class="boton-dia-small"
         [class.active]="diaSeleccionado === dia">
         {{ dia }}
@@ -128,9 +129,9 @@
       <button class="custom-modal-close-btn-small" (click)="cerrarFiltroHora()">×</button>
     </div>
     <div class="grid-horas-small">
-      <button 
-  *ngFor="let hora of horas" 
-  (click)="seleccionarHora(hora)" 
+      <button
+  *ngFor="let hora of horas"
+  (click)="seleccionarHora(hora)"
   class="boton-hora-small"
   [class.active]="horaSeleccionada === hora">
   {{ hora }} <!-- Si quieres, puedes mostrar también la hora24: convertirHoraA24h(hora) -->

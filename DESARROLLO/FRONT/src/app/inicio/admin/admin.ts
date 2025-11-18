@@ -65,7 +65,6 @@ toggleSidebar() {
     this.servicios = response;
     this.calcularTotalPaginas();
     this.cd.detectChanges();
-    console.log('Servicios cargados:', this.servicios);
   },
   error: (err) => {
     console.error('Ocurrió un error al consultar servicios =>', err.message);
@@ -286,7 +285,6 @@ abrirAgregarServicioModal() {
     this.servicios = response;
     this.calcularTotalPaginas();
     this.cd.detectChanges();
-    console.log('Servicios cargados:', this.servicios);
   },
   error: (err) => {
     console.error('Ocurrió un error al consultar servicios =>', err.message);
@@ -339,7 +337,6 @@ confirmarEliminarServicio() {
     this.servicios = response;
     this.calcularTotalPaginas();
     this.cd.detectChanges();
-    console.log('Servicios cargados:', this.servicios);
   },
   error: (err) => {
     console.error('Ocurrió un error al consultar servicios =>', err.message);

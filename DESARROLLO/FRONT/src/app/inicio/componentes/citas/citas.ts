@@ -35,17 +35,17 @@ export class Citas {
 
   getEstatusInfo(estatus: string) {
     switch (estatus) {
-      case 'A': return { text: 'Activa', class: 'active-text' };     
-      case 'C': return { text: 'Cancelada', class: 'error-text' };   
-      case 'F': return { text: 'Finalizada', class: 'finished-text' }; 
-      default:  return { text: 'Desconocido', class: 'unknown-text' }; 
+      case 'A': return { text: 'Activa', class: 'active-text' };
+      case 'C': return { text: 'Cancelada', class: 'error-text' };
+      case 'F': return { text: 'Finalizada', class: 'finished-text' };
+      default:  return { text: 'Desconocido', class: 'unknown-text' };
     }
   }
 
   obtenerCitas(): void {
     this.loading = true;
-    this.citas = []; 
-    this.cd.detectChanges(); 
+    this.citas = [];
+    this.cd.detectChanges();
 
     this.consultaService.getCitas().subscribe({
       next: (data: any) => {
@@ -66,12 +66,13 @@ export class Citas {
             duracion: this.calcularDuracion(item.horaInicio, item.horaFin),
             inicio: horaInicioFormateada,
             horaFiltrado: hora24,
-            fin: this.formatearHora(item.horaFin),
+            fin: this.formatearHora(item.horaFin) ?? '00:00',
             fecha: this.formatearFecha(item.fechaCita),
             telefono: item.telefono ?? '',
             estatus: estatusInfo.text,
             estatusClass: estatusInfo.class,
-            uuid: item.uuid
+            uuid: item.uuid,
+            nombreServicio: item.nombreServicio
           };
         });
 
@@ -83,12 +84,12 @@ export class Citas {
         });
 
         this.loading = false;
-        this.cd.detectChanges(); 
+        this.cd.detectChanges();
       },
       error: (err) => {
         console.error('Error al obtener citas:', err);
         this.loading = false;
-        this.cd.detectChanges(); 
+        this.cd.detectChanges();
       }
     });
   }
@@ -105,7 +106,7 @@ export class Citas {
   formatearFecha(fecha: string): string {
     if (!fecha) return '';
     const [year, month, day] = fecha.split('-').map(Number);
-    const fechaObj = new Date(year, month - 1, day); 
+    const fechaObj = new Date(year, month - 1, day);
     const opciones: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
     return fechaObj.toLocaleDateString('es-MX', opciones);
   }
@@ -114,7 +115,7 @@ export class Citas {
     if (!horaInicio || !horaFin) return '';
     const [hiH, hiM] = horaInicio.split(':').map(Number);
     const [hfH, hfM] = horaFin.split(':').map(Number);
-    const inicio = hiH * 60 + hiM; 
+    const inicio = hiH * 60 + hiM;
     const fin = hfH * 60 + hfM;
     const duracion = fin - inicio;
     return duracion > 0 ? `${duracion} min` : '';
@@ -131,12 +132,12 @@ export class Citas {
     console.log(`Abriendo campo para comentario para: ${cita.nombre}`);
   }
 
-  editarCitaSeleccionada: any = null; 
-  showEditarModal: boolean = false;   
+  editarCitaSeleccionada: any = null;
+  showEditarModal: boolean = false;
 
   editarCita(cita: any) {
-    this.editarCitaSeleccionada = { ...cita }; 
-    this.showEditarModal = true;               
+    this.editarCitaSeleccionada = { ...cita };
+    this.showEditarModal = true;
   }
 
   cerrarEditarModal() {
@@ -264,7 +265,7 @@ private convertirFechaISO(fechaStr: string): string {
   }
 }
 
-  
+
  onSearchInput(event?: any) {
   if (!this.searchTerm) {
     this.citas = [...this.citasOriginal];

@@ -1,0 +1,58 @@
+<div class="flex h-screen bg-gradient-to-br from-pink-50 to-rose-50">
+  <!-- Sidebar -->
+  <aside
+    [class]="sidebarOpen ? 'w-64' : 'w-22 md:w-22'"
+    class="bg-gradient-to-b from-fuchsia-300 to-pink-400 text-white transition-all duration-300 ease-in-out overflow-hidden flex flex-col shadow-2xl"
+  >
+    <!-- Logo -->
+    <div class="p-6 flex items-center justify-between border-b border-pink-100">
+      <div class="flex items-center space-x-2 overflow-hidden">
+        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center flex-shrink-0">
+          <img src="assets/imagenes/logo.jpg" alt="Médica Isor" class="rounded-5">
+        </div>
+        <span
+          [ngClass]="sidebarOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'"
+          class="text-xl font-bold whitespace-nowrap transition-all duration-300 ease-in-out">
+      Médica Isor
+    </span>
+      </div>
+    </div>
+
+    <!-- Menu Items -->
+    <nav class="flex-1 p-4 space-y-2">
+      <header class="mb-3">
+        <button
+          (click)="toggleSidebar()"
+          class="p-2 rounded-lg bg-white hover:bg-pink-50 text-pink-600 shadow-md transition-colors duration-200"
+          aria-label="Toggle sidebar">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16">
+            </path>
+          </svg>
+        </button>
+      </header>
+      <a
+        *ngFor="let item of menuItems"
+        [routerLink]="item.route"
+        routerLinkActive="bg-white text-pink-600 shadow-lg transform scale-105"
+        [routerLinkActiveOptions]="{ exact: item.id === 'dashboard' }"
+        (click)="setActiveMenu(item.id)"
+        class="w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 text-pink-100 hover:bg-pink-500 hover:text-white cursor-pointer"
+      >
+        <span class="text-xl flex-shrink-0">{{ item.icon }}</span>
+        <span *ngIf="sidebarOpen" class="font-medium">{{ item.name }}</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col overflow-hidden p-3 bg-zinc-100">
+    <div class="card-body rounded-4 h-auto w-auto" >
+      <router-outlet></router-outlet>
+    </div>
+</div>
+</div>
