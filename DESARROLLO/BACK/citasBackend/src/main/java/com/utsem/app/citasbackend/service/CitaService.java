@@ -9,10 +9,7 @@ import com.utsem.app.citasbackend.repository.CitaRepository;
 import com.utsem.app.citasbackend.repository.ServicioRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -41,10 +38,24 @@ public class CitaService {
         this.whatsAppService = whatsAppService;
     }
 
-    public List<Cita> findCita(CitaDTO citaDTO) {
+    public List<CitaResponseDTO> findCita(CitaDTO citaDTO) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Cita> query = cb.createQuery(Cita.class);
+        CriteriaQuery<CitaResponseDTO> query = cb.createQuery(CitaResponseDTO.class);
         Root<Cita> root = query.from(Cita.class);
+
+        // JOIN con Servicio
+        Join<Cita, Servicio> servicioJoin = root.join("servicio", JoinType.LEFT);
+
+        // Proyección al DTO - el orden debe coincidir con el constructor
+        query.select(cb.construct(
+                CitaResponseDTO.class,
+                cb.literal("Búsqueda exitosa"), // o puedes poner otro mensaje
+                root.get("nombrePaciente"),
+                root.get("fechaCita"),
+                root.get("horaInicio"),
+                servicioJoin.get("nombreServicio"),
+                servicioJoin.get("servicioId")
+        ));
 
         Predicate predicate = cb.conjunction();
 
@@ -64,14 +75,17 @@ public class CitaService {
             predicate = cb.and(predicate, cb.equal(root.get("horaInicio"), citaDTO.getHoraInicio()));
         }
 
+        // Filtro por servicioId
+        if (citaDTO.getServicioId() != null) {
+            predicate = cb.and(predicate, cb.equal(servicioJoin.get("id"), citaDTO.getServicioId()));
+        }
+
         // Manejo de fechas
         if (citaDTO.getFechaInicio() != null && citaDTO.getFechaFin() != null) {
-            // Filtro por rango de fechas
             predicate = cb.and(predicate,
                     cb.between(root.get("fechaCita"), citaDTO.getFechaInicio(), citaDTO.getFechaFin())
             );
         } else if (citaDTO.getFechaCita() != null) {
-            // Mantiene la lógica existente para una fecha específica
             if (citaDTO.getSoloMes() != null && citaDTO.getSoloMes()) {
                 predicate = cb.and(predicate, cb.equal(
                         cb.function("MONTH", Integer.class, root.get("fechaCita")),
@@ -196,7 +210,8 @@ public class CitaService {
                 cita.getNombrePaciente(),
                 cita.getFechaCita(),
                 cita.getHoraInicio(),
-                cita.getServicio().getNombreServicio()
+                cita.getServicio().getNombreServicio(),
+                cita.getServicio().getServicioId()
         );
     }
 

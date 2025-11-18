@@ -19,7 +19,7 @@ public class CitaController {
     }
 
     @PostMapping("/sCita")
-    public List<Cita> consultarCita(@RequestBody CitaDTO citaDTO) {
+    public List<CitaResponseDTO> consultarCita(@RequestBody CitaDTO citaDTO) {
         return citaService.findCita(citaDTO);
     }
 
