@@ -420,8 +420,8 @@ guarda(fecha: string, horaInicio: string) {
         estatus: "A",
         nombrePaciente: res.nombrePaciente,
         fechaCita: res.fechaCita,
-        horaInicio: res.horaIncio,
-        horaFin: this.calcularHoraFin(res.horaIncio),
+        horaInicio: res.horaInicio,
+        horaFin: this.calcularHoraFin(res.horaInicio),
         nombreServicio: res.nombreServicio || '',
       };
 
