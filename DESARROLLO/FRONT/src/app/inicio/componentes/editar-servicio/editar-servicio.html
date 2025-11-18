@@ -1,4 +1,9 @@
+<!-- ALERTA -->
+<div *ngIf="alertaVisible" class="alerta-toast">
+  {{ alertaMensaje }}
+</div>
 <div class="modal-overlay" (click)="cancelar()">
+
   <div class="modal-content" (click)="$event.stopPropagation()">
 
     <div class="modal-header">

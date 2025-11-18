@@ -79,7 +79,7 @@ fixedTimes: string[] = []; // ya existe, se generará dinámicamente
   private consultaService: Services,
   private cdRef: ChangeDetectorRef,private renderer: Renderer2){
    this.formulario = this.formBuilder.group({
-      nombre: ['', []],
+      nombre:  ['', [Validators.pattern(/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/)  ]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       serviciodes: ['', []],
       servicio: ['', []],
@@ -369,7 +369,20 @@ isLastWeek: boolean = false;
 cerrarModal() {
   this.showModal2 = false;
 }
+soloLetras(event: KeyboardEvent) {
+  const char = event.key;
 
+  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+
+  // Permitir teclas especiales como backspace, delete, arrows
+  if (['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(char)) {
+    return;
+  }
+
+  if (!regex.test(char)) {
+    event.preventDefault();
+  }
+}
 
 showErrorModal: boolean = false;
 errorMessage: string = "";
@@ -424,9 +437,9 @@ guarda(fecha: string, horaInicio: string) {
         horaFin: this.calcularHoraFin(res.horaInicio),
         nombreServicio: res.nombreServicio || '',
       };
-
-      this.showModal2 = true;
       this.limpiarFormulario();
+      this.showModal2 = true;
+
       this.cdRef.detectChanges();
     },
     error: (err) => {
@@ -437,10 +450,10 @@ guarda(fecha: string, horaInicio: string) {
       } else {
         this.errorMessage = "Ocurrió un error al guardar la cita. Intenta de nuevo.";
       }
-
+      this.limpiarFormulario();
       this.showErrorModal = true;
       this.showModal2 = false;
-      this.limpiarFormulario();
+
       this.cdRef.detectChanges();
     }
   });
@@ -512,6 +525,7 @@ next() {
 }
 
 prev() {
+        const servicioCtrl = this.formulario.get('servicio');
   if (this.activeIndex > 0) {
     this.activeIndex--;
   }
@@ -557,10 +571,11 @@ this.activeIndex=0;
 }
 
 regresar(){
+  this.limpiarFormulario();
 this.visiblehome =true;
 this.visiblehome2=false;
 this.regresarf = false;
-this.limpiarFormulario();
+
 }
 
 
@@ -625,12 +640,14 @@ this.limpiarFormulario();
 
   }
 
-  closeConsultaModal() {
-    this.showConsultaModal = false;
-    this.consultaResult = false;
-    this.formulario2.get('telefono')?.setValue('');
-    this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
-  }
+
+closeConsultaModal() {
+  this.showConsultaModal = false;
+  this.consultaResult = false;
+  this.formulario2.get('telefono')?.reset();
+  this.renderer.removeClass(document.body, 'modal-open-scroll-blocker');
+}
+
 
  closemodalmeses() {
     this.showModal = false;

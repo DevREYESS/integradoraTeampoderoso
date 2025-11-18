@@ -20,6 +20,8 @@ export interface Servicio {
   styleUrl: './editar-servicio.css'
 })
 export class EditarServicio {
+
+
   @Input() servicioSeleccionado: Servicio | null = null;
   @Input() modo: 'editar' | 'nuevo' = 'editar'; // 👈 NUEVO
   @Output() close = new EventEmitter<void>();
@@ -30,6 +32,10 @@ export class EditarServicio {
 
 
   opcionesDuracion: number[] = [20, 40, 60, 80, 120, 140, 180];
+
+// Variables para controlar la alerta
+alertaVisible = false;
+alertaMensaje = '';
 
   ngOnInit() {
     if (this.modo === 'editar' && this.servicioSeleccionado) {
@@ -47,25 +53,33 @@ export class EditarServicio {
     }
   }
 
+  mostrarAlerta(mensaje: string) {
+    this.alertaMensaje = mensaje;
+    this.alertaVisible = true;
 
-
-
- guardar(form: NgForm) {
-    if (!form.valid) {
-      form.control.markAllAsTouched();
-      return;
-    }
-
-    if (this.modo === 'editar') {
-      this.servicioActualizado.emit(this.servicioEditado);
-
-    } else {
-      this.servicioAgregado.emit(this.servicioEditado);
-
-    }
-
-    setTimeout(() => this.close.emit(), 1500);
+    setTimeout(() => {
+      this.alertaVisible = false;
+    }, 3000); // 3 segundos
   }
+
+guardar(form: NgForm) {
+  if (!form.valid) {
+    form.control.markAllAsTouched();
+    return;
+  }
+
+  if (this.modo === 'editar') {
+    this.servicioActualizado.emit(this.servicioEditado);
+    this.mostrarAlerta('Servicio actualizado correctamente'); // ✅ Aquí
+  } else {
+    this.servicioAgregado.emit(this.servicioEditado);
+    this.mostrarAlerta('Servicio agregado correctamente'); // ✅ Aquí
+  }
+
+  // Cierra el modal después de 1.5s
+  setTimeout(() => this.close.emit(), 1500);
+}
+
 
 
 

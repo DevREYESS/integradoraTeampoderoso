@@ -35,7 +35,7 @@
 }
 
 .logo-placeholder {
-  width: 30px; 
+  width: 30px;
   height: 30px;
   border-radius: 50%;
       background-image: url('../../../../assets/imagenes/logo.jpg');
@@ -81,7 +81,7 @@ label {
   font-size: 1em;
   line-height: 1.5;
   color: #555; /* Color de texto del select */
-  
+
   background-color: #fff;
   border: 1px solid #a8d5e5; /* Color de borde del select */
   border-radius: 20px;
@@ -134,3 +134,29 @@ label {
 .cancel-button:hover {
     background-color: #e2a5aa;
 }
+.alerta-toast {
+  position: fixed;
+  top: 10px; /* un poco de espacio desde arriba */
+  left: 50%; /* centrado horizontal */
+  transform: translateX(-50%);
+  max-width: 400px; /* ancho máximo razonable */
+  width: auto;
+  padding: 10px 20px;
+  background-color: rgba(76, 175, 80, 0.85); /* verde con algo de transparencia */
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  animation: fadeInOut 3s forwards;
+  text-align: center;
+  pointer-events: none; /* para que no interfiera con clicks debajo */
+}
+
+/* Animación suave para aparecer y desaparecer */
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0;

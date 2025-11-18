@@ -70,7 +70,7 @@
             <span class="p-inputgroup-addon">
               <input type="text" formControlName="nombre" icon="pi pi-user"
                 class="p-inputtext p-inputtext-rounded custom-input" pInputText required
-                (keydown)="noEspacioInicial($event)" />
+                (keydown)="noEspacioInicial($event)"    (keypress)="soloLetras($event)"/>
             </span>
           </div>
           <div style="margin-left: 10px;">
@@ -146,7 +146,7 @@
       formulario.get('servicio')?.touched &&
       formulario.get('servicio')?.hasError('required')
     "
-    class="error-msg" 
+    class="error-msg"
   >
     Este campo es requerido.
   </small>
@@ -154,7 +154,7 @@
 
 </div>
 
-      
+
         <div class="descripcion-container">
           <label for="descripcion-cita">Descripción: (Opcional)</label>
           <textarea id="descripcion-cita" rows="2" formControlName="descripcionCita" placeholder=""
@@ -242,11 +242,11 @@
             <div class="day-name">{{ day.name }}</div>
             <div class="day-date">{{ day.date }}</div>
 
-            <div *ngFor="let schedule of day.schedules" class="schedule-slot" 
-                 [ngClass]="{ 
+            <div *ngFor="let schedule of day.schedules" class="schedule-slot"
+                 [ngClass]="{
                      'agendado': schedule.status === 'Agendado',
                      'no-disponible': schedule.status === 'No disponible',
-                     'disponible': schedule.status === 'Disponible' 
+                     'disponible': schedule.status === 'Disponible'
                  }">
                 <span>{{ schedule.time }}</span>
                 <button *ngIf="schedule.status === 'Disponible'" (click)="guarda(day.date, schedule.time)">Agendar</button>
@@ -265,12 +265,12 @@
         <button class="pestana ano">{{ currentAno }}</button>
        <button class="pestana mes" (click)="showModal = true">{{ selectedMonthName }}</button>
 
-         
+
         <!--<button class="pestana dia">DIA</button>-->
 
       </div>
       <div class="selector-horario">Seleccione el horario</div>
-      
+
 
       <div class="contenedor-calendario">
 
@@ -309,11 +309,11 @@
 
               <ng-container *ngIf="day.schedules && day.schedules.length > 0">
                 <ng-container *ngIf="getScheduleSlot(day.schedules, time) as slot">
-                  <div class="celda" [ngClass]="{ 
+                  <div class="celda" [ngClass]="{
                             'no-disponible-suave': slot.status !== 'Disponible'
                         }">
 
-                   <button *ngIf="slot.status === 'Disponible'" class="agendar" 
+                   <button *ngIf="slot.status === 'Disponible'" class="agendar"
         (click)="abrirConfirmacion(day.date, time)">
   Agendar
 </button>
@@ -438,14 +438,14 @@
 
 
   <!--<div *ngIf="showConfirmationModal">
-    <div class="modal-backdrop" (click)="regresar2()"></div> 
+    <div class="modal-backdrop" (click)="regresar2()"></div>
 
     <div class="custom-modal-container">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
-            <i class="pi pi-check custom-modal-icon-success"></i> 
+            <i class="pi pi-check custom-modal-icon-success"></i>
             <div class="custom-modal-title">Cita agendada</div>
         </div>
-        
+
         <div class="custom-modal-message">
             Tu cita se ha agendado correctamente.
         </div>
@@ -453,9 +453,9 @@
         <button class="custom-modal-button" (click)="regresar2()">
             Aceptar
         </button>
-        
+
         <button class="custom-modal-close-btn" (click)="regresar2()">
-            &times; 
+            &times;
         </button>
     </div>
 </div>-->
