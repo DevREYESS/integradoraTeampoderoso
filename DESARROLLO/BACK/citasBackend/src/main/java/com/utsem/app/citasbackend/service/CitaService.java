@@ -53,6 +53,7 @@ public class CitaService {
                 root.get("nombrePaciente"),
                 root.get("fechaCita"),
                 root.get("horaInicio"),
+                root.get("horaFin"),
                 servicioJoin.get("nombreServicio"),
                 servicioJoin.get("servicioId")
         ));
@@ -210,6 +211,7 @@ public class CitaService {
                 cita.getNombrePaciente(),
                 cita.getFechaCita(),
                 cita.getHoraInicio(),
+                cita.getHoraFin(),
                 cita.getServicio().getNombreServicio(),
                 cita.getServicio().getServicioId()
         );
