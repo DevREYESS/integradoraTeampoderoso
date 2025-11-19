@@ -49,7 +49,9 @@ public class CitaService {
         // Proyección al DTO - el orden debe coincidir con el constructor
         query.select(cb.construct(
                 CitaResponseDTO.class,
-                cb.literal("Búsqueda exitosa"), // o puedes poner otro mensaje
+                cb.literal("Búsqueda exitosa"),
+                root.get("telefono"),
+                root.get("estatus"),
                 root.get("nombrePaciente"),
                 root.get("fechaCita"),
                 root.get("horaInicio"),
@@ -208,6 +210,8 @@ public class CitaService {
     private CitaResponseDTO construirRespuesta(Cita cita, String mensaje) {
         return new CitaResponseDTO(
                 mensaje,
+                cita.getTelefono(),
+                cita.getEstatus(),
                 cita.getNombrePaciente(),
                 cita.getFechaCita(),
                 cita.getHoraInicio(),
