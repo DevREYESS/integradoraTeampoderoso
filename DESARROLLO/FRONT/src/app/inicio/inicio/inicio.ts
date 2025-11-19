@@ -64,8 +64,8 @@ mostrarcard13 = false;
 
  // Agregar estas propiedades a la clase Inicio
 private horarioDefault = {
-  horaInicio: '10:00',
-  horaFin: '17:00'
+  horaInicio: '08:00',
+  horaFin: '18:20'
 };
 
 // Reemplazar las propiedades existentes relacionadas con datos estáticos
@@ -169,6 +169,7 @@ private consultarDatosSemana(fechaInicio: Date, fechaFin: Date): void {
     this.consultaService.citasPorRango(rangoFechas).toPromise()
   ]).then(([horarios, citasAgendadas]) => {
     this.generarDatosSemana(fechaInicio, fechaFin, horarios || [], citasAgendadas || []);
+    this.cdRef.detectChanges();
   }).catch(error => {
     console.error('Error al consultar datos de la semana:', error);
     // En caso de error, generar con datos por defecto
@@ -439,7 +440,7 @@ guarda(fecha: string, horaInicio: string) {
       };
       this.limpiarFormulario();
       this.showModal2 = true;
-
+this.telefonoFormateado = " ";
       this.cdRef.detectChanges();
     },
     error: (err) => {

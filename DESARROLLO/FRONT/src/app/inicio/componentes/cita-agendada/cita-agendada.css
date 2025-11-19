@@ -149,3 +149,26 @@
     font-weight: bold;
     cursor: pointer;
 }
+
+
+
+.brand-logo-circle {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-color: #f7a8ca;
+  display: flex;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  justify-content: center;
+  align-items: center;
+  background-image: url('../../../../assets/imagenes/logo.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header-container.shrink .brand-logo-circle {
+  width: 50px;
+  height: 50px;
+}
