@@ -13,7 +13,8 @@ export interface Servicio {
   providedIn: 'root'
 })
 export class Services {
-    private apiUrlBase: string = 'http://localhost:8010'; //! Esta ruta sera cambiada una vez que suba al hosting
+    //private apiUrlBase: string = 'http://localhost:8010'; //! Ruta para local
+    private apiUrlBase: string = 'http://vps-5464962-x.dattaweb.com:8080'; //! Ruta para producción
 
   constructor(private http: HttpClient) { }
 
