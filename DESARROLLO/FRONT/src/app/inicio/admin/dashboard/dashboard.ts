@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
+import Swal from 'sweetalert2';
+import {Tooltip} from 'primeng/tooltip';
 
 interface MenuItem {
   id: string;
@@ -12,7 +14,7 @@ interface MenuItem {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, Tooltip],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
@@ -22,6 +24,9 @@ export class Dashboard {
   showUserMenu = false;
 
   citas: boolean = false;
+
+  constructor(private router: Router) {
+  }
 
   menuItems: MenuItem[] = [
     { id: 'citas', name: 'Citas', icon: 'pi pi-calendar', route: 'citas' },
@@ -39,5 +44,23 @@ export class Dashboard {
 
   toggleUserMenu(): void {
     this.showUserMenu = !this.showUserMenu;
+  }
+
+  logout() {
+    Swal.fire({
+      title: '¿Deseas cerrar sesión?',
+      text: 'Tu sesión actual se cerrará.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, salir',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result: any) => {
+      if (result.isConfirmed) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/']); // o donde tengas tu ruta de login
+      }
+    });
   }
 }
