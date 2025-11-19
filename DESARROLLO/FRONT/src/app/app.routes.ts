@@ -6,6 +6,7 @@ import { authGuard } from './guards/auth-guard';
 import { NuevaCita } from './inicio/nueva-cita/nueva-cita';
 import { Dashboard} from './inicio/admin/dashboard/dashboard';
 import { Citas } from './inicio/componentes/citas/citas';
+import { Servicios } from './inicio/componentes/servicios/servicios';
 
 export const routes: Routes = [
  { path: '', component: Inicio },
@@ -16,7 +17,8 @@ export const routes: Routes = [
     component: Dashboard,
     children: [
       { path: 'citas', component: Citas },
-
+      { path: 'servicios', component: Servicios },
+      { path: '', redirectTo: 'citas', pathMatch: 'full' },
     ]
   },
 { path: 'nuevacita', component: NuevaCita },

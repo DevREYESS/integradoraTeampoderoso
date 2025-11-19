@@ -1,0 +1,91 @@
+<div class="rounded-4 p-4">
+  <div class="acciones-servicios">
+    <button class="font-bold" (click)="abrirAgregarServicioModal()">
+      <i class="pi pi-plus"></i> Nuevo Servicio
+    </button>
+  </div>
+
+  <div class="mt-4 max-h-[90vw] overflow-auto border border-gray-200 rounded-xl">
+    <table class="w-full bg-white text-sm">
+      <thead class="bg-gray-100 text-gray-700 uppercase text-xs font-semibold sticky top-0 z-10">
+      <tr>
+        <th class="px-4 py-2 text-left">Nombre del servicio</th>
+        <th class="px-4 py-2 text-left">Duración</th>
+        <th class="px-4 py-2 text-left">Color</th>
+        <th class="px-4 py-2 text-center">Acciones</th>
+      </tr>
+      </thead>
+
+      <tbody class="divide-y divide-gray-200">
+      <tr
+        *ngFor="let s of getPaginatedServicios()"
+        class="hover:bg-gray-50 transition-colors"
+      >
+        <td class="px-4 py-2 text-gray-800">
+          {{ s.nombreServicio }}
+        </td>
+
+        <td class="px-4 py-2 text-gray-700">
+          {{ s.duracion }}
+        </td>
+
+        <td class="px-4 py-2">
+          <span
+            [style.background]="s.color"
+            class="w-4 h-4 rounded-full border border-gray-300 inline-block"
+          ></span>
+        </td>
+
+        <td class="px-4 py-2 flex items-center justify-center gap-3">
+          <i
+            class="pi pi-trash text-red-500 hover:text-red-600 cursor-pointer text-base transition"
+            (click)="abrirModalEliminar(s)"
+            title="Eliminar"
+          ></i>
+
+          <i
+            class="pi pi-pencil text-blue-500 hover:text-blue-600 cursor-pointer text-base transition"
+            (click)="abrirEditarServicioModal(s)"
+            title="Editar"
+          ></i>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 🩷 PAGINADO -->
+  <div class="pagination-container" *ngIf="totalPages > 1">
+    <button (click)="prevPage()" [disabled]="currentPage === 1"><</button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">></button>
+  </div>
+</div>
+
+<app-editar-servicio
+  *ngIf="showEditarServicioModal"
+  [servicioSeleccionado]="servicioAEditar"
+  [modo]="modoModal"
+  (close)="cerrarEditarServicioModal()"
+  (servicioActualizado)="manejarServicioActualizado($event)"
+  (servicioAgregado)="manejarServicioAgregado($event)">
+</app-editar-servicio>
+
+<div *ngIf="showDeleteModal">
+  <div class="modal-backdrop-small2" (click)="cancelarEliminacion()"></div>
+
+  <div class="custom-modal-container-small2" (click)="$event.stopPropagation()">
+    <div class="modal-header-small">Confirmar eliminación</div>
+
+    <div class="custom-modal-message">
+      ¿Deseas eliminar el servicio <b>{{ servicioAEliminar?.nombreServicio }}</b>?
+    </div>
+
+    <div class="custom-modal-actions">
+      <button class="custom-modal-button danger" (click)="confirmarEliminarServicio()">Sí, eliminar</button>
+      <button class="custom-modal-button" (click)="cancelarEliminacion()">No</button>
+    </div>
+
+    <button class="custom-modal-close-btn" (click)="cancelarEliminacion()">&times;</button>
+  </div>
+</div>

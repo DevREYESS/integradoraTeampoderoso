@@ -24,9 +24,9 @@ export class Dashboard {
   citas: boolean = false;
 
   menuItems: MenuItem[] = [
-    { id: 'citas', name: 'Citas', icon: '📊', route: 'citas' },
-    { id: 'servicios', name: 'Servicios', icon: '📈', route: 'servicios' },
-    { id: 'horarios', name: 'Horarios', icon: '👥', route: '/dashboard/users' },
+    { id: 'citas', name: 'Citas', icon: 'pi pi-calendar', route: 'citas' },
+    { id: 'servicios', name: 'Servicios', icon: 'pi pi-bell', route: 'servicios' },
+    { id: 'horarios', name: 'Horarios', icon: 'pi pi-clock', route: '/dashboard/users' },
   ];
 
   toggleSidebar(): void {
