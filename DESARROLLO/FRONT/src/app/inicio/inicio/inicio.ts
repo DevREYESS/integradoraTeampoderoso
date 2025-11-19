@@ -423,7 +423,8 @@ guarda(fecha: string, horaInicio: string) {
     servicioId: this.formulario.get('servicio')?.value || "",
     telefono: this.formulario.get('telefono')?.value || ""
   };
-
+ 
+  console.log(datos,'gshjdk')
   console.log("Datos a enviar:", datos);
 
   this.consultaService.guardarcita(datos).subscribe({
@@ -435,7 +436,7 @@ guarda(fecha: string, horaInicio: string) {
         nombrePaciente: res.nombrePaciente,
         fechaCita: res.fechaCita,
         horaInicio: res.horaInicio,
-        horaFin: this.calcularHoraFin(res.horaInicio),
+        horaFin: res.horaFin,
         nombreServicio: res.nombreServicio || '',
       };
       this.limpiarFormulario();
@@ -471,14 +472,19 @@ cerrarErrorModal() {
 
 
 calcularHoraFin(horaInicio: string): string {
+  const duracion = this.obtenerDuracionServicio(); // ← aquí usamos la duración real
+
   const [horas, minutos] = horaInicio.split(':').map(Number);
   const fecha = new Date();
   fecha.setHours(horas);
-  fecha.setMinutes(minutos + 20);
+  fecha.setMinutes(minutos + duracion);
+
   const h = fecha.getHours().toString().padStart(2, '0');
   const m = fecha.getMinutes().toString().padStart(2, '0');
+
   return `${h}:${m}`;
 }
+
 
 formatoHora(hora: string): string {
   const [h, m] = hora.split(':');
@@ -903,5 +909,10 @@ soloNumeros(event: KeyboardEvent) {
   }
 }
 
+obtenerDuracionServicio(): number {
+  const servicioId = Number(this.formulario.get('servicio')?.value);
+  const servicio = this.servicios.find(s => s.servicioId === servicioId);
+  return servicio ? servicio.duracion : 20;
+}
 
 }
