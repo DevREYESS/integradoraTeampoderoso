@@ -21,9 +21,20 @@ export class Editarcita implements OnInit {
 
 
   constructor(private consultaService: Services) {}
-
+filtrosServicios: any = {};
+servicios: any[] = [];
   ngOnInit() {
+      this.consultaService.servicios(this.filtrosServicios).subscribe({
+    next: (response) => {
+      this.servicios = response;
+    },
+    error: (err) => {
+      console.error('Ocurrió un error al consultar servicios => ', err.message);
+    }
+  });
+
     this.formCita = new FormGroup({
+      servicio: new FormControl(this.cita?.servicioId || ''),
       nombre: new FormControl(this.cita?.nombre || '', Validators.required),
       telefono: new FormControl(this.cita?.telefono || '', Validators.required),
       horaInicio: new FormControl(this.convertirHora(this.cita?.inicio) || '', Validators.required),

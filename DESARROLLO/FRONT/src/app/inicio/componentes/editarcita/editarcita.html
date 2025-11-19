@@ -14,6 +14,16 @@
   <option value="Cancelada">Cancelada</option>
   <option value="Finalizada">Finalizada</option>
 </select>
+<label>Servicio:</label>
+<select formControlName="servicio">
+  <option value="" disabled>Selecciona un servicio</option>
+
+  <option *ngFor="let s of servicios" [value]="s.servicioId">
+    {{ s.nombreServicio }}
+  </option>
+</select>
+
+
       <label>Nombre:</label>
       <input type="text" formControlName="nombre" />
 
