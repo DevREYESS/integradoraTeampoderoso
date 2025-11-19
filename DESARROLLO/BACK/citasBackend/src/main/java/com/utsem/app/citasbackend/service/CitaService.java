@@ -57,7 +57,8 @@ public class CitaService {
                 root.get("horaInicio"),
                 root.get("horaFin"),
                 servicioJoin.get("nombreServicio"),
-                servicioJoin.get("servicioId")
+                servicioJoin.get("servicioId"),
+                root.get("uuid")
         ));
 
         Predicate predicate = cb.conjunction();
@@ -217,7 +218,8 @@ public class CitaService {
                 cita.getHoraInicio(),
                 cita.getHoraFin(),
                 cita.getServicio().getNombreServicio(),
-                cita.getServicio().getServicioId()
+                cita.getServicio().getServicioId(),
+                cita.getUuid()
         );
     }
 

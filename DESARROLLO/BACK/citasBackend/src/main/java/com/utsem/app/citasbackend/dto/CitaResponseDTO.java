@@ -2,6 +2,7 @@ package com.utsem.app.citasbackend.dto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.UUID;
 
 public class CitaResponseDTO {
 
@@ -14,8 +15,9 @@ public class CitaResponseDTO {
     private LocalDate fechaCita;
     private String nombreServicio;
     private Long servicioId;
+    private UUID citaUuid;
 
-    public CitaResponseDTO(String mensaje, String telefono, String estatus, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String nombreServicio, Long servicioId) {
+    public CitaResponseDTO(String mensaje, String telefono, String estatus, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String nombreServicio, Long servicioId, UUID citaUuid) {
         this.mensaje = mensaje;
         this.telefono = telefono;
         this.estatus = estatus;
@@ -25,6 +27,7 @@ public class CitaResponseDTO {
         this.horaFin = horaFin;
         this.nombreServicio = nombreServicio;
         this.servicioId = servicioId;
+        this.citaUuid = citaUuid;
     }
 
     public String getMensaje() {
@@ -86,4 +89,8 @@ public class CitaResponseDTO {
     public void setServicioId(Long servicioId) {
         this.servicioId = servicioId;
     }
+
+    public UUID getCitaUuid() { return citaUuid; }
+
+    public void setCitaUuid(UUID citaUuid) { this.citaUuid = citaUuid; }
 }
