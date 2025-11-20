@@ -408,6 +408,7 @@ isLastWeek: boolean = false;
 
   limpiarFormulario() {
     this.formulario.reset();
+    this.telefonoFormateado = '';
   }
 
   datos:any;
