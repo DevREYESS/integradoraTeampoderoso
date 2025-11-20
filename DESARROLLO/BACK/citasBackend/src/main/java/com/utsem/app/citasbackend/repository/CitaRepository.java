@@ -24,4 +24,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findCitasParaRecordatorio(@Param("fecha") LocalDate fecha,
                                          @Param("horaInicio") LocalTime horaInicio,
                                          @Param("horaFin") LocalTime horaFin);
+
+    List<Cita> findByFechaCita(LocalDate fechaCita);
 }

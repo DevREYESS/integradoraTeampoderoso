@@ -169,19 +169,34 @@ public class CitaService {
         LocalTime inicioNueva = citaDTO.getHoraInicio();
         LocalTime finNueva = citaDTO.getHoraFin();
 
-        List<Cita> citasExistentes = citaRepository.findByFechaCitaAndHoraInicioAndHoraFin(
-                fechaCita, inicioNueva, finNueva
-        );
+        List<Cita> citasDelDia = citaRepository.findByFechaCita(fechaCita);
 
-        for (Cita cita : citasExistentes) {
+        if (citasDelDia.isEmpty()) {
+            return;
+        }
 
-            if (cita.getUuid().equals(uuid)) {
+        for (Cita citaExistente : citasDelDia) {
+            // Si es la misma cita (actualización), ignorar
+            if (uuid != null && citaExistente.getUuid().equals(uuid)) {
                 continue;
             }
 
-            boolean seSolapa = inicioNueva.isBefore(cita.getHoraFin()) && finNueva.isAfter(cita.getHoraInicio());
+            // Solo validar citas activas (estatus 'A')
+            if (!"A".equals(citaExistente.getEstatus())) {
+                continue;
+            }
+
+            LocalTime inicioExistente = citaExistente.getHoraInicio();
+            LocalTime finExistente = citaExistente.getHoraFin();
+
+            boolean seSolapa = inicioNueva.isBefore(finExistente) && finNueva.isAfter(inicioExistente);
+
             if (seSolapa) {
-                throw new CitaDuplicadaException("Ya existe una cita que se solapa con este horario.");
+                throw new CitaDuplicadaException(
+                        String.format("Ya existe una cita que se solapa con este horario. " +
+                                        "Cita existente: %s - %s",
+                                inicioExistente, finExistente)
+                );
             }
         }
     }
