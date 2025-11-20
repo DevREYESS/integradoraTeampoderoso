@@ -23,7 +23,8 @@
     
     width: 500px; 
     max-width: 90%; 
-    padding: 30px;
+    height: 83%;
+    padding: 10px;
     background-color: white;
     border-radius: 12px; 
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3); 
@@ -65,16 +66,19 @@
 /* 3. Estilos de los Detalles de la Cita*/
 /* ==================================== */
 .appointment-details {
+    height: 350px;
     margin-bottom: 30px;
-    padding: 10px;
+    padding: 0px;
     border: 1px solid #f0f0f0; 
     border-radius: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
 .detail-row {
     display: flex;
     justify-content: space-between;
-    padding: 12px 0;
+    padding: 7px 0;
     border-bottom: 1px dashed #e0e0e0; 
     align-items: center;
 }
@@ -153,8 +157,8 @@
 
 
 .brand-logo-circle {
-  width: 70px;
-  height: 70px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background-color: #f7a8ca;
   display: flex;
