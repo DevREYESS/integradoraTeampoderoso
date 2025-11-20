@@ -8,22 +8,27 @@
     <div *ngIf="loading" class="loading-text">Guardando cambios...</div>
 
     <form *ngIf="!loading" [formGroup]="formCita" class="edit-form">
-         <label>Estatus:</label>
-<select formControlName="estatus">
-  <option value="Activa">Activa</option>
-  <option value="Cancelada">Cancelada</option>
-  <option value="Finalizada">Finalizada</option>
-</select>
-<label>Servicio:</label>
-<select formControlName="servicio">
-  <option value="" disabled>Selecciona un servicio</option>
+      <div class="grid grid-cols-2 gap-2 p-3">
+        <div>
+          <label>Estatus:</label>
+        <select formControlName="estatus">
+          <option value="Activa">Activa</option>
+          <option value="Cancelada">Cancelada</option>
+          <option value="Finalizada">Finalizada</option>
+        </select>
+        </div>
+        <div>
+          <label>Servicio:</label>
+        <select formControlName="servicio">
+          <option value="" disabled>Selecciona un servicio</option>
 
-  <option *ngFor="let s of servicios" [value]="s.servicioId">
-    {{ s.nombreServicio }}
-  </option>
-</select>
-
-
+          <option *ngFor="let s of servicios" [value]="s.servicioId">
+            {{ s.nombreServicio }}
+          </option>
+        </select>
+        </div>
+        
+<!--
       <label>Nombre:</label>
       <input type="text" formControlName="nombre" />
 
@@ -38,6 +43,8 @@
 
       <label>Fecha:</label>
       <input type="date" formControlName="fechaCita" readonly/>
+      -->
+    </div>
 
       <div class="button-group">
         <button type="button" class="save-button" (click)="guardarCambios()">Guardar</button>

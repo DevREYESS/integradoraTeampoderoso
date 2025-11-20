@@ -71,7 +71,7 @@ export class Citas {
             telefono: item.telefono ?? '',
             estatus: estatusInfo.text,
             estatusClass: estatusInfo.class,
-            uuid: item.uuid,
+            uuid: item.citaUuid,
             nombreServicio: item.nombreServicio
           };
         });
