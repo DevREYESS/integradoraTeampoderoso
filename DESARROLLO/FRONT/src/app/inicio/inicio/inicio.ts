@@ -62,7 +62,11 @@ mostrarcard11 = true;
 mostrarcard12 = false;
 mostrarcard13 = false;
 
- // Agregar estas propiedades a la clase Inicio
+private horariosDelMes: any[] = [];
+private citasDelMes: any[] = [];
+private mesActualCargado: number = -1;
+private añoActualCargado: number = -1;
+
 private horarioDefault = {
   horaInicio: '08:00',
   horaFin: '18:20'
@@ -197,7 +201,7 @@ private generarDatosSemana(fechaInicio: Date, fechaFin: Date, horarios: any[], c
     const horariosDelDia = this.generarHorariosDelDia(horaInicio, horaFin, fechaString, citasAgendadas);
 
     this.weekData.push({
-      name: daysOfWeek[i],
+      name: daysOfWeek[fechaActual.getDay()], // ✅ Usar el día real de la fecha
       date: fechaString,
       schedules: horariosDelDia
     });
@@ -214,10 +218,24 @@ private generarDatosSemana(fechaInicio: Date, fechaFin: Date, horarios: any[], c
 private generarHorariosDelDia(horaInicio: string, horaFin: string, fecha: string, citasAgendadas: any[]): any[] {
   const horarios: any[] = [];
 
-  // Verificar si es domingo (día no laborable por defecto)
-  const fechaObj = new Date(fecha);
-  if (fechaObj.getDay() === 6) {
-    return []; // Domingo sin horarios (mostrará "No labora")
+  // Obtener la fecha de mañana
+  const hoy = new Date();
+  hoy.setHours(0, 0, 0, 0);
+  const manana = new Date(hoy);
+  manana.setDate(hoy.getDate() + 1);
+
+  // Crear fecha SIN problema de zona horaria
+  const [año, mes, dia] = fecha.split('-').map(Number);
+  const fechaObj = new Date(año, mes - 1, dia);
+
+  // Si la fecha es anterior a mañana, no mostrar horarios
+  if (fechaObj < manana) {
+    return [];
+  }
+
+  const diaSemana = fechaObj.getDay();
+  if (diaSemana === 0) {
+    return [];
   }
 
   const [horaInicioH, horaInicioM] = horaInicio.split(':').map(Number);
@@ -226,30 +244,41 @@ private generarHorariosDelDia(horaInicio: string, horaFin: string, fecha: string
   const minutosInicio = horaInicioH * 60 + horaInicioM;
   const minutosFin = horaFinH * 60 + horaFinM;
 
+  // Obtener las citas de esta fecha
+  const citasDelDia = citasAgendadas.filter(cita => cita.fechaCita === fecha && cita.estatus === 'A');
+
   // Generar horarios en intervalos de 20 minutos
   for (let minutos = minutosInicio; minutos < minutosFin; minutos += 20) {
     const horas = Math.floor(minutos / 60);
     const mins = minutos % 60;
     const horaFormateada = `${horas.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
 
-    // Verificar si hay cita agendada en este horario
-    const citaEnEsteHorario = citasAgendadas.find(cita =>
-      cita.fechaCita === fecha && cita.horaInicio === horaFormateada + ':00'
-    );
-
-    let status = 'Disponible';
-    if (citaEnEsteHorario) {
-      status = citaEnEsteHorario.estatus === 'A' ? 'Agendado' :
-               citaEnEsteHorario.estatus === 'C' ? 'Disponible' : 'No disponible';
-    }
-
-    horarios.push({
-      time: horaFormateada,
-      status: status
+    // Verificar si este horario está ocupado por alguna cita
+    const estaOcupado = citasDelDia.some(cita => {
+      const horaInicioCita = this.convertirHoraAMinutos(cita.horaInicio.substring(0, 5));
+      const horaFinCita = this.convertirHoraAMinutos(cita.horaFin.substring(0, 5));
+      
+      // El horario está ocupado si cae dentro del rango de la cita
+      // (>= inicio y < fin)
+      return minutos >= horaInicioCita && minutos < horaFinCita;
     });
+
+    // Solo agregar el horario si NO está ocupado
+    if (!estaOcupado) {
+      horarios.push({
+        time: horaFormateada,
+        status: 'Disponible'
+      });
+    }
   }
 
   return horarios;
+}
+
+// Método auxiliar para convertir hora a minutos
+private convertirHoraAMinutos(hora: string): number {
+  const [horas, minutos] = hora.split(':').map(Number);
+  return horas * 60 + minutos;
 }
 
 // Generar fixedTimes dinámicamente basado en todos los horarios
@@ -284,7 +313,10 @@ private generarFixedTimes(): void {
 
 // Formatear fecha para la API
 private formatDateForAPI(date: Date): string {
-  return date.toISOString().split('T')[0];
+  const año = date.getFullYear();
+  const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+  const dia = date.getDate().toString().padStart(2, '0');
+  return `${año}-${mes}-${dia}`;
 }
 
 // Actualizar estados de navegación
@@ -306,29 +338,43 @@ private updateNavigationStates(): void {
   this.isLastWeek = ultimoDiaSemana >= fechaLimite;
 }
 
-// Modificar goToNextWeek para que consulte la siguiente semana
 goToNextWeek(): void {
   if (!this.isLastWeek && this.weekData.length > 0) {
-    const fechaActual = new Date(this.weekData[0].date);
-    fechaActual.setDate(fechaActual.getDate() + 7);
+    // Si tenemos datos del mes cargados, usarlos
+    if (this.mesActualCargado !== -1) {
+      this.currentWeekIndex++;
+      this.loadCurrentWeekFromMonth();
+    } else {
+      // Lógica original para navegación semanal
+      const fechaActual = new Date(this.weekData[0].date);
+      fechaActual.setDate(fechaActual.getDate() + 7);
 
-    const fechaInicio = fechaActual;
-    const fechaFin = this.getWeekEndDate(fechaInicio);
+      const fechaInicio = fechaActual;
+      const fechaFin = this.getWeekEndDate(fechaInicio);
 
-    this.consultarDatosSemana(fechaInicio, fechaFin);
+      this.consultarDatosSemana(fechaInicio, fechaFin);
+    }
   }
 }
 
-// Modificar goToPreviousWeek para que consulte la semana anterior
+
+
 goToPreviousWeek(): void {
   if (!this.isFirstWeek && this.weekData.length > 0) {
-    const fechaActual = new Date(this.weekData[0].date);
-    fechaActual.setDate(fechaActual.getDate() - 7);
+    // Si tenemos datos del mes cargados, usarlos
+    if (this.mesActualCargado !== -1 && this.currentWeekIndex > 0) {
+      this.currentWeekIndex--;
+      this.loadCurrentWeekFromMonth();
+    } else {
+      // Lógica original para navegación semanal
+      const fechaActual = new Date(this.weekData[0].date);
+      fechaActual.setDate(fechaActual.getDate() - 7);
 
-    const fechaInicio = fechaActual;
-    const fechaFin = this.getWeekEndDate(fechaInicio);
+      const fechaInicio = fechaActual;
+      const fechaFin = this.getWeekEndDate(fechaInicio);
 
-    this.consultarDatosSemana(fechaInicio, fechaFin);
+      this.consultarDatosSemana(fechaInicio, fechaFin);
+    }
   }
 }
 
@@ -772,8 +818,64 @@ onMonthSelected(mesNumero: number) {
   const end = new Date(targetYear, mesNumero + 1, 0);
 
   this.generateDaysData(start, end);
-  this.currentWeekIndex = 0;
-  this.loadCurrentWeek();
+  
+  // Cargar datos del mes completo
+  this.cargarDatosDelMes(targetYear, mesNumero);
+}
+
+private cargarDatosDelMes(año: number, mes: number): void {
+  // Si ya están cargados los datos de este mes, no volver a consultar
+  if (this.mesActualCargado === mes && this.añoActualCargado === año) {
+    this.currentWeekIndex = 0;
+    this.loadCurrentWeekFromMonth();
+    return;
+  }
+
+  // Cargar horarios y citas del mes en paralelo
+  Promise.all([
+    this.consultaService.horariosPorMes(año, mes).toPromise(),
+    this.consultaService.citasPorRango({
+      fechaInicio: `${año}-${(mes + 1).toString().padStart(2, '0')}-01`,
+      fechaFin: new Date(año, mes + 1, 0).toISOString().split('T')[0]
+    }).toPromise()
+  ]).then(([horarios, citas]) => {
+    this.horariosDelMes = horarios || [];
+    this.citasDelMes = citas || [];
+    this.mesActualCargado = mes;
+    this.añoActualCargado = año;
+    
+    this.currentWeekIndex = 0;
+    this.loadCurrentWeekFromMonth();
+    this.cdRef.detectChanges();
+  }).catch(error => {
+    console.error('Error al cargar datos del mes:', error);
+    this.horariosDelMes = [];
+    this.citasDelMes = [];
+    this.currentWeekIndex = 0;
+    this.loadCurrentWeekFromMonth();
+  });
+}
+
+private loadCurrentWeekFromMonth(): void {
+  const primerDiaDelMes = new Date(this.currentAno, this.currentMonth, 1);
+  
+  // Obtener el día de la semana del primer día del mes (0=Dom, 1=Lun, ..., 6=Sáb)
+  const diaDeLaSemana = primerDiaDelMes.getDay();
+  
+  // Calcular el domingo de la semana que contiene el primer día del mes
+  const domingoDeEsaSemana = new Date(primerDiaDelMes);
+  domingoDeEsaSemana.setDate(primerDiaDelMes.getDate() - diaDeLaSemana);
+  
+  // Aplicar el desplazamiento de semanas
+  const diasDesplazamiento = this.currentWeekIndex * 7;
+  const fechaInicio = new Date(domingoDeEsaSemana);
+  fechaInicio.setDate(domingoDeEsaSemana.getDate() + diasDesplazamiento);
+  
+  const fechaFin = new Date(fechaInicio);
+  fechaFin.setDate(fechaInicio.getDate() + 6);
+
+  // Usar los datos del mes ya cargados
+  this.generarDatosSemana(fechaInicio, fechaFin, this.horariosDelMes, this.citasDelMes);
 }
 
 

@@ -145,4 +145,14 @@ horariosPorRango(rango: any): Observable<any> {
       );
   }
 
+  horariosPorMes(año: number, mes: number): Observable<any> {
+    return this.http.post<any>(`${this.apiUrlBase}/horarios/mes`,
+      { año, mes },
+      { headers: { 'Content-Type': 'application/json' } }
+    ).pipe(
+      map(response => response),
+      catchError(this.handleErrorLogin)
+    );
+  }
+
 }
