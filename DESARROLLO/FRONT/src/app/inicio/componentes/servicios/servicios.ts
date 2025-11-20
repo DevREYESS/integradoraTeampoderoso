@@ -3,6 +3,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {Servicio} from '../../admin/admin';
 import {Services} from '../../services/services';
 import {EditarServicio} from '../editar-servicio/editar-servicio';
+import iziToast from 'izitoast';
 
 @Component({
   selector: 'app-servicios',
@@ -100,7 +101,13 @@ export class Servicios implements OnInit{
 
     this.consultaService.deleteServicio(this.servicioAEliminar.servicioUuid).subscribe({
       next: () => {
-        console.log('🗑️ Servicio eliminado');
+        iziToast.success({
+        title: '¡Listo!',
+        message: 'Servicio eliminado correctamente',
+        position: 'topCenter',
+        timeout: 6000,
+        progressBar: true
+      });
 
         this.showDeleteModal = false;
         this.servicioAEliminar = null;

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "primeicons/primeicons.css";
+@import 'izitoast/dist/css/iziToast.min.css';
 
 /*.modal-open-scroll-blocker {
     overflow: hidden !important; 
