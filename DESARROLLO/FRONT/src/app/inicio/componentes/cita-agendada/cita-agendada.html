@@ -5,10 +5,10 @@
   <button class="custom-modal-close-btn" (click)="close.emit()">&times;</button>
 
   <div #pdfContent class="mx-auto bg-white p-4 rounded" style="max-width: 600px;"> 
-    <h3 class="modal-header">
+    <!-- <h3 class="modal-header">
       <i class="modal-icon"></i> 
       Cita Agendada
-    </h3>
+    </h3> -->
     <div class="btn-success mb-2 no-print">
 <button type="button" class="btn btn-secondary  align-items-center " (click)="descargarPDF()">
   <i class="bi bi-file-earmark-arrow-down"></i>
@@ -47,7 +47,7 @@
       </div>
       <div class="detail-row">
         <span class="detail-label">Ubicación:</span>
-        <span class="detail-value">{{ ubicacion }}</span>
+        <span class="detail-value text-xs">{{ ubicacion }}</span>
       </div>
     </div>
   </div>

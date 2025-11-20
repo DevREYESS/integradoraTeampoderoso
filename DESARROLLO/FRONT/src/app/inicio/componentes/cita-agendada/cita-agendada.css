@@ -21,7 +21,7 @@
     transform: translate(-50%, -50%);
     z-index: 1000; 
     
-    width: 500px; 
+    width: 600px; 
     max-width: 90%; 
     height: 83%;
     padding: 10px;
@@ -66,7 +66,7 @@
 /* 3. Estilos de los Detalles de la Cita*/
 /* ==================================== */
 .appointment-details {
-    height: 350px;
+    height: 400px;
     margin-bottom: 30px;
     padding: 0px;
     border: 1px solid #f0f0f0; 
@@ -78,7 +78,7 @@
 .detail-row {
     display: flex;
     justify-content: space-between;
-    padding: 7px 0;
+    padding: 12px 0;
     border-bottom: 1px dashed #e0e0e0; 
     align-items: center;
 }
