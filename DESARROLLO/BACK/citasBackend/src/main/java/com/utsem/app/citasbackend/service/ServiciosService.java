@@ -40,6 +40,14 @@ public class ServiciosService {
             predicate = cb.and(predicate, cb.like(root.get("nombreServicio"), "%" + servicioDTO.getNombreServicio() + "%"));
         }
 
+        if (servicioDTO.getcolor() != null && !servicioDTO.getcolor().isEmpty()) {
+            predicate = cb.and(predicate, cb.equal(root.get("color"), servicioDTO.getcolor()));
+        }
+
+        if (servicioDTO.getDuracion() != null && servicioDTO.getDuracion() > 0) {
+            predicate = cb.and(predicate, cb.equal(root.get("duracion"), servicioDTO.getDuracion()));
+        }
+
         query.where(predicate);
 
         return entityManager.createQuery(query).getResultList();

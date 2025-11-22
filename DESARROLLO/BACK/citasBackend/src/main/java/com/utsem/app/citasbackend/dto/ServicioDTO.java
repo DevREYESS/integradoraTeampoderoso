@@ -3,7 +3,7 @@ package com.utsem.app.citasbackend.dto;
 public class ServicioDTO {
     private String servicioUuid;
     private String nombreServicio;
-    private String duracion;
+    private Integer duracion;
     private String color;
 
     public String getServicioUuid() {
@@ -22,11 +22,9 @@ public class ServicioDTO {
         this.nombreServicio = nombreServicio;
     }
 
-    public String getDuracion() {
-        return duracion;
-    }
+    public Integer getDuracion() { return duracion; }
 
-    public void setDuracion(String duracion) {
+    public void setDuracion(Integer duracion) {
         this.duracion = duracion;
     }
 
