@@ -58,6 +58,7 @@ public class CitaService {
                 root.get("horaFin"),
                 servicioJoin.get("nombreServicio"),
                 servicioJoin.get("servicioId"),
+                servicioJoin.get("color"),
                 root.get("uuid")
         ));
 
@@ -234,6 +235,7 @@ public class CitaService {
                 cita.getHoraFin(),
                 cita.getServicio().getNombreServicio(),
                 cita.getServicio().getServicioId(),
+                cita.getServicio().getcolor(),
                 cita.getUuid()
         );
     }

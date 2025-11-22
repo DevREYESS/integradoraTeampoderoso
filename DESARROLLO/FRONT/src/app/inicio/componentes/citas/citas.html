@@ -50,13 +50,13 @@
 
       <div *ngIf="!loading">
         <div class="appointment-card" *ngFor="let cita of citas" [ngClass]="cita.estatus.toLowerCase()">
-          <div class="initials-circle" [ngClass]="cita.colorIniciales">{{ cita.iniciales }}</div>
+          <div class="initials-circle" [style.background-color]="cita.colorServicio">{{ cita.iniciales }}</div>
 
           <div class="appointment-details">
             <p class="name">{{ cita.nombre }}</p>
             <p>Duración del servicio: {{ cita.duracion }}</p>
-            <p class="time start">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
-            <p class="time end">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
+            <p class="text-fuchsia-400">{{ cita.estatus === 'Finalizada' ? 'Empieza' : 'Hora de inicio' }}: {{ cita.inicio }}</p>
+            <p class="text-fuchsia-400">{{ cita.estatus === 'Finalizada' ? 'Termina' : 'Hora final' }} {{ cita.fin }}</p>
           </div>
 
           <div class="status-details">

@@ -15,9 +15,10 @@ public class CitaResponseDTO {
     private LocalDate fechaCita;
     private String nombreServicio;
     private Long servicioId;
+    private String colorServicio;
     private UUID citaUuid;
 
-    public CitaResponseDTO(String mensaje, String telefono, String estatus, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String nombreServicio, Long servicioId, UUID citaUuid) {
+    public CitaResponseDTO(String mensaje, String telefono, String estatus, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String nombreServicio, Long servicioId, String colorServicio, UUID citaUuid) {
         this.mensaje = mensaje;
         this.telefono = telefono;
         this.estatus = estatus;
@@ -27,6 +28,7 @@ public class CitaResponseDTO {
         this.horaFin = horaFin;
         this.nombreServicio = nombreServicio;
         this.servicioId = servicioId;
+        this.colorServicio = colorServicio;
         this.citaUuid = citaUuid;
     }
 
@@ -89,6 +91,10 @@ public class CitaResponseDTO {
     public void setServicioId(Long servicioId) {
         this.servicioId = servicioId;
     }
+
+    public String getColorServicio() { return colorServicio; }
+
+    public void setColorServicio(String colorServicio) { this.colorServicio = colorServicio; }
 
     public UUID getCitaUuid() { return citaUuid; }
 

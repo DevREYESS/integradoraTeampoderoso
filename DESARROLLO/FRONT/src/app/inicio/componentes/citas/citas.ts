@@ -72,15 +72,14 @@ export class Citas {
             estatus: estatusInfo.text,
             estatusClass: estatusInfo.class,
             uuid: item.citaUuid,
-            nombreServicio: item.nombreServicio
+            nombreServicio: item.nombreServicio,
+            colorServicio: item.colorServicio
           };
         });
 
         this.citas = [...this.citasOriginal];
         this.citas.forEach(cita => {
           cita.iniciales = this.getInitials(cita.nombre);
-          const index = Math.floor(Math.random() * this.coloresIniciales.length);
-          cita.colorIniciales = this.coloresIniciales[index];
         });
 
         this.loading = false;
