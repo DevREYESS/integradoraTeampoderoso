@@ -51,4 +51,12 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
+
+    @ExceptionHandler(ServicioDuplicadoException.class)
+    public ResponseEntity<Map<String, String>> handleServicioDuplicado(ServicioDuplicadoException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Servicio duplicado");
+        body.put("message", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
+    }
 }

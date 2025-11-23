@@ -10,4 +10,10 @@ import java.util.UUID;
 @Repository
 public interface ServicioRepository extends JpaRepository <Servicio, Long>{
     Optional<Servicio> findByServicioUuid(UUID servicioUuid);
+
+    boolean existsByNombreServicio(String nombreServicio);
+    boolean existsBycolor(String color);
+    boolean existsByNombreServicioAndServicioUuidNot(String nombreServicio, UUID servicioUuid);
+    boolean existsByColorAndServicioUuidNot(String color, UUID servicioUuid);
+
 }
