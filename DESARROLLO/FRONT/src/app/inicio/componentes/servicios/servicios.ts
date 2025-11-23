@@ -237,10 +237,10 @@ export class Servicios implements OnInit, OnDestroy {
         this.cerrarEditarServicioModal();
       },
       error: (err) => {
-        console.error('Error al actualizar', err);
+        const mensajeError = err.error.message || 'Error al actualizar el servicio';
         iziToast.error({
           title: 'Error',
-          message: 'No se pudo actualizar el servicio',
+          message: mensajeError,
           position: 'topCenter',
           timeout: 3000
         });
@@ -261,10 +261,10 @@ export class Servicios implements OnInit, OnDestroy {
         this.cerrarEditarServicioModal();
       },
       error: (err) => {
-        console.error('Error al crear servicio', err);
+        const mensajeError = err.error.message || 'Error al crear el servicio';
         iziToast.error({
           title: 'Error',
-          message: 'No se pudo crear el servicio',
+          message: mensajeError,
           position: 'topCenter',
           timeout: 3000
         });

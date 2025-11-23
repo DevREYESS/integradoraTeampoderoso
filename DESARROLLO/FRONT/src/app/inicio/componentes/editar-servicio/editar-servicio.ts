@@ -70,14 +70,9 @@ guardar(form: NgForm) {
 
   if (this.modo === 'editar') {
     this.servicioActualizado.emit(this.servicioEditado);
-    this.mostrarAlerta('Servicio actualizado correctamente'); // ✅ Aquí
   } else {
     this.servicioAgregado.emit(this.servicioEditado);
-    this.mostrarAlerta('Servicio agregado correctamente'); // ✅ Aquí
   }
-
-  // Cierra el modal después de 1.5s
-  setTimeout(() => this.close.emit(), 1500);
 }
 
 
