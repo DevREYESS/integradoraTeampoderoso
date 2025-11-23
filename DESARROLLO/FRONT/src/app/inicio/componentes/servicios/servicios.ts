@@ -196,7 +196,7 @@ export class Servicios implements OnInit, OnDestroy {
           title: '¡Listo!',
           message: 'Servicio eliminado correctamente',
           position: 'topCenter',
-          timeout: 6000,
+          timeout: 3000,
           progressBar: true
         });
 
@@ -231,7 +231,7 @@ export class Servicios implements OnInit, OnDestroy {
           title: '¡Actualizado!',
           message: 'Servicio actualizado correctamente',
           position: 'topCenter',
-          timeout: 6000,
+          timeout: 3000,
           progressBar: true
         });
         this.cerrarEditarServicioModal();
@@ -242,7 +242,7 @@ export class Servicios implements OnInit, OnDestroy {
           title: 'Error',
           message: 'No se pudo actualizar el servicio',
           position: 'topCenter',
-          timeout: 6000
+          timeout: 3000
         });
       }
     });
@@ -255,7 +255,7 @@ export class Servicios implements OnInit, OnDestroy {
           title: '¡Creado!',
           message: 'Servicio creado correctamente',
           position: 'topCenter',
-          timeout: 6000,
+          timeout: 3000,
           progressBar: true
         });
         this.cerrarEditarServicioModal();
@@ -266,7 +266,7 @@ export class Servicios implements OnInit, OnDestroy {
           title: 'Error',
           message: 'No se pudo crear el servicio',
           position: 'topCenter',
-          timeout: 6000
+          timeout: 3000
         });
       }
     });
