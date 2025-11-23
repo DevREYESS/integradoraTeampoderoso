@@ -4,7 +4,7 @@
 
   <button class="custom-modal-close-btn" (click)="close.emit()">&times;</button>
 
-  <div #pdfContent class="mx-auto bg-white p-4 rounded" style="max-width: 600px;"> 
+  <div #pdfContent class="pt-2 px-3 rounded"> 
     <h3 class="modal-header">
       <i class="modal-icon"></i> 
       Detalle de tu Cita
@@ -15,7 +15,7 @@
   Descargar PDF
 </button>
 </div>
-    <div class="appointment-details">
+    <div class="appointment-details mb-1">
       <div class="detail-row" style="justify-content: center;">
         <h3 class="modal-header" style="font-weight: bold;">Medica Isor</h3>
       </div>
@@ -47,7 +47,7 @@
     </div>
     <div class="detail-value2"><span class="detail-value2">{{ mensaje }}</span></div>
     
+    <button class="custom-modal-button primary-button" (click)="close.emit()">Aceptar</button>
   </div>
 
-  <button class="custom-modal-button primary-button" (click)="close.emit()">Aceptar</button>
 </div>
