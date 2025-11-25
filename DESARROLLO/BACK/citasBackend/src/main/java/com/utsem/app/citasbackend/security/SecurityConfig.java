@@ -77,7 +77,8 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(Arrays.asList(
                 "http://localhost:[*]",
                 "http://127.0.0.1:[*]",
-                "chrome-extension://*"
+                "chrome-extension://*",
+                "https://spoilless-purulently-pearlie.ngrok-free.dev"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
