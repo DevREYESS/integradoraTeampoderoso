@@ -133,6 +133,9 @@ public class CitaService {
         Cita citaExistente = citaRepository.findByUuid(UUID.fromString(uuid))
                 .orElseThrow(() -> new RegistroNoEncontrado("Cita no encontrada"));
 
+        Servicio servicio = servicioRepository.findById(citaDTO.getServicioId())
+                .orElseThrow(() -> new RegistroNoEncontrado("El servicio con ID " + citaDTO.getServicioId() + " no existe"));
+
         validarFechaCita(citaDTO.getFechaCita());
         validarSolapamiento(citaDTO, UUID.fromString(uuid));
 
@@ -142,6 +145,7 @@ public class CitaService {
         citaExistente.setNombrePaciente(citaDTO.getNombrePaciente());
         citaExistente.setTelefono(citaDTO.getTelefono());
         citaExistente.setEstatus(citaDTO.getEstatus());
+        citaExistente.setServicio(servicio);
 
         Cita citaActualizada = citaRepository.save(citaExistente);
 

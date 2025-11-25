@@ -95,7 +95,8 @@ guardarCambios() {
     horaInicio: this.formCita.value.horaInicio,
     horaFin: this.formCita.value.horaFin,
     fechaCita: this.formCita.value.fechaCita,
-    estatus: estatusMap[this.formCita.value.estatus]
+    estatus: estatusMap[this.formCita.value.estatus],
+    servicioId: this.formCita.value.servicio
   };
 
   this.consultaService.updateCita(datosActualizados, this.cita.uuid).subscribe({
