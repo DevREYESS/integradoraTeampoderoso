@@ -480,3 +480,20 @@
 .custom-modal-close-btn:hover {
   color: #333;
 }
+
+
+.cta-button {
+  background-color: #ff66c4;
+  color: #213c6c;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: -13px;
+}
+
+.cta-button:hover {
+  background-color: #ff66c4 !important;
+}

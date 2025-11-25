@@ -3,6 +3,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { Services } from '../../services/services';
 import { Editarcita } from '../editarcita/editarcita';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-citas',
@@ -22,7 +23,7 @@ export class Citas {
   filterBy: 'nombre' | 'numero' = 'numero';
   loading: boolean = true;
 
-  constructor(private consultaService: Services, private cd: ChangeDetectorRef) {}
+  constructor(private consultaService: Services, private cd: ChangeDetectorRef, private router:Router) {}
 
   ngOnInit(): void {
     this.generarHoras(); // Inicializa horas
@@ -389,5 +390,9 @@ private convertirFechaISO(fechaStr: string): string {
     this.citas.forEach(cita => {
       cita.iniciales = this.getInitials(cita.nombre);
     });
+  }
+
+  agendar(){
+    this.router.navigate(['/nuevacita'])
   }
 }

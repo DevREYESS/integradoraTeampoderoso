@@ -394,7 +394,7 @@ confirmarAgendar() {
 isLoadingA: boolean = false;
 
 guarda(fecha: string, horaInicio: string) {
-  this.isLoadingA = true; 
+  this.isLoadingA = true;
 
   const horaFin = this.calcularHoraFin(horaInicio);
 
@@ -407,78 +407,75 @@ guarda(fecha: string, horaInicio: string) {
     servicioId: this.formulario.get('servicio')?.value || "",
     telefono: this.formulario.get('telefono')?.value || ""
   };
-
+ 
+  console.log(datos,'gshjdk')
   console.log("Datos a enviar:", datos);
 
   this.consultaService.guardarcita(datos).subscribe({
     next: (res) => {
-      this.isLoadingA = false; 
+      this.isLoadingA = false;
 
       this.appointmentData = {
         estatus: "A",
         nombrePaciente: res.nombrePaciente,
         fechaCita: res.fechaCita,
-        horaInicio: res.horaIncio, 
-        horaFin: this.calcularHoraFin(res.horaIncio),
+        horaInicio: res.horaInicio,
+        horaFin: res.horaFin,
         nombreServicio: res.nombreServicio || '',
       };
-
-      this.showModal2 = true;
-     this.regresarf = true;
-this.activeIndex=0;
-this.telefonoFormateado="";
- this.mostrarcard1 = true;
-  this.mostrarcard11 = true;
-  this.mostrarcard12=false;
-    this.mostrarcard13=false;
-    this.mostrarcalendario=false;
-  this.regresarf = false;
       this.limpiarFormulario();
+      this.showModal2 = true;
+this.telefonoFormateado = " ";
       this.cdRef.detectChanges();
     },
     error: (err) => {
-      this.isLoadingA = false; 
+      this.isLoadingA = false;
 
       if (err.error && err.error.message) {
         this.errorMessage = err.error.message;
       } else {
         this.errorMessage = "Ocurrió un error al guardar la cita. Intenta de nuevo.";
       }
-
-      this.showErrorModal = true; 
-      this.showModal2 = false;
-this.telefonoFormateado="";
- this.mostrarcard1 = false;
-  this.mostrarcard11 = false;
-  this.mostrarcard12=false;
-    this.mostrarcard13=false;
-    this.mostrarcalendario=true;
-  this.regresarf = false;
-
       this.limpiarFormulario();
+      this.showErrorModal = true;
+      this.showModal2 = false;
+
       this.cdRef.detectChanges();
     }
   });
  this.limpiarFormulario();
-  this.visiblehome2 = true;
   this.visiblehome = true;
-      
-
+  this.visiblehome2 = true;
+  this.mostrarcalendario=false;
+  this.mostrarcard1=true;
+  this.mostrarcard11=true;
+  this.mostrarcard12=false;
+  this.mostrarcard13=false;
+  this.activeIndex=0;
+  this.regresarf = false;
 }
 
 
 cerrarErrorModal() {
   this.showErrorModal = false;
 }
-
+obtenerDuracionServicio(): number {
+  const servicioId = Number(this.formulario.get('servicio')?.value);
+  const servicio = this.servicios.find(s => s.servicioId === servicioId);
+  return servicio ? servicio.duracion : 20;
+}
 
 calcularHoraFin(horaInicio: string): string {
+  const duracion = this.obtenerDuracionServicio(); // ← aquí usamos la duración real
+
   const [horas, minutos] = horaInicio.split(':').map(Number);
   const fecha = new Date();
   fecha.setHours(horas);
-  fecha.setMinutes(minutos + 20);
-  const h = fecha.getHours().toString().padStart(2, '0'); 
+  fecha.setMinutes(minutos + duracion);
+
+  const h = fecha.getHours().toString().padStart(2, '0');
   const m = fecha.getMinutes().toString().padStart(2, '0');
+
   return `${h}:${m}`;
 }
 

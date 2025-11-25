@@ -192,11 +192,12 @@ export class Servicios implements OnInit, OnDestroy {
 
     this.consultaService.deleteServicio(this.servicioAEliminar.servicioUuid).subscribe({
       next: () => {
+        this.cargarServicios();
         iziToast.success({
           title: '¡Listo!',
           message: 'Servicio eliminado correctamente',
           position: 'topCenter',
-          timeout: 3000,
+          timeout: 2000,
           progressBar: true
         });
 
@@ -227,11 +228,12 @@ export class Servicios implements OnInit, OnDestroy {
     if (!servicio.servicioUuid) return;
     this.consultaService.updateServicio(servicio.servicioUuid, servicio).subscribe({
       next: (data) => {
+         this.cargarServicios();
         iziToast.success({
           title: '¡Actualizado!',
           message: 'Servicio actualizado correctamente',
           position: 'topCenter',
-          timeout: 3000,
+          timeout: 2000,
           progressBar: true
         });
         this.cerrarEditarServicioModal();
@@ -251,11 +253,12 @@ export class Servicios implements OnInit, OnDestroy {
   manejarServicioAgregado(servicio: Servicio) {
     this.consultaService.saveServicio(servicio).subscribe({
       next: (nuevo) => {
+         this.cargarServicios();
         iziToast.success({
           title: '¡Creado!',
           message: 'Servicio creado correctamente',
           position: 'topCenter',
-          timeout: 3000,
+          timeout: 2000,
           progressBar: true
         });
         this.cerrarEditarServicioModal();
