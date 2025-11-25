@@ -74,7 +74,8 @@ export class Citas {
             estatusClass: estatusInfo.class,
             uuid: item.citaUuid,
             nombreServicio: item.nombreServicio,
-            colorServicio: item.colorServicio
+            colorServicio: item.colorServicio,
+            servicioId: item.servicioId
           };
         });
 

@@ -24,15 +24,28 @@ export class Editarcita implements OnInit {
 filtrosServicios: any = {};
 servicios: any[] = [];
   ngOnInit() {
-      this.consultaService.servicios(this.filtrosServicios).subscribe({
+    this.inicializarFormulario();
+
+    this.consultaService.servicios(this.filtrosServicios).subscribe({
     next: (response) => {
       this.servicios = response;
+      if(this.servicios.length > 0){
+          if (this.formCita.value) {
+            this.formCita.patchValue({
+              servicio: this.cita.servicioId
+            });
+          }
+        
+      }
     },
     error: (err) => {
       console.error('Ocurrió un error al consultar servicios => ', err.message);
     }
   });
 
+  }
+
+  inicializarFormulario() {
     this.formCita = new FormGroup({
       servicio: new FormControl(this.cita?.servicioId || ''),
       nombre: new FormControl(this.cita?.nombre || '', Validators.required),
@@ -43,7 +56,6 @@ servicios: any[] = [];
       estatus: new FormControl( [this.cita?.estatus],Validators.required)
       // quitamos fechaCita de aquí
     });
-
   }
 
   convertirHora(hora: string): string {
