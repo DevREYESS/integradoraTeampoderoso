@@ -78,7 +78,7 @@ public class SecurityConfig {
                 "http://localhost:[*]",
                 "http://127.0.0.1:[*]",
                 "chrome-extension://*",
-                "https://spoilless-purulently-pearlie.ngrok-free.dev"
+                "https://*.ngrok-free.dev"
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList(
