@@ -57,6 +57,15 @@ updateCita(cita: any, uuid:any): Observable<any> {
   );
 }
 
+cancelarCita(uuid: any):Observable<any> {
+  return this.http.delete<any>(`${this.apiUrlBase}/citas/${uuid}`)
+  .pipe(
+    catchError(err => {
+      return throwError(() => err);
+    })
+  )
+}
+
 
 
 servicios(filtros: any): Observable<any> {

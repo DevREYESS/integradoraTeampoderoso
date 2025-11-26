@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Services } from '../../services/services';
 import { Editarcita } from '../editarcita/editarcita';
 import { Router } from '@angular/router';
+import iziToast from 'izitoast';
 
 @Component({
   selector: 'app-citas',
@@ -167,36 +168,37 @@ abrirConfirmacion(cita: any) {
 confirmarCancelarCita() {
   if (!this.selectedCita) return;
 
-  // Cerramos el modal de confirmación antes de llamar al servicio
-  this.showConfirmationModal = false;
-
-  const citaParaAPI = {
-    telefono: this.selectedCita.telefono,
-    estatus: 'C',
-    nombrePaciente: this.selectedCita.nombre,
-    horaInicio: this.convertirAHora24(this.selectedCita.inicio),
-    horaFin: this.convertirAHora24(this.selectedCita.fin),
-    fechaCita: this.convertirFechaISO(this.selectedCita.fecha)
-  };
-
-  this.consultaService.updateCita(citaParaAPI, this.selectedCita.uuid).subscribe({
+  this.consultaService.cancelarCita(this.selectedCita.uuid).subscribe({
     next: (res) => {
-      const index = this.citas.findIndex(c => c.uuid === this.selectedCita.uuid);
-      if (index !== -1) this.citas[index].estatus = 'C';
+      if (res) {
+        this.resultMessage = 'Cita cancelada correctamente';
+        this.showResultModal = true;
+        iziToast.success({
+          title: '¡Listo!',
+          message: 'Cita cancelada correctamente',
+          position: 'topCenter',
+          timeout: 2000,
+          progressBar: true
+        });
 
-      this.resultMessage = 'Cita cancelada correctamente';
-      this.showResultModal = true;
-
-      this.selectedCita = null;
-      this.obtenerCitas(); // Refresca la lista
+        this.selectedCita = null;
+        this.obtenerCitas(); // Refresca la lista
+      }
     },
     error: (err) => {
-      console.error('Error al cancelar la cita', err);
+      iziToast.error({
+          title: 'Error!',
+          message: err.error.message,
+          position: 'topCenter',
+          timeout: 2000,
+          progressBar: true
+        });
       this.resultMessage = 'No se pudo cancelar la cita';
       this.showResultModal = true;
       this.selectedCita = null;
     }
   });
+  this.showConfirmationModal = false;
 }
 
   eliminarCita(cita: any) {

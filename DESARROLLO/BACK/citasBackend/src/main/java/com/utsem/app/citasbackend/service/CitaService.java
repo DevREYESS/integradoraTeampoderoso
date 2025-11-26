@@ -251,10 +251,6 @@ public class CitaService {
         LocalDateTime ahora = LocalDateTime.now();
         LocalDateTime citaDateTime = citaExistente.getFechaCita().atTime(citaExistente.getHoraInicio());
 
-        if ("X".equalsIgnoreCase(citaExistente.getEstatus())) {
-            throw new CancelarCitaException("Cita ya cancelada");
-        }
-
         if (citaExistente.getFechaCita().isBefore(LocalDate.now())) {
             throw new CancelarCitaException("No se puede cancelar una cita en una fecha anterior a la actual");
         }
@@ -263,17 +259,17 @@ public class CitaService {
             throw new CancelarCitaException("No se puede cancelar con menos de 24 horas de anticipación");
         }
 
-        citaExistente.setEstatus("X");
-        Cita citaCancelada = citaRepository.save(citaExistente);
-
-        // Enviar notificación de cancelación
+        // Enviar notificación de cancelación antes de eliminar
         try {
-            whatsAppService.enviarCancelacionCita(citaCancelada);
+            whatsAppService.enviarCancelacionCita(citaExistente);
         } catch (Exception e) {
             System.err.println("Advertencia: Cita cancelada pero WhatsApp falló: " + e.getMessage());
         }
 
-        return construirRespuesta(citaCancelada, "Cita cancelada");
+        // Eliminar la cita de la base de datos
+        citaRepository.delete(citaExistente);
+
+        return construirRespuesta(citaExistente, "Cita cancelada");
     }
 
 }
