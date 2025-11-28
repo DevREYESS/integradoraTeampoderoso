@@ -34,21 +34,14 @@
 
       @if (mostrarcard11) {
       <div class="cita-card reserva-card">
-        <div class="input-container">
-          <label>Ingresa tu nombre completo</label>
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon">
-              <input type="text" formControlName="nombre" icon="pi pi-user"
-                class="p-inputtext p-inputtext-rounded custom-input" pInputText required
-                (keydown)="noEspacioInicial($event)" />
-            </span>
-          </div>
-          <div style="margin-left: 10px;">
-            <small *ngIf="formulario.get('nombre')?.touched && formulario.get('nombre')?.invalid" class="error-msg">
-              Este campo es requerido.
-            </small>
-          </div>
-        </div>
+        <app-custom-input
+          label="Ingresa tu nombre completo"
+          icon="pi pi-user"
+          [control]="formulario.get('nombre')"
+          [soloLetras]="true"
+          [noEspacioInicial]="true"
+          formControlName="nombre">
+        </app-custom-input>
 
         <div class="contenedor-boton">
           <button pButton type="button" label="Siguiente" class="p-button-siguiente" (click)="validarpaso1()"></button>
@@ -57,30 +50,15 @@
       }
       @if (mostrarcard12) {
       <div class="cita-card reserva-card">
-        <div class="input-container">
-          <label>Ingresa tu número de teléfono</label>
-          <div class="p-inputgroup">
-            <span class="p-inputgroup-addon">
-              <input type="text" maxlength="12" [value]="telefonoFormateado" (input)="onTelefonoInput($event)" (keypress)="soloNumeros($event)"
-                class="p-inputtext p-inputtext-rounded custom-input" pInputText />
-            </span>
-          </div>
-          <div style="margin-left: 10px;">
-            <small *ngIf="
-  formulario.get('telefono')?.touched &&
-  formulario.get('telefono')?.hasError('required')
-" class="error-msg" style="align-items: center;">
-              Este campo es requerido.
-            </small>
-
-            <small *ngIf="
-    formulario.get('telefono')?.dirty &&
-    formulario.get('telefono')?.hasError('pattern')
-  " class="error-msg">
-              Número de teléfono inválido.
-            </small>
-          </div>
-        </div>
+        <app-custom-input
+          label="Ingresa tu número de Teléfono"
+          icon="pi pi-phone"
+          type="tel"
+          placeholder="000-000-0000"
+          [control]="formulario.get('telefono')"
+          [formatoTelefono]="true"
+          formControlName="telefono">
+        </app-custom-input>
 
         <div class="contenedor-boton">
           <button pButton type="button" label="Atrás" class="p-button-siguiente" (click)="prev()"></button>

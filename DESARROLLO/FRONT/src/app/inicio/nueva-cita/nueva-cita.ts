@@ -14,11 +14,12 @@ import { Meses } from '../componentes/meses/meses';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Services } from '../services/services';
+import { CustomInputComponent } from '../../shared/custom-input/custom-input';
 
 @Component({
   selector: 'app-nueva-cita',
   standalone: true,
-  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,TooltipModule,CommonModule,FormsModule,CitaAgendada,ToastModule,Meses,HttpClientModule],
+  imports: [ReactiveFormsModule,CardModule,StepperModule,StepsModule,ButtonModule,TooltipModule,CommonModule,FormsModule,CitaAgendada,ToastModule,Meses,HttpClientModule, CustomInputComponent],
   templateUrl: './nueva-cita.html',
   styleUrl: './nueva-cita.css',
   providers: [MessageService],
@@ -67,15 +68,24 @@ fixedTimes: string[] = []; // ya existe, se generará dinámicamente
   private consultaService: Services,
   private cdRef: ChangeDetectorRef,private renderer: Renderer2){
    this.formulario = this.formBuilder.group({
-      nombre: ['', []],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      nombre: ['', [
+        Validators.required, 
+        Validators.minLength(3), 
+        Validators.maxLength(50), 
+        Validators.pattern('^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+$')
+      ]],
+      telefono: ['', [
+        Validators.required,
+        Validators.maxLength(12),
+        Validators.pattern('^[0-9-]{12}$')
+      ]],
       serviciodes: ['', []],
       servicio: ['', []],
-            
       descripcionCita: ['',[]]
 
      
     });
+    
      this.formulario2 = this.formBuilder.group({
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
     });
@@ -842,7 +852,6 @@ validarpaso2() {
 }
 validarpaso1() {
   const nombreControl = this.formulario.get('nombre');
-
   nombreControl?.markAsTouched();
 
   if (nombreControl?.invalid) {

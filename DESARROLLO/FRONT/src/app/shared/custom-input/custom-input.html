@@ -1,0 +1,23 @@
+<div class="input-container mt-5">
+    <label *ngIf="label">{{ label }}</label>
+    <div class="p-inputgroup flex">
+        <span class="p-inputgroup-addon text-4xl mr-5" *ngIf="icon">
+            <i [class]="icon"></i>
+        </span>
+        <input 
+            [type]="type"
+            [value]="value"
+            [placeholder]="placeholder"
+            [disabled]="disabled"
+            class="p-inputtext p-inputtext-rounded custom-input"
+            [class.p-invalid]="hasError()"
+            pInputText
+            (input)="onInput($event)"
+            (blur)="onBlur()"
+            (keydown)="validarInput($event)"
+        />
+    </div>
+    <small *ngIf="hasError()" class="error-msg">
+        {{ getErrorMessage() }}
+    </small>
+</div>

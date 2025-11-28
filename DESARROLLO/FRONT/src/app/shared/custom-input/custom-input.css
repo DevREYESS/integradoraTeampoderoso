@@ -1,0 +1,29 @@
+.input-container {
+    margin-bottom: 1rem;
+}
+
+.input-container label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.error-msg {
+    color: #e74c3c;
+    display: block;
+    margin-top: 0.25rem;
+    margin-left: 0.5rem;
+}
+
+.p-invalid {
+    border-color: #e74c3c !important;
+}
+
+.custom-input {
+    border-radius: 25px;
+    border: 1px solid #add8e6;
+    padding: 10px 15px;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
