@@ -113,6 +113,7 @@ public class CitaService {
     }
     public CitaResponseDTO crearCita(CitaDTO citaDTO) {
         validarFechaCita(citaDTO.getFechaCita());
+        validarLimiteCitasPorDia(citaDTO.getTelefono(), citaDTO.getFechaCita());
         validarSolapamiento(citaDTO, null);
 
         Cita nuevaCita = crearEntidadCita(citaDTO);
@@ -203,6 +204,20 @@ public class CitaService {
                                 inicioExistente, finExistente)
                 );
             }
+        }
+    }
+
+    private void validarLimiteCitasPorDia(String telefono, LocalDate fechaCita) {
+        // Contar citas del mismo teléfono en ese día
+        long cantidadCitas = citaRepository.countByTelefonoAndFechaCita(
+                telefono,
+                fechaCita
+        );
+
+        if (cantidadCitas >= 4) {
+            throw new LimteCitasException(
+                    String.format("Ya se alcanzó el límite de 4 citas por día para el número de teléfono %s ", telefono)
+            );
         }
     }
 

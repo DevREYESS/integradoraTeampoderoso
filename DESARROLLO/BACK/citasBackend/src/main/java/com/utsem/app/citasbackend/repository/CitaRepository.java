@@ -26,4 +26,6 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
                                          @Param("horaFin") LocalTime horaFin);
 
     List<Cita> findByFechaCita(LocalDate fechaCita);
+
+    long countByTelefonoAndFechaCita(String telefono, LocalDate fechaCita);
 }
