@@ -470,9 +470,6 @@ guarda(fecha: string, horaInicio: string) {
     servicioId: this.formulario.get('servicio')?.value || "",
     telefono: this.formulario.get('telefono')?.value || ""
   };
- 
-  console.log(datos,'gshjdk')
-  console.log("Datos a enviar:", datos);
 
   this.consultaService.guardarcita(datos).subscribe({
     next: (res) => {
@@ -488,7 +485,11 @@ guarda(fecha: string, horaInicio: string) {
       };
       this.limpiarFormulario();
       this.showModal2 = true;
-this.telefonoFormateado = " ";
+      this.visiblehome2 = false;
+      this.visiblehome = true;
+      this.regresarf = false;
+      this.telefonoFormateado = '';
+      
       this.cdRef.detectChanges();
     },
     error: (err) => {
@@ -499,17 +500,11 @@ this.telefonoFormateado = " ";
       } else {
         this.errorMessage = "Ocurrió un error al guardar la cita. Intenta de nuevo.";
       }
-      this.limpiarFormulario();
-      this.showErrorModal = true;
-      this.showModal2 = false;
-
+      console.log(this.errorMessage);
+      this.showErrorModal = false;      
       this.cdRef.detectChanges();
     }
   });
- this.limpiarFormulario();
-  this.visiblehome2 = false;
-  this.visiblehome = true;
-  this.regresarf = false;
 }
 
 
@@ -612,17 +607,12 @@ this.telefonoFormateado = this.formatVisualPhone(telefono || '');
   }
 
 }
-agendar() {
-  this.visiblehome=false;
-  this.visiblehome2=true;
-this.regresarf = true;
-this.activeIndex=0;
- this.mostrarcard1 = true;
-  this.mostrarcard11 = true;
-  this.mostrarcard12=false;
-    this.mostrarcard13=false;
-    this.mostrarcalendario=false;
-}
+
+  agendar(){
+    this.router.navigate(['/nuevacita'], {
+      queryParams: { returnUrl: 'inicio'}
+    })
+  }
 
 regresar(){
   this.limpiarFormulario();

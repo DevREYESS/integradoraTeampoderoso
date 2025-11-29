@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, EventEmitter, Output } from '@angular/cor
 import { FormsModule } from '@angular/forms';
 import { Services } from '../../services/services';
 import { Editarcita } from '../editarcita/editarcita';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import iziToast from 'izitoast';
 
 @Component({
@@ -396,6 +396,8 @@ private convertirFechaISO(fechaStr: string): string {
   }
 
   agendar(){
-    this.router.navigate(['/nuevacita'])
+    this.router.navigate(['/nuevacita'], {
+      queryParams: { returnUrl: 'admin/citas'}
+    })
   }
 }

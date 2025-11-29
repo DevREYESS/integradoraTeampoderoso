@@ -9,12 +9,14 @@ import { Citas } from './inicio/componentes/citas/citas';
 import { Servicios } from './inicio/componentes/servicios/servicios';
 
 export const routes: Routes = [
- { path: '', component: Inicio },
+  { path: '', component: Inicio },
+  { path: 'inicio', component: Inicio },
   { path: 'login', component: Login },
   //{ path: 'admin', component: Admin ,  canActivate: [authGuard]},
   {
     path: 'admin',
     component: Dashboard,
+    canActivate: [authGuard],
     children: [
       { path: 'citas', component: Citas },
       { path: 'servicios', component: Servicios },
