@@ -165,6 +165,7 @@ export class NuevaCita {
   cerrarModal() {
     this.showModal2 = false;
     this.agendar();
+    this.recargarCalendario();
   }
 
 
@@ -270,6 +271,26 @@ export class NuevaCita {
     this.router.navigate(['/' + this.returnUrl]);
   }
 
+  private recargarCalendario(): void {
+  if (this.mesActualCargado !== -1 && this.añoActualCargado !== -1) {
+    Promise.all([
+      this.consultaService.horariosPorMes(this.añoActualCargado, this.mesActualCargado).toPromise(),
+      this.consultaService.citasPorRango({
+        fechaInicio: `${this.añoActualCargado}-${(this.mesActualCargado + 1).toString().padStart(2, '0')}-01`,
+        fechaFin: new Date(this.añoActualCargado, this.mesActualCargado + 1, 0).toISOString().split('T')[0]
+      }).toPromise()
+    ]).then(([horarios, citas]) => {
+      this.horariosDelMes = horarios || [];
+      this.citasDelMes = citas || [];
+      this.loadCurrentWeekFromMonth();
+      this.cdRef.detectChanges();
+    }).catch(error => {
+      console.error('Error al recargar datos del mes:', error);
+    });
+  } else {
+    this.loadCurrentWeek();
+  }
+}
 
   public showConfirmationModal: boolean = false;
   public showConfirmationModal2: boolean = false;
