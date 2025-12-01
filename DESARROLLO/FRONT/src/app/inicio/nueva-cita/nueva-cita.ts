@@ -55,8 +55,8 @@ export class NuevaCita {
 
   // Agregar estas propiedades a la clase Inicio
   private horarioDefault = {
-    horaInicio: '10:00',
-    horaFin: '17:00'
+    horaInicio: '08:00',
+    horaFin: '18:00'
   };
 
 
