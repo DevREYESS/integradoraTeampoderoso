@@ -5,11 +5,12 @@ import { Services } from '../../services/services';
 import { Editarcita } from '../editarcita/editarcita';
 import { Router, ActivatedRoute } from '@angular/router';
 import iziToast from 'izitoast';
+import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-citas',
   standalone: true,
-  imports: [CommonModule, FormsModule, Editarcita],
+  imports: [CommonModule, FormsModule, Editarcita,Tooltip],
   providers: [Services],
   templateUrl: './citas.html',
   styleUrl: './citas.css'

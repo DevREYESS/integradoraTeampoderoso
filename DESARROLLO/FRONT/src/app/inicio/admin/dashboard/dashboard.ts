@@ -14,7 +14,7 @@ interface MenuItem {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, Tooltip],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })

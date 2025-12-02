@@ -68,8 +68,10 @@
           </div>
 
           <div class="actions">
-            <span class="action-icon action-delete" *ngIf="cita.estatus === 'Activa'" (click)="abrirConfirmacion(cita)">⊗</span>
-            <span class="action-icon action-edit" (click)="editarCita(cita)">✎</span>
+            <span class="action-icon action-delete" *ngIf="cita.estatus === 'Activa'" pTooltip="Eliminar" 
+    tooltipPosition="top" (click)="abrirConfirmacion(cita)">⊗</span>
+            <span class="action-icon action-edit" (click)="editarCita(cita)" pTooltip="Editar" 
+    tooltipPosition="top">✎</span>
             <!--<button class="comment-button" (click)="agregarComentario(cita)">Agregar comentario</button>-->
           </div>
         </div>
@@ -147,12 +149,12 @@
   <div class="modal-backdrop-small2" (click)="showConfirmationModal = false"></div>
 
   <div class="custom-modal-container-small2">
-    <div class="modal-header-small">Confirmar cancelación</div>
+    <div class="modal-header-small">Confirmar eliminación</div>
     <div class="custom-modal-message">
-      ¿Deseas cancelar la cita de {{selectedCita?.nombre}} el {{selectedCita?.fecha}}?
+      ¿Deseas eliminar la cita de {{selectedCita?.nombre}} el {{selectedCita?.fecha}}?
     </div>
 
-    <button class="custom-modal-button" (click)="confirmarCancelarCita()">Sí, cancelar</button>
+    <button class="custom-modal-button" (click)="confirmarCancelarCita()">Sí, Eliminar</button>
     <button class="custom-modal-button" (click)="showConfirmationModal = false">No</button>
 
     <button class="custom-modal-close-btn" (click)="showConfirmationModal = false">&times;</button>
