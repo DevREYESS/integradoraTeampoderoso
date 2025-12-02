@@ -69,7 +69,7 @@
 
           <div class="actions">
             <span class="action-icon action-delete" *ngIf="cita.estatus === 'Activa'"  title="Eliminar"  (click)="abrirConfirmacion(cita)">⊗</span>
-            <span class="action-icon action-edit" (click)="editarCita(cita)"  title="Editar" >✎</span>
+            <span class="action-icon action-edit" *ngIf="cita.estatus === 'Activa'" (click)="editarCita(cita)"  title="Editar" >✎</span>
             <!--<button class="comment-button" (click)="agregarComentario(cita)">Agregar comentario</button>-->
           </div>
         </div>
