@@ -10,7 +10,7 @@ import { Tooltip } from 'primeng/tooltip';
 @Component({
   selector: 'app-citas',
   standalone: true,
-  imports: [CommonModule, FormsModule, Editarcita,Tooltip],
+  imports: [CommonModule, FormsModule, Editarcita],
   providers: [Services],
   templateUrl: './citas.html',
   styleUrl: './citas.css'
