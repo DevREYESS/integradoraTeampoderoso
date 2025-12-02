@@ -769,7 +769,7 @@ export class NuevaCita {
     fechaCita: fecha,
     nombrePaciente: this.formulario.get('nombre')?.value || "",
     servicioId: this.formulario.get('servicio')?.value || "",
-    telefono: this.formulario.get('telefono')?.value || ""
+    telefono: this.formulario.get('telefono')?.value?.replace(/\D/g, '') || ""
   };
 
   this.consultaService.guardarcita(datos).subscribe({
