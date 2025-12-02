@@ -137,6 +137,13 @@ public class CitaService {
         Servicio servicio = servicioRepository.findById(citaDTO.getServicioId())
                 .orElseThrow(() -> new RegistroNoEncontrado("El servicio con ID " + citaDTO.getServicioId() + " no existe"));
 
+        if ((citaExistente.getEstatus().equalsIgnoreCase("f") ||
+                citaExistente.getEstatus().equalsIgnoreCase("c"))
+                && citaDTO.getEstatus().equalsIgnoreCase("a")
+        ) {
+            throw new EstatusInvalidoException("No se puede activar una cita finalizada o cancelada. ");
+        }
+
         validarFechaCita(citaDTO.getFechaCita());
         validarSolapamiento(citaDTO, UUID.fromString(uuid));
 
