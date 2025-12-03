@@ -81,7 +81,8 @@ public class SecurityConfig {
                 "http://localhost:[*]",
                 "http://127.0.0.1:[*]",
                 "chrome-extension://*",
-                "https://*.ngrok-free.dev"
+                "https://*.ngrok-free.dev",
+                "https://*.onrender.com"
         ));
 
         configuration.setAllowedMethods(Arrays.asList(
