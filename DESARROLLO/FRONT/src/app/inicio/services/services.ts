@@ -14,7 +14,7 @@ export interface Servicio {
 })
 export class Services {
     //private apiUrlBase: string = 'http://localhost:8010'; //! Ruta para local
-    private apiUrlBase: string = 'https://vps-5464962-x.dattaweb.com'; //! Ruta para producción
+    private apiUrlBase: string = 'https://vps-5464962-x.dattaweb.com:8080'; //! Ruta para producción
 
   constructor(private http: HttpClient) { }
 
