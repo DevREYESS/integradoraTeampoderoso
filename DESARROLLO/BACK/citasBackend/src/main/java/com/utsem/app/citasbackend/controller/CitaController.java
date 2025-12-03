@@ -4,6 +4,7 @@ import com.utsem.app.citasbackend.dto.CitaDTO;
 import com.utsem.app.citasbackend.dto.CitaResponseDTO;
 import com.utsem.app.citasbackend.model.Cita;
 import com.utsem.app.citasbackend.service.CitaService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,5 +37,11 @@ public class CitaController {
     @DeleteMapping("/{uuid}")
     public CitaResponseDTO cancelarCita(@PathVariable String uuid) {
         return citaService.cancelarCita(uuid);
+    }
+
+    @GetMapping("/proxima/{telefono}")
+    public ResponseEntity<CitaResponseDTO> obtenerProximaCita(@PathVariable String telefono) {
+        CitaResponseDTO cita = citaService.consultarProximaCita(telefono);
+        return ResponseEntity.ok(cita);
     }
 }

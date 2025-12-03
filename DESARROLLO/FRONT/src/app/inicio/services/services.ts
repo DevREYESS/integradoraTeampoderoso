@@ -28,14 +28,8 @@ export class Services {
   }
 
   getCitaPorTelefono(telefono: string): Observable<any> {
-    return this.http.post<any[]>(`${this.apiUrlBase}/citas/sCita`, { telefono: telefono })
+    return this.http.get<any>(`${this.apiUrlBase}/citas/proxima/${telefono}`)
       .pipe(
-        map(response => {
-          if (response && response.length > 0) {
-            return response[0];
-          }
-          return null;
-        }),
         catchError(this.handleError)
       );
   }

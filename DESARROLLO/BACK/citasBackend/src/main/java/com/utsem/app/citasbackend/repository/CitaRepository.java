@@ -28,4 +28,11 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     List<Cita> findByFechaCita(LocalDate fechaCita);
 
     long countByTelefonoAndFechaCita(String telefono, LocalDate fechaCita);
+
+    Optional<Cita> findFirstByTelefonoAndEstatusAndFechaCitaGreaterThanEqualOrderByFechaCitaAscHoraInicioAsc(
+            String telefono,
+            String estatus,
+            LocalDate fechaCita
+    );
+
 }

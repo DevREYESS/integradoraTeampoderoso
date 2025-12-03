@@ -294,4 +294,20 @@ public class CitaService {
         return construirRespuesta(citaExistente, "Cita cancelada");
     }
 
+    public CitaResponseDTO consultarProximaCita(String telefono) {
+        LocalDate hoy = LocalDate.now();
+        // Buscar la cita más próxima usando el repositorio
+        Cita proximaCita = citaRepository
+                .findFirstByTelefonoAndEstatusAndFechaCitaGreaterThanEqualOrderByFechaCitaAscHoraInicioAsc(
+                        telefono,
+                        "A",
+                        hoy
+                )
+                .orElseThrow(() -> new RegistroNoEncontrado(
+                        "No se encontró ninguna cita activa próxima para el teléfono: " + telefono
+                ));
+
+        return construirRespuesta(proximaCita, "Próxima cita encontrada");
+    }
+
 }
